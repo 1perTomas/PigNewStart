@@ -1,0 +1,851 @@
+fileFormatVersion: 2
+guid: 5aae77ee3c7ed1447ad527718babaa09
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8467279419335030620
+    second: WheatBigSwingAnimationGreyScale_0
+  - first:
+      213: -8154515050701372935
+    second: WheatBigSwingAnimationGreyScale_1
+  - first:
+      213: 3480658417638903986
+    second: WheatBigSwingAnimationGreyScale_2
+  - first:
+      213: -6024287968644072806
+    second: WheatBigSwingAnimationGreyScale_3
+  - first:
+      213: 8220923271639472167
+    second: WheatBigSwingAnimationGreyScale_4
+  - first:
+      213: 7862837058641694072
+    second: WheatBigSwingAnimationGreyScale_5
+  - first:
+      213: 1328899826842312461
+    second: WheatBigSwingAnimationGreyScale_6
+  - first:
+      213: 5744247354438460640
+    second: WheatBigSwingAnimationGreyScale_7
+  - first:
+      213: -3744543161405689753
+    second: WheatBigSwingAnimationGreyScale_8
+  - first:
+      213: -2371424559364916862
+    second: WheatBigSwingAnimationGreyScale_9
+  - first:
+      213: -50261675712781803
+    second: WheatBigSwingAnimationGreyScale_10
+  - first:
+      213: -5826028764331915114
+    second: WheatBigSwingAnimationGreyScale_11
+  - first:
+      213: -3448055324922295323
+    second: WheatBigSwingAnimationGreyScale_12
+  - first:
+      213: -4802082648029626216
+    second: WheatBigSwingAnimationGreyScale_13
+  - first:
+      213: 8018238189471622379
+    second: WheatBigSwingAnimationGreyScale_14
+  - first:
+      213: -6134762735405568463
+    second: WheatBigSwingAnimationGreyScale_15
+  - first:
+      213: -2812002603588102755
+    second: WheatBigSwingAnimationGreyScale_16
+  - first:
+      213: 7208008473558336532
+    second: WheatBigSwingAnimationGreyScale_17
+  - first:
+      213: 8843182666976473348
+    second: WheatBigSwingAnimationGreyScale_18
+  - first:
+      213: 8645587137043523538
+    second: WheatBigSwingAnimationGreyScale_19
+  - first:
+      213: 125510721189101421
+    second: WheatBigSwingAnimationGreyScale_20
+  - first:
+      213: 8967619906654535536
+    second: WheatBigSwingAnimationGreyScale_21
+  - first:
+      213: -255336046181740798
+    second: WheatBigSwingAnimationGreyScale_22
+  - first:
+      213: -3925992071041695637
+    second: WheatBigSwingAnimationGreyScale_23
+  - first:
+      213: -2027797120404878004
+    second: WheatBigSwingAnimationGreyScale_24
+  - first:
+      213: -8308726128783313561
+    second: WheatBigSwingAnimationGreyScale_25
+  - first:
+      213: 8845056392498032385
+    second: WheatBigSwingAnimationGreyScale_26
+  - first:
+      213: -7599421613429445397
+    second: WheatBigSwingAnimationGreyScale_27
+  - first:
+      213: -7581428464015220212
+    second: WheatBigSwingAnimationGreyScale_28
+  - first:
+      213: -610670888576077642
+    second: WheatBigSwingAnimationGreyScale_29
+  - first:
+      213: -8801631783699607910
+    second: WheatBigSwingAnimationGreyScale_30
+  - first:
+      213: 3269106784447418124
+    second: WheatBigSwingAnimationGreyScale_31
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a84f8cca3e2e7a80800000000000000
+      internalID: -8467279419335030620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_1
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f14e5f04c755de80800000000000000
+      internalID: -8154515050701372935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_2
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b017d7b368cd4030800000000000000
+      internalID: 3480658417638903986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_3
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9a7f44b20e656ca0800000000000000
+      internalID: -6024287968644072806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_4
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72810d3c826961270800000000000000
+      internalID: 8220923271639472167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_5
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87d8d1f45a86e1d60800000000000000
+      internalID: 7862837058641694072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_6
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0f93090a53317210800000000000000
+      internalID: 1328899826842312461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_7
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e42847d88aa7bf40800000000000000
+      internalID: 5744247354438460640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_8
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 760bb4a85d5b80cc0800000000000000
+      internalID: -3744543161405689753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_9
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 289ba677de1071fd0800000000000000
+      internalID: -2371424559364916862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_10
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 512e251b54f6d4ff0800000000000000
+      internalID: -50261675712781803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_11
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 698c9cad4b9c52fa0800000000000000
+      internalID: -5826028764331915114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_12
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ebcc1853fb0620d0800000000000000
+      internalID: -3448055324922295323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_13
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 890802e26439b5db0800000000000000
+      internalID: -4802082648029626216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_14
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 52
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be46def9621864f60800000000000000
+      internalID: 8018238189471622379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_15
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 52
+        width: 16
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13ee8d6abc1fcdaa0800000000000000
+      internalID: -6134762735405568463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 17
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5588235, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9558a9d782c9f8d0800000000000000
+      internalID: -2812002603588102755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_17
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 0
+        width: 17
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5588235, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 414437c548df70460800000000000000
+      internalID: 7208008473558336532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_18
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 0
+        width: 17
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5588235, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 401360d48cb49ba70800000000000000
+      internalID: 8843182666976473348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_19
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 0
+        width: 17
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5588235, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d76a22e1bb4bf770800000000000000
+      internalID: 8645587137043523538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_20
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 0
+        width: 17
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5588235, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6fbafff557edb100800000000000000
+      internalID: 125510721189101421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_21
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 0
+        width: 17
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5588235, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07f7dd8eac2637c70800000000000000
+      internalID: 8967619906654535536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_22
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 0
+        width: 17
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5588235, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20f0cf4083dd47cf0800000000000000
+      internalID: -255336046181740798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_23
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 0
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b604f8e13031489c0800000000000000
+      internalID: -3925992071041695637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_24
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 0
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4d05b14341dbd3e0800000000000000
+      internalID: -2027797120404878004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_25
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 0
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7653ddd7b9971bc80800000000000000
+      internalID: -8308726128783313561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_26
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 0
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10fa4250de3ffba70800000000000000
+      internalID: 8845056392498032385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_27
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 0
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: becac195e4e698690800000000000000
+      internalID: -7599421613429445397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_28
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 0
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c026658eafa59c690800000000000000
+      internalID: -7581428464015220212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_29
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 0
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b030c3ff067687f0800000000000000
+      internalID: -610670888576077642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WheatBigSwingAnimationGreyScale_30
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 0
+        width: 17
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9e0cc896825ad580800000000000000
+      internalID: -8801631783699607910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
