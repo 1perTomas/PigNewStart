@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     internal void WallInteraction()
-    {
+    { 
         if (playerController.playerSurroundings.isTouchingWall
             && !playerController.playerSurroundings.isGrounded)
         {
