@@ -73895,7 +73895,8 @@ MonoBehaviour:
   jumpForce: 6.75
   fallMultiplier: 2.5
   lowJumpMultiplier: 2
-  turningRate: 0.26
+  turningRateWalk: 0
+  turningRateSprint: 0
   turningRateAir: 0.1
   acceleration: 0.15
 --- !u!114 &1759083735

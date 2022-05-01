@@ -16,7 +16,7 @@ public class PlayerAnimationManager : MonoBehaviour
     const string PLAYER_WALLSLIDE_R = "WallSlideRight";
     const string PLAYER_RUNNING_R = "RunRight";
     const string PLAYER_GOPRONE_R = "GoProneRight";
-    const string PLAYER_CRAWLING_R = "CrawlingRight";
+    const string PLAYER_CRAWLING_R = "CrawlRight";
     const string PLAYER_STANDUP_R = "StandUpRight";
     const string PLAYER_SLIDE_R = "SlideRight";
     const string PLAYER_FALL_R = "FallRight";

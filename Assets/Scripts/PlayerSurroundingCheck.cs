@@ -229,22 +229,22 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(GroundCheck.position, new Vector3(GroundCheck.position.x, GroundCheck.position.y+0.1f));
-      
-        //Gizmos.DrawWireSphere(GroundCheck.position, groundCheckRadius;
-       // Gizmos.DrawLine(GroundCheck.position, new Vector3(GroundCheck.position.x + 0.28f, GroundCheck.position.y, GroundCheck.position.z));
-
-        Gizmos.DrawWireSphere(CeilingCheck.position, CeilingCheckRadius);
-        Gizmos.DrawWireSphere(CeilingCheckCrawling.position, CeilingCheckRadius);
-
-  
-
-        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y, wallCheck.position.z));
-
-        Gizmos.DrawLine(LedgeCheck.position, new Vector3(LedgeCheck.position.x + wallCheckDistance, LedgeCheck.position.y, LedgeCheck.position.z));
-    }
+   // private void OnDrawGizmos()
+   // {
+   //     Gizmos.DrawLine(GroundCheck.position, new Vector3(GroundCheck.position.x, GroundCheck.position.y+0.1f));
+   //   
+   //     //Gizmos.DrawWireSphere(GroundCheck.position, groundCheckRadius;
+   //    // Gizmos.DrawLine(GroundCheck.position, new Vector3(GroundCheck.position.x + 0.28f, GroundCheck.position.y, GroundCheck.position.z));
+   //
+   //     Gizmos.DrawWireSphere(CeilingCheck.position, CeilingCheckRadius);
+   //     Gizmos.DrawWireSphere(CeilingCheckCrawling.position, CeilingCheckRadius);
+   //
+   //
+   //
+   //     Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y, wallCheck.position.z));
+   //
+   //     Gizmos.DrawLine(LedgeCheck.position, new Vector3(LedgeCheck.position.x + wallCheckDistance, LedgeCheck.position.y, LedgeCheck.position.z));
+   // }
 
     private void AirGlitch()
     {
