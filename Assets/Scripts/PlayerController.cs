@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-        playerMovement.SpeedSet();
+        speedList.SpeedSet();
         playerMovement.NewMovements();
 
         playerInput.CheckButtonInput();

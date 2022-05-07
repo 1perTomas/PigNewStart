@@ -53,8 +53,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float turningRateWalk;
     public float turningRateSprint;
-    public float turningRateAir;
-    public float acceleration;
+   // public float turningRateAir;
+   // public float acceleration;
 
     internal bool wallJumpReady = false;
 
@@ -79,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
                 isHangingLedge = false;
             }
             if ((playerController.playerSurroundings.isTouchingLedge
-      && playerController.rb.velocity.y < -1) || (playerController.playerSurroundings.isTouchingLedgeJump && isMoving)) //sticks better to walljumps
+      && playerController.rb.velocity.y < -1)) //sticks better to walljumps
             {
                 isWallSliding = true;
                 //ChangeSpeed(0); ---------------------------------------------------------------------------
@@ -193,56 +193,56 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    internal void ChangeSpeed(float newSpeed)
-    {
-        playerController.currentSpeed = newSpeed;
-    }
-
-    internal void ChangeSpeedNew(float newSpeed)
-    {
-        {
-            if (playerController.currentSpeed != newSpeed)
-            {
-
-                if (playerController.currentSpeed < newSpeed)
-                {
-                    if (playerController.playerSurroundings.isGrounded)
-                    {
-                        playerController.currentSpeed += (acceleration);
-                    }
-
-                    else
-                    {
-                        playerController.currentSpeed += (turningRateAir);
-                    }
-
-                    if (playerController.currentSpeed > newSpeed)
-                    {
-                        playerController.currentSpeed = newSpeed;
-                    }
-                }
-
-                if (playerController.currentSpeed > newSpeed)
-                {
-                    if (playerController.playerSurroundings.isGrounded)
-                    {
-                        playerController.currentSpeed -= (acceleration);
-                    }
-
-                    else
-                    {
-                        playerController.currentSpeed -= (turningRateAir);
-                    }
-
-                    if (playerController.currentSpeed < newSpeed)
-                    {
-                        playerController.currentSpeed = newSpeed;
-                    }
-                }
-            }
-        }
-
-    }
+    //internal void ChangeSpeed(float newSpeed)
+    //{
+    //    playerController.currentSpeed = newSpeed;
+    //}
+    //
+    //internal void ChangeSpeedNew(float newSpeed)
+    //{
+    //    {
+    //        if (playerController.currentSpeed != newSpeed)
+    //        {
+    //
+    //            if (playerController.currentSpeed < newSpeed)
+    //            {
+    //                if (playerController.playerSurroundings.isGrounded)
+    //                {
+    //                    playerController.currentSpeed += (acceleration);
+    //                }
+    //
+    //                else
+    //                {
+    //                    playerController.currentSpeed += (turningRateAir);
+    //                }
+    //
+    //                if (playerController.currentSpeed > newSpeed)
+    //                {
+    //                    playerController.currentSpeed = newSpeed;
+    //                }
+    //            }
+    //
+    //            if (playerController.currentSpeed > newSpeed)
+    //            {
+    //                if (playerController.playerSurroundings.isGrounded)
+    //                {
+    //                    playerController.currentSpeed -= (acceleration);
+    //                }
+    //
+    //                else
+    //                {
+    //                    playerController.currentSpeed -= (turningRateAir);
+    //                }
+    //
+    //                if (playerController.currentSpeed < newSpeed)
+    //                {
+    //                    playerController.currentSpeed = newSpeed;
+    //                }
+    //            }
+    //        }
+    //    }
+    //
+    //}
 
     internal void WallSlideSpeedIdle()
     {
@@ -405,6 +405,7 @@ public class PlayerMovement : MonoBehaviour
 
                     JumpNew();
                 }
+              
 
             }
             else if (/*playerController.playerSurroundings.canJump &&playerController.playerInput.isJumpTapped && playerController.hangTimeTimer > 0f
@@ -723,6 +724,7 @@ public class PlayerMovement : MonoBehaviour
                             }
                         }
 
+                       
 
                         if (isHangingLedge)
                         {
@@ -785,7 +787,7 @@ public class PlayerMovement : MonoBehaviour
                             }
                             else
                             {
-                                ChangeSpeedNew(playerController.speedList.walkSpeed);
+                                playerController.speedList.ChangeSpeedNew(playerController.speedList.walkSpeed);
                             }
                         }
                     }
@@ -801,111 +803,111 @@ public class PlayerMovement : MonoBehaviour
 
     //----------------------------------------S P E E D   S W I T C H----------------------------------------------------------------
 
-    internal void SpeedSet()
-    {
-
-        if (playerController.playerSurroundings.isGrounded)
-        {
-            if ((playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge) && playerController.playerMovement.isStandingNew)
-            {
-
-                ChangeSpeed(0);
-            }
-
-            else
-            {
-                if (isIdleNew || isProneIdle)
-                {
-                    if (playerController.playerSurroundings.isTouchingWall)
-                    {
-                        ChangeSpeed(0);
-                    }
-                    else
-                    {
-                        // Debug.Log("honk");
-                        ChangeSpeedNew(0);
-                    }
-                }
-
-
-                else if (isWalkingNew)
-                {
-                    if (isFacingRight)
-                    {
-                        if (playerController.currentSpeed < playerController.speedList.walkSpeed)
-                        {
-
-                            ChangeSpeedNew(playerController.speedList.walkSpeed);
-                        }
-
-
-                        else
-                        {
-                            ChangeSpeedNew(playerController.speedList.walkSpeed);
-                        }
-                    }
-                    else
-                    {
-                        if (playerController.currentSpeed > playerController.speedList.walkSpeed)
-                        {
-
-                            ChangeSpeedNew(playerController.speedList.walkSpeed);
-                        }
-
-
-                        else
-                        {
-                            ChangeSpeedNew(playerController.speedList.walkSpeed);
-                        }
-                    }
-                }
-
-                else if (isSprintingNew)
-                {
-                    ChangeSpeedNew(playerController.speedList.runningSpeed);
-                }
-
-                else if (isCrawlingNew)
-                {
-                    if (playerController.currentSpeed == 0)
-                    {
-                        ChangeSpeed(playerController.speedList.crawlingSpeed);
-                    }
-
-                    else
-                    {
-                        ChangeSpeedNew(playerController.speedList.crawlingSpeed);
-                    }
-                }
-
-                else if (isSlidingNew)
-                {
-                    ChangeSpeedNew(playerController.speedList.slidingSpeed);
-                }
-            }
-        }
-
-        else if (isWallSliding || isHangingLedge)
-        {
-            if (wallJumpReady)
-            {
-                ChangeSpeed(playerController.speedList.walkSpeed);
-            }
-            else
-            {
-                // ChangeSpeed(0); -----------------------------------------------------------------------
-            }
-        }
-
-        else
-        {
-            if (!isMoving)
-            {
-                ChangeSpeedNew(0);
-                Debug.Log("NoMovement");
-            }
-        }
-    }
+   // internal void SpeedSet()
+   // {
+   //
+   //     if (playerController.playerSurroundings.isGrounded)
+   //     {
+   //         if ((playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge) && playerController.playerMovement.isStandingNew)
+   //         {
+   //
+   //             ChangeSpeed(0);
+   //         }
+   //
+   //         else
+   //         {
+   //             if (isIdleNew || isProneIdle)
+   //             {
+   //                 if (playerController.playerSurroundings.isTouchingWall)
+   //                 {
+   //                     ChangeSpeed(0);
+   //                 }
+   //                 else
+   //                 {
+   //                     // Debug.Log("honk");
+   //                     ChangeSpeedNew(0);
+   //                 }
+   //             }
+   //
+   //
+   //             else if (isWalkingNew)
+   //             {
+   //                 if (isFacingRight)
+   //                 {
+   //                     if (playerController.currentSpeed < playerController.speedList.walkSpeed)
+   //                     {
+   //
+   //                         ChangeSpeedNew(playerController.speedList.walkSpeed);
+   //                     }
+   //
+   //
+   //                     else
+   //                     {
+   //                         ChangeSpeedNew(playerController.speedList.walkSpeed);
+   //                     }
+   //                 }
+   //                 else
+   //                 {
+   //                     if (playerController.currentSpeed > playerController.speedList.walkSpeed)
+   //                     {
+   //
+   //                         ChangeSpeedNew(playerController.speedList.walkSpeed);
+   //                     }
+   //
+   //
+   //                     else
+   //                     {
+   //                         ChangeSpeedNew(playerController.speedList.walkSpeed);
+   //                     }
+   //                 }
+   //             }
+   //
+   //             else if (isSprintingNew)
+   //             {
+   //                 ChangeSpeedNew(playerController.speedList.runningSpeed);
+   //             }
+   //
+   //             else if (isCrawlingNew)
+   //             {
+   //                 if (playerController.currentSpeed == 0)
+   //                 {
+   //                     ChangeSpeed(playerController.speedList.crawlingSpeed);
+   //                 }
+   //
+   //                 else
+   //                 {
+   //                     ChangeSpeedNew(playerController.speedList.crawlingSpeed);
+   //                 }
+   //             }
+   //
+   //             else if (isSlidingNew)
+   //             {
+   //                 ChangeSpeedNew(playerController.speedList.slidingSpeed);
+   //             }
+   //         }
+   //     }
+   //
+   //     else if (isWallSliding || isHangingLedge)
+   //     {
+   //         if (wallJumpReady)
+   //         {
+   //             ChangeSpeed(playerController.speedList.walkSpeed);
+   //         }
+   //         else
+   //         {
+   //             // ChangeSpeed(0); -----------------------------------------------------------------------
+   //         }
+   //     }
+   //
+   //     else
+   //     {
+   //         if (!isMoving)
+   //         {
+   //             ChangeSpeedNew(0);
+   //             Debug.Log("NoMovement");
+   //         }
+   //     }
+   // }
 
 
     //-----------------------------------------S T A T E   F U N C T I O N S-----------------------------------------------------------------
@@ -980,7 +982,6 @@ public class PlayerMovement : MonoBehaviour
 
     internal void JumpNew()
     {
-        //  if (playerController.playerSurroundings.canJump)
         if (isWallSliding || isHangingLedge)
         {
             if ((isFacingRight && playerController.playerInput.isLeftPressed) || (!isFacingRight && playerController.playerInput.isRightPressed))
