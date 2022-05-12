@@ -47,20 +47,16 @@ public class PlayerMovement : MonoBehaviour
     internal float jumpBufferCount;
     internal float jumpBufferLength = 0.2f;
 
+    internal float jumpAntiSpam;
+
     public float jumpForce = 6.6f;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
 
     public float turningRateWalk;
     public float turningRateSprint;
-    // public float turningRateAir;
-    // public float acceleration;
 
     internal bool wallJumpReady = false;
-
-
-
-
 
     internal void WallInteraction()
     {
@@ -82,7 +78,6 @@ public class PlayerMovement : MonoBehaviour
       && playerController.rb.velocity.y < -1)) //sticks better to walljumps
             {
                 isWallSliding = true;
-                //ChangeSpeed(0); ---------------------------------------------------------------------------
             }
         }
         else
@@ -93,8 +88,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
-
     private void HangingLedge() // put into wall interaction function
     {
         if (!isClimbingLedge)
@@ -102,24 +95,19 @@ public class PlayerMovement : MonoBehaviour
             hangingPosition = new Vector2(playerController.rb.position.x, playerController.rb.position.y);
             FreezePlayerLocation(velX, velY);
             isHangingLedge = true;
-            //print("i'm hanging");
         }
     }
 
     internal void ClimbLedge()
     {
-
         canMove = false;
         canTurn = false;
-
 
         if (isFacingRight && !playerController.playerInput.isLeftPressed && canClimb)
         {
             isHangingLedge = false;
             isClimbingLedge = true;
-
             playerController.rb.position = new Vector2(hangingPosition.x + 0.35f, hangingPosition.y + 0.43f); //standin +0.28f
-
         }
         else if (!isFacingRight && !playerController.playerInput.isRightPressed && canClimb)
         {
@@ -136,10 +124,8 @@ public class PlayerMovement : MonoBehaviour
 
     internal void SpecialMovement()
     {
-
         if (isClimbingLedge)
         {
-
             DisableMovement();
             FreezePlayerLocation(velX, velY);
             playerController.climbLedgeTimer += Time.deltaTime;
@@ -152,13 +138,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // else if (!isClimbingLedge)
-        // {
-        //    // EnableMovement();
-        //     playerController.climbLedgeTimer = 0;
-        // }
-
-
         if (isWallSliding)
         {
             canTurn = false;
@@ -167,11 +146,6 @@ public class PlayerMovement : MonoBehaviour
                 playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
             }
         }
-
-        //else
-        //{
-        //    playerController.wallSlideSpeed = 0.45f;
-        //}
     }
 
     private void FreezePlayerLocation(float velocityX, float velocityY)
@@ -192,11 +166,8 @@ public class PlayerMovement : MonoBehaviour
         canTurn = true;
     }
 
-
     //internal void ChangeSpeed(float newSpeed) - now in SpeedList
-
     //internal void ChangeSpeedNew(float newSpeed) - now in SpeedList
-
 
     internal void WallSlideSpeedIdle()
     {
@@ -221,114 +192,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void PriorityDirectionLeft()
-    {
-        if (canTurn)
-        {
-
-            if (playerController.playerInput.isLeftPressed)
-            {
-                isMoving = true;
-                if (isFacingRight)
-                {
-                    playerController.speedList.FlipSpeedValues();
-
-                    if (isSlidingNew)
-                    {
-                        CrawlNew();
-                    }
-                }
-
-                isFacingRight = false;
-
-                Move();
-            }
-
-            //---------------------------------------------------------------------------------Input Right
-            else if (playerController.playerInput.isRightPressed)
-
-            {
-
-                isMoving = true;
-                if (!isFacingRight)
-                {
-                    playerController.speedList.FlipSpeedValues();
-
-                }
-
-                isFacingRight = true;
-
-
-                Move();
-            }
-
-            else
-            {
-                isMoving = false;
-                IdleStop();
-            }
-        }
-    }
-
-    private void PriorityDirectionRight()
-    {
-        if (canTurn)
-        {
-            if (playerController.playerInput.isRightPressed)
-            //-----------------------------------------------------------------------------------Input Left
-            {
-                isMoving = true;
-                if (!isFacingRight)
-                {
-                    playerController.speedList.FlipSpeedValues();
-
-                    if (isSlidingNew)
-                    {
-                        CrawlNew();
-                    }
-                }
-
-                isFacingRight = true;
-                Move();
-
-            }
-
-            //---------------------------------------------------------------------------------Input Right
-            else if (playerController.playerInput.isLeftPressed)
-            {
-
-                isMoving = true;
-                if (isFacingRight)
-                {
-                    playerController.speedList.FlipSpeedValues();
-
-                }
-
-                isFacingRight = false;
-                Move();
-
-
-            }
-
-            else
-            {
-                isMoving = false;
-                IdleStop();
-
-            }
-        }
-        else
-        {
-
-        }
-    }
+    // private void PriorityDirectionLeft() - now in PlayerDirectionPriority
+    // private void PriorityDirectionRight() - now in PlayerDirectionPriority
 
     //---------------------------------------------M O V E M E N T   L O G I C-------------------------------------------------------------------------
     internal void NewMovements()
     {
-
         {
-
             if (playerController.playerInput.isLeftTapped)
             {
                 Debug.Log("Left Tap");
@@ -343,31 +213,26 @@ public class PlayerMovement : MonoBehaviour
 
             if (leftPriority)
             {
-                PriorityDirectionLeft();
+                playerController.playerDirectionPriority.PriorityDirectionLeft();
             }
 
             else
             {
-                PriorityDirectionRight();
+                playerController.playerDirectionPriority.PriorityDirectionRight();
             }
 
             if (playerController.playerInput.isJumpTapped)
             {
+                jumpAntiSpam += Time.deltaTime;
                 jumpBufferCount = jumpBufferLength;
+
                 if (playerController.playerSurroundings.canJump) // JUMP
                 {
                     JumpNew();
                 }
-
-               // else if (wallJumpReady)
-               // {
-               //     WallJump(jumpForce);
-               // }
-
-
             }
-            else if (/*playerController.playerSurroundings.canJump &&playerController.playerInput.isJumpTapped && playerController.hangTimeTimer > 0f
-            && */ jumpBufferCount > 0)
+
+            else if (jumpBufferCount > 0)
             {
                 if (playerController.playerSurroundings.canJump && playerController.playerInput.isJumpPressed && playerController.playerSurroundings.isGrounded)
                 {
@@ -388,7 +253,6 @@ public class PlayerMovement : MonoBehaviour
           && playerController.playerInput.isJumpReleased) // if space is tapped, jump is smaller
             {
                 playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, playerController.rb.velocity.y * 0.5f);
-                //playerController.rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
 
             if (playerController.playerSurroundings.isGrounded)
@@ -405,8 +269,6 @@ public class PlayerMovement : MonoBehaviour
                     playerController.speedList.FlipSpeedValues();
                 }
 
-
-
                 if (canMove)
                 {
 
@@ -417,7 +279,6 @@ public class PlayerMovement : MonoBehaviour
 
                         if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
                         {
-                            //Debug.Log("Stop one");
                             IdleStop();
                         }
 
@@ -433,7 +294,6 @@ public class PlayerMovement : MonoBehaviour
                         else if ((isSprintingNew && playerController.playerInput.isSprintReleased)
                             || (isSprintingNew && !playerController.playerInput.isLeftPressed && !isFacingRight)
                             || (isSprintingNew && isFacingRight && !playerController.playerInput.isRightPressed))
-
                         {
                             isSprintingNew = false;
                         }
@@ -453,7 +313,6 @@ public class PlayerMovement : MonoBehaviour
                                 {
                                     WallBounce();
                                 }
-
                                 IdleStop();
                             }
                             else
@@ -531,7 +390,6 @@ public class PlayerMovement : MonoBehaviour
                         {
                             playerController.slidingTimer -= Time.deltaTime;
                             if (!playerController.playerInput.isSprintPressed || playerController.slidingTimer < 0.05)
-
                             {
                                 CrawlNew();
                             }
@@ -541,7 +399,6 @@ public class PlayerMovement : MonoBehaviour
                             {
                                 SprintNew();
                             }
-
                         }
 
                         else if (isCrawlingNew)
@@ -550,14 +407,12 @@ public class PlayerMovement : MonoBehaviour
                             if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
                             {
                                 StandUp();
-                                //isWalkingNew = true;
                             }
 
                             //-----------------IDLE PRONE-------------------------------------
                             else if ((isFacingRight && !playerController.playerInput.isRightPressed)
                                 || (!isFacingRight && !playerController.playerInput.isLeftPressed)
                                 || (playerController.playerSurroundings.isTouchingWall))
-
                             {
                                 IdleStop();
                             }
@@ -569,24 +424,16 @@ public class PlayerMovement : MonoBehaviour
                             if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
                             {
                                 StandUp();
-                                //isIdleNew = true;
                             }
-
 
                             else if ((playerController.playerInput.isLeftPressed || playerController.playerInput.isRightPressed) && !playerController.playerSurroundings.isTouchingWall)
                             {
                                 CrawlNew();
                             }
-                            else                        //Check if needed
-                            {                           //Check if needed
-                                GoProne();              //Check if needed
-                                //isProneIdle = true;     //Check if needed
-                            }                           //Check if needed
-                        }
-
-                        else if (isInteracting)
-                        {
-
+                            else
+                            {
+                                GoProne();
+                            }
                         }
                     }
                 }
@@ -597,15 +444,11 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (playerController.playerSurroundings.isAbleToClimb)
                     {
-                        //playerController.crawlTimer = 0;
                         GoProne();
-                        //isProneIdle = true;
                     }
                     else
                     {
-                        //  StandUp();
                     }
-
 
                 }
                 else
@@ -614,6 +457,25 @@ public class PlayerMovement : MonoBehaviour
                     isIdleNew = false;
                     isWalkingNew = false;
                     isSprintingNew = false;
+                  //
+                  //if( (playerController.currentSpeed < 0 && playerController.playerSurroundings.isTouchingWallBehind)   //test
+                  //|| (playerController.currentSpeed > 0 && playerController.playerSurroundings.isTouchingWallBehind))   //test
+                  //{                                                                                                     //test
+                  //    wallJumpReady = true;                                                                             //test
+                  //}                                                                                                     //test
+                  //                                                                                                      //test
+                  //else                                                                                                  //test
+                  //{                                                                                                     //test
+                  //    wallJumpReady = false;                                                                            //test
+                  //}                                                                                                     //test
+                  //                                                                                                      //test
+                  //if (wallJumpReady)                                                                                    //test
+                  //{                                                                                                     //test
+                  //    if (playerController.playerInput.isJumpTapped)                                                    //test
+                  //    {                                                                                                 //test
+                  //        WallJump(jumpForce);                                                                          //test                                              ////CHECK THIS
+                  //    }                                                                                                 //test
+                  //}
 
                     if (isHangingLedge && wallJumpReady)
                     {
@@ -625,6 +487,7 @@ public class PlayerMovement : MonoBehaviour
 
                         if ((isFacingRight && playerController.playerInput.isLeftPressed && !playerController.playerInput.isRightPressed)
                         || (!isFacingRight && playerController.playerInput.isRightPressed && !playerController.playerInput.isLeftPressed))
+                        
                         {
                             wallJumpReady = true;
                             canClimb = false;
@@ -659,35 +522,25 @@ public class PlayerMovement : MonoBehaviour
                                 playerController.speedList.FlipSpeedValues();
                             }
 
-                            if (playerController.playerInput.isJumpTapped)
+                            else
                             {
 
+                            }
+
+                            if (playerController.playerInput.isJumpTapped)
+                            {
                                 if (playerController.playerInput.isJumpPressed)
                                 {
                                     WallJump(jumpForce);                                                                                                                        ////CHECK THIS
                                 }
                             }////CHECK THIS
 
-                            else if (playerController.playerInput.isDownPressed)
+                            else if (playerController.playerInput.isDownTapped)
                             {
-
                                 WallJump(0);
                             }
-                        }                                                                                                                                      ////CHECK THIS
-                        else
-                        {
-                            if (isFacingRight && playerController.speedList.walkSpeed < 0)
-                            {
-                                playerController.speedList.FlipSpeedValues();
-                            }
-
-                            else if (!isFacingRight && playerController.speedList.walkSpeed > 0)
-                            {
-                                playerController.speedList.FlipSpeedValues();
-                            }
                         }
-
-
+                     
 
                         if (isHangingLedge)
                         {
@@ -740,20 +593,33 @@ public class PlayerMovement : MonoBehaviour
                     }
 
                     else if (!playerController.playerSurroundings.isGrounded)       //////////CHECK THIS
-                    {  //                                                             //////////CHECK THIS
+                    {                                                            //////////CHECK THIS
                         EnableMovement();                                           //////////CHECK THIS
 
-                        if (playerController.playerInput.isLeftPressed || playerController.playerInput.isRightPressed)
-                        {
-                            if (playerController.playerInput.isSprintPressed)
-                            {
-                                //ChangeSpeedNew(playerController.speedList.runningSpeed);
-                            }
-                            else
-                            {
-                                playerController.speedList.ChangeSpeedNew(playerController.speedList.walkSpeed);
-                            }
-                        }
+                        // if (playerController.playerInput.isLeftPressed || playerController.playerInput.isRightPressed)
+                        // {
+                        //     if (playerController.playerInput.isSprintPressed)
+                        //     {
+                        //         if (playerController.rb.velocity.x > 0 && playerController.playerInput.isLeftPressed)
+                        //         {
+                        //             playerController.speedList.ChangeSpeedNew(playerController.speedList.walkSpeed);
+                        //         }
+                        //
+                        //         else if (playerController.rb.velocity.x <0 && playerController.playerInput.isRightPressed)
+                        //         {
+                        //             playerController.speedList.ChangeSpeedNew(playerController.speedList.walkSpeed);
+                        //         }
+                        //     }
+                        //     else
+                        //     {
+                        //         playerController.speedList.ChangeSpeedNew(playerController.speedList.walkSpeed);
+                        //     }
+                        // }
+                        // 
+                        // else
+                        // {
+                        //     playerController.speedList.ChangeSpeedNew(0);
+                        // }
                     }
 
                     else
@@ -788,13 +654,11 @@ public class PlayerMovement : MonoBehaviour
 
     internal void GoProne()
     {
-        Debug.Log("GoProne");
         isStandingNew = false;
         isIdleNew = false;
         isWalkingNew = false;
         isSprintingNew = false;
         isProne = true;
-
     }
 
     internal void StandUp()
@@ -811,7 +675,6 @@ public class PlayerMovement : MonoBehaviour
         GoProne();
         isSlidingNew = true;
         playerController.slideTransitionTimer = playerController.slideTransitionTimerSet;
-
     }
 
     internal void CrawlNew()
@@ -839,29 +702,15 @@ public class PlayerMovement : MonoBehaviour
 
     internal void JumpNew()
     {
-        if (isWallSliding || isHangingLedge)
-        {
-            if ((isFacingRight && playerController.playerInput.isLeftPressed) || (!isFacingRight && playerController.playerInput.isRightPressed))
-            {
-
-            }
-        }
-
-        else
-        {
-            playerController.hangTimeTimer = 0;
-
-            playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
-
-            jumpBufferCount = 0;
-        }
+        playerController.hangTimeTimer = 0;
+        playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
+        jumpBufferCount = 0;
     }
 
     internal void WallJump(float jumpPower) /////////CHECK THIS
     {
         EnableMovement();
         playerController.hangTimeTimer = 0;
-
         jumpBufferCount = 0;
 
         if (isFacingRight)
@@ -883,16 +732,16 @@ public class PlayerMovement : MonoBehaviour
         {
             playerController.transform.localPosition = new Vector2(transform.localPosition.x - 0.015f, transform.localPosition.y);
         }
+
         else
         {
             playerController.transform.localPosition = new Vector2(transform.localPosition.x + 0.015f, transform.localPosition.y);
         }
     }
 
-    private void IdleStop()
+    internal void IdleStop()
     {
         Move();
-        //Debug.Log("Stop");
         NearestPixel();
         if (isStandingNew)
         {

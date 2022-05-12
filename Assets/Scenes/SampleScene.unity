@@ -29848,7 +29848,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 663207951}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.502, z: 0}
+  m_LocalPosition: {x: 0, y: -0.4995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1759083728}
@@ -54199,6 +54199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef39641edc86d6c40ab4aa63c733e27a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <PlayerInput>k__BackingField: {fileID: 0}
+  <Anim>k__BackingField: {fileID: 0}
   playerData: {fileID: 0}
 --- !u!61 &1263267057
 BoxCollider2D:
@@ -73683,6 +73685,7 @@ GameObject:
   - component: {fileID: 1759083736}
   - component: {fileID: 1759083738}
   - component: {fileID: 1759083737}
+  - component: {fileID: 1759083739}
   m_Layer: 17
   m_Name: Player
   m_TagString: Player
@@ -73829,6 +73832,7 @@ MonoBehaviour:
   moveObject: {fileID: 1759083736}
   playerState: {fileID: 1759083738}
   speedList: {fileID: 1759083737}
+  playerDirectionPriority: {fileID: 1759083739}
   turnTimerSet: 0.1
   climbLedgeTimerSet: 0.32
   walkSpeed: 3.5
@@ -73897,8 +73901,6 @@ MonoBehaviour:
   lowJumpMultiplier: 2
   turningRateWalk: 0
   turningRateSprint: 0
-  turningRateAir: 0.1
-  acceleration: 0.15
 --- !u!114 &1759083735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73961,6 +73963,8 @@ MonoBehaviour:
   crawlingSpeed: 2
   slidingSpeed: 4.5
   wallSlideSpeed: 0.45
+  turningRateAir: 0.1
+  acceleration: 0.15
 --- !u!114 &1759083738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73973,6 +73977,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e1f452186336f43af78626fc77e7f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1759083739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759083725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1abf1c29df9f21a44a25a39901e4a98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 1759083730}
 --- !u!1 &1762218701
 GameObject:
   m_ObjectHideFlags: 0

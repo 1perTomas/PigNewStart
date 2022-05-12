@@ -45,7 +45,6 @@ public class SpeedList : MonoBehaviour
                     }
                     else
                     {
-                        // Debug.Log("honk");
                         ChangeSpeedNew(0);
                     }
                 }
@@ -110,11 +109,71 @@ public class SpeedList : MonoBehaviour
         {
             if (playerController.playerMovement.wallJumpReady)
             {
-                ChangeSpeed(playerController.speedList.walkSpeed);
+                ChangeSpeed(walkSpeed);
+            }
+            else if ((playerController.playerMovement.isFacingRight && playerController.playerInput.isRightPressed)
+                || (!playerController.playerMovement.isFacingRight && playerController.playerInput.isLeftPressed))
+            {
+                ChangeSpeed(walkSpeed);
             }
             else
             {
-                // ChangeSpeed(0); -----------------------------------------------------------------------
+                playerController.speedList.ChangeSpeed(0);
+            }
+        }
+
+        else if (!playerController.playerSurroundings.isGrounded)
+        {
+           //if (playerController.playerMovement.wallJumpReady)  //Test
+           //{                                                   //Test
+           //   // ChangeSpeed(walkSpeed);                         //Test
+           //}                                                   //Test
+
+            if (playerController.playerInput.isLeftPressed || playerController.playerInput.isRightPressed)
+            {
+                if (playerController.playerSurroundings.isTouchingWall
+                    || (playerController.currentSpeed < 0 && playerController.playerMovement.isFacingRight && playerController.playerSurroundings.isTouchingWallBehind)
+                    || (playerController.currentSpeed > 0 && !playerController.playerMovement.isFacingRight && playerController.playerSurroundings.isTouchingWallBehind))
+                {
+                    playerController.speedList.ChangeSpeed(0);
+                }
+
+                else if(playerController.currentSpeed == 0 && playerController.playerSurroundings.isTouchingWallBehind)
+                  
+                    {
+                    ChangeSpeedNew(walkSpeed);
+                }
+
+                else if (playerController.playerInput.isSprintPressed && (playerController.currentSpeed > slidingSpeed || playerController.currentSpeed < slidingSpeed * -1))
+                {
+                    if (playerController.playerSurroundings.isTouchingWall)
+                    {
+                        //   playerController.speedList.ChangeSpeed(0);
+                    }
+                    else
+
+
+                    {
+                        if (playerController.rb.velocity.x > 0 && playerController.playerInput.isLeftPressed)
+                        {
+                            playerController.speedList.ChangeSpeedNew(walkSpeed);
+                        }
+
+                        else if (playerController.rb.velocity.x < 0 && playerController.playerInput.isRightPressed)
+                        {
+                            playerController.speedList.ChangeSpeedNew(walkSpeed);
+                        }
+                    }
+                }
+                else
+                {
+                    playerController.speedList.ChangeSpeedNew(walkSpeed);
+                }
+            }
+
+            else
+            {
+                playerController.speedList.ChangeSpeedNew(0);
             }
         }
 
@@ -134,47 +193,47 @@ public class SpeedList : MonoBehaviour
 
     internal void ChangeSpeedNew(float newSpeed)
     {
+
+        if (playerController.currentSpeed != newSpeed)
         {
-            if (playerController.currentSpeed != newSpeed)
+
+            if (playerController.currentSpeed < newSpeed)
             {
-
-                if (playerController.currentSpeed < newSpeed)
+                if (playerController.playerSurroundings.isGrounded)
                 {
-                    if (playerController.playerSurroundings.isGrounded)
-                    {
-                        playerController.currentSpeed += (acceleration);
-                    }
+                    playerController.currentSpeed += (acceleration);
+                }
 
-                    else
-                    {
-                        playerController.currentSpeed += (turningRateAir);
-                    }
-
-                    if (playerController.currentSpeed > newSpeed)
-                    {
-                        playerController.currentSpeed = newSpeed;
-                    }
+                else
+                {
+                    playerController.currentSpeed += (turningRateAir);
                 }
 
                 if (playerController.currentSpeed > newSpeed)
                 {
-                    if (playerController.playerSurroundings.isGrounded)
-                    {
-                        playerController.currentSpeed -= (acceleration);
-                    }
+                    playerController.currentSpeed = newSpeed;
+                }
+            }
 
-                    else
-                    {
-                        playerController.currentSpeed -= (turningRateAir);
-                    }
+            if (playerController.currentSpeed > newSpeed)
+            {
+                if (playerController.playerSurroundings.isGrounded)
+                {
+                    playerController.currentSpeed -= (acceleration);
+                }
 
-                    if (playerController.currentSpeed < newSpeed)
-                    {
-                        playerController.currentSpeed = newSpeed;
-                    }
+                else
+                {
+                    playerController.currentSpeed -= (turningRateAir);
+                }
+
+                if (playerController.currentSpeed < newSpeed)
+                {
+                    playerController.currentSpeed = newSpeed;
                 }
             }
         }
+
 
     }
 }

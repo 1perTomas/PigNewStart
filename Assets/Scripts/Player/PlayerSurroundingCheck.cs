@@ -87,13 +87,9 @@ public class PlayerSurroundingCheck : MonoBehaviour
                 }
             }
 
-            else if (!isGrounded && isTouchingWallBehind && playerController.playerMovement.isMoving)
-            {
-                playerController.playerMovement.wallJumpReady = true;
-            }
-
             else
             {
+
                 playerController.hangTimeTimer -= Time.deltaTime;
                 if (playerController.hangTimeTimer > 0f)
                 {
@@ -105,6 +101,16 @@ public class PlayerSurroundingCheck : MonoBehaviour
                     canJump = false;
                 }
             }
+
+            if (!isGrounded && isTouchingWallBehind && playerController.playerMovement.isMoving)
+            {
+                playerController.playerMovement.wallJumpReady = true;
+            }
+            else
+            {
+                playerController.playerMovement.wallJumpReady = false;
+            }
+
         }
 
         else

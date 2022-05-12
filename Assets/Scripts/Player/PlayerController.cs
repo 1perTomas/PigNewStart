@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     internal SpeedList speedList;
 
+    [SerializeField]
+    internal PlayerDirectionPriority playerDirectionPriority;
+
 
     //private float movementInputDirection;
     internal float currentSpeed;
