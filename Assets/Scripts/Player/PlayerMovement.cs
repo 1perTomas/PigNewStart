@@ -145,6 +145,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
             }
+
+            if (playerController.rb.velocity.y > playerController.speedList.wallSlideSpeed)
+            {
+                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+            }
         }
     }
 
@@ -223,12 +228,23 @@ public class PlayerMovement : MonoBehaviour
 
             if (playerController.playerInput.isJumpTapped)
             {
-                jumpAntiSpam += Time.deltaTime;
+
+               // jumpAntiSpam += Time.deltaTime;
+
                 jumpBufferCount = jumpBufferLength;
 
                 if (playerController.playerSurroundings.canJump) // JUMP
                 {
-                    JumpNew();
+                    if (jumpAntiSpam == 0)
+                    {
+                        JumpNew();
+                    }
+
+                    else
+                    {
+
+                       // JumpNew();
+                    }
                 }
             }
 
@@ -252,22 +268,23 @@ public class PlayerMovement : MonoBehaviour
             if (playerController.rb.velocity.y > 0
           && playerController.playerInput.isJumpReleased) // if space is tapped, jump is smaller
             {
-                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, playerController.rb.velocity.y * 0.5f);
+                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, playerController.rb.velocity.y * 0.65f);
             }
 
             if (playerController.playerSurroundings.isGrounded)
             {
+                jumpAntiSpam = 0;
                 EnableMovement(); // CHECK
 
-                if (isFacingRight && playerController.speedList.walkSpeed < 0)
-                {
-                    playerController.speedList.FlipSpeedValues();
-                }
-
-                else if (!isFacingRight && playerController.speedList.walkSpeed > 0)
-                {
-                    playerController.speedList.FlipSpeedValues();
-                }
+                // if (isFacingRight && playerController.speedList.walkSpeed < 0)
+                // {
+                //   //  playerController.speedList.FlipSpeedValues();
+                // }
+                //
+                // else if (!isFacingRight && playerController.speedList.walkSpeed > 0)
+                // {
+                //    // playerController.speedList.FlipSpeedValues();
+                // }
 
                 if (canMove)
                 {
@@ -440,6 +457,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (!playerController.playerSurroundings.isGrounded)
             {
+                
+
                 if (isClimbingLedge)
                 {
                     if (playerController.playerSurroundings.isAbleToClimb)
@@ -457,25 +476,25 @@ public class PlayerMovement : MonoBehaviour
                     isIdleNew = false;
                     isWalkingNew = false;
                     isSprintingNew = false;
-                  //
-                  //if( (playerController.currentSpeed < 0 && playerController.playerSurroundings.isTouchingWallBehind)   //test
-                  //|| (playerController.currentSpeed > 0 && playerController.playerSurroundings.isTouchingWallBehind))   //test
-                  //{                                                                                                     //test
-                  //    wallJumpReady = true;                                                                             //test
-                  //}                                                                                                     //test
-                  //                                                                                                      //test
-                  //else                                                                                                  //test
-                  //{                                                                                                     //test
-                  //    wallJumpReady = false;                                                                            //test
-                  //}                                                                                                     //test
-                  //                                                                                                      //test
-                  //if (wallJumpReady)                                                                                    //test
-                  //{                                                                                                     //test
-                  //    if (playerController.playerInput.isJumpTapped)                                                    //test
-                  //    {                                                                                                 //test
-                  //        WallJump(jumpForce);                                                                          //test                                              ////CHECK THIS
-                  //    }                                                                                                 //test
-                  //}
+                    //
+                    //if( (playerController.currentSpeed < 0 && playerController.playerSurroundings.isTouchingWallBehind)   //test
+                    //|| (playerController.currentSpeed > 0 && playerController.playerSurroundings.isTouchingWallBehind))   //test
+                    //{                                                                                                     //test
+                    //    wallJumpReady = true;                                                                             //test
+                    //}                                                                                                     //test
+                    //                                                                                                      //test
+                    //else                                                                                                  //test
+                    //{                                                                                                     //test
+                    //    wallJumpReady = false;                                                                            //test
+                    //}                                                                                                     //test
+                    //                                                                                                      //test
+                    //if (wallJumpReady)                                                                                    //test
+                    //{                                                                                                     //test
+                    //    if (playerController.playerInput.isJumpTapped)                                                    //test
+                    //    {                                                                                                 //test
+                    //        WallJump(jumpForce);                                                                          //test                                              ////CHECK THIS
+                    //    }                                                                                                 //test
+                    //}
 
                     if (isHangingLedge && wallJumpReady)
                     {
@@ -484,10 +503,11 @@ public class PlayerMovement : MonoBehaviour
 
                     if (isHangingLedge || isWallSliding)
                     {
+                        jumpAntiSpam = 0;
 
                         if ((isFacingRight && playerController.playerInput.isLeftPressed && !playerController.playerInput.isRightPressed)
                         || (!isFacingRight && playerController.playerInput.isRightPressed && !playerController.playerInput.isLeftPressed))
-                        
+
                         {
                             wallJumpReady = true;
                             canClimb = false;
@@ -540,7 +560,7 @@ public class PlayerMovement : MonoBehaviour
                                 WallJump(0);
                             }
                         }
-                     
+
 
                         if (isHangingLedge)
                         {
@@ -593,7 +613,8 @@ public class PlayerMovement : MonoBehaviour
                     }
 
                     else if (!playerController.playerSurroundings.isGrounded)       //////////CHECK THIS
-                    {                                                            //////////CHECK THIS
+                    {
+                        jumpAntiSpam += Time.deltaTime; //////////CHECK THIS
                         EnableMovement();                                           //////////CHECK THIS
 
                         // if (playerController.playerInput.isLeftPressed || playerController.playerInput.isRightPressed)
@@ -710,6 +731,7 @@ public class PlayerMovement : MonoBehaviour
     internal void WallJump(float jumpPower) /////////CHECK THIS
     {
         EnableMovement();
+        isWallSliding = false;
         playerController.hangTimeTimer = 0;
         jumpBufferCount = 0;
 
