@@ -14,6 +14,7 @@ public class PlayerDirectionPriority : MonoBehaviour
             if (playerController.playerInput.isLeftPressed)
             {
                 playerController.playerMovement.isMoving = true;
+
                 if (playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
@@ -35,7 +36,6 @@ public class PlayerDirectionPriority : MonoBehaviour
                 if (!playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
-
                 }
                 playerController.playerMovement.isFacingRight = true;
                 playerController.playerMovement.Move();

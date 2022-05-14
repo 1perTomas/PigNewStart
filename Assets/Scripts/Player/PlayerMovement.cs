@@ -58,35 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     internal bool wallJumpReady = false;
 
-    internal void WallInteraction()
-    {
-        if (playerController.playerSurroundings.isTouchingWall
-            && !playerController.playerSurroundings.isGrounded)
-        {
-            if (!playerController.playerSurroundings.isTouchingLedge
-                && playerController.playerSurroundings.canHangLedge
-                && playerController.rb.velocity.y < 2)
-            {
-                HangingLedge();
-            }
-
-            else
-            {
-                isHangingLedge = false;
-            }
-            if ((playerController.playerSurroundings.isTouchingLedge
-      && playerController.rb.velocity.y < -1)) //sticks better to walljumps
-            {
-                isWallSliding = true;
-            }
-        }
-        else
-        {
-            isHangingLedge = false;
-            playerController.rb.gravityScale = playerController.startingGravity;
-            isWallSliding = false;
-        }
-    }
+ 
 
     private void HangingLedge() // put into wall interaction function
     {
@@ -138,19 +110,25 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (isWallSliding)
-        {
-            canTurn = false;
-            if (playerController.rb.velocity.y < -playerController.speedList.wallSlideSpeed)
-            {
-                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
-            }
-
-            if (playerController.rb.velocity.y > playerController.speedList.wallSlideSpeed)
-            {
-                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
-            }
-        }
+       // if (isWallSliding)
+       // {
+       //     canTurn = false;
+       //
+       //     if (wallJumpReady)
+       //     {
+       //         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -0.25f);
+       //     }
+       //
+       //     if (playerController.rb.velocity.y < -playerController.speedList.wallSlideSpeed)
+       //     {
+       //         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+       //     }
+       //
+       //     if (playerController.rb.velocity.y > playerController.speedList.wallSlideSpeed)
+       //     {
+       //         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+       //     }
+       // }
     }
 
     private void FreezePlayerLocation(float velocityX, float velocityY)
@@ -229,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
             if (playerController.playerInput.isJumpTapped)
             {
 
-               // jumpAntiSpam += Time.deltaTime;
+                // jumpAntiSpam += Time.deltaTime;
 
                 jumpBufferCount = jumpBufferLength;
 
@@ -238,12 +216,6 @@ public class PlayerMovement : MonoBehaviour
                     if (jumpAntiSpam == 0)
                     {
                         JumpNew();
-                    }
-
-                    else
-                    {
-
-                       // JumpNew();
                     }
                 }
             }
@@ -275,16 +247,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 jumpAntiSpam = 0;
                 EnableMovement(); // CHECK
-
-                // if (isFacingRight && playerController.speedList.walkSpeed < 0)
-                // {
-                //   //  playerController.speedList.FlipSpeedValues();
-                // }
-                //
-                // else if (!isFacingRight && playerController.speedList.walkSpeed > 0)
-                // {
-                //    // playerController.speedList.FlipSpeedValues();
-                // }
 
                 if (canMove)
                 {
@@ -457,7 +419,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (!playerController.playerSurroundings.isGrounded)
             {
-                
+
 
                 if (isClimbingLedge)
                 {
@@ -616,31 +578,6 @@ public class PlayerMovement : MonoBehaviour
                     {
                         jumpAntiSpam += Time.deltaTime; //////////CHECK THIS
                         EnableMovement();                                           //////////CHECK THIS
-
-                        // if (playerController.playerInput.isLeftPressed || playerController.playerInput.isRightPressed)
-                        // {
-                        //     if (playerController.playerInput.isSprintPressed)
-                        //     {
-                        //         if (playerController.rb.velocity.x > 0 && playerController.playerInput.isLeftPressed)
-                        //         {
-                        //             playerController.speedList.ChangeSpeedNew(playerController.speedList.walkSpeed);
-                        //         }
-                        //
-                        //         else if (playerController.rb.velocity.x <0 && playerController.playerInput.isRightPressed)
-                        //         {
-                        //             playerController.speedList.ChangeSpeedNew(playerController.speedList.walkSpeed);
-                        //         }
-                        //     }
-                        //     else
-                        //     {
-                        //         playerController.speedList.ChangeSpeedNew(playerController.speedList.walkSpeed);
-                        //     }
-                        // }
-                        // 
-                        // else
-                        // {
-                        //     playerController.speedList.ChangeSpeedNew(0);
-                        // }
                     }
 
                     else
@@ -726,6 +663,36 @@ public class PlayerMovement : MonoBehaviour
         playerController.hangTimeTimer = 0;
         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
         jumpBufferCount = 0;
+    }
+
+    internal void WallInteraction()
+    {
+        if (playerController.playerSurroundings.isTouchingWall
+            && !playerController.playerSurroundings.isGrounded)
+        {
+            if (!playerController.playerSurroundings.isTouchingLedge
+                && playerController.playerSurroundings.canHangLedge
+                && playerController.rb.velocity.y < 2)
+            {
+                HangingLedge();
+            }
+
+            else
+            {
+                isHangingLedge = false;
+            }
+            if ((playerController.playerSurroundings.isTouchingLedge
+      && playerController.rb.velocity.y < -1)) //sticks better to walljumps
+            {
+                isWallSliding = true;
+            }
+        }
+        else
+        {
+            isHangingLedge = false;
+            playerController.rb.gravityScale = playerController.startingGravity;
+            isWallSliding = false;
+        }
     }
 
     internal void WallJump(float jumpPower) /////////CHECK THIS

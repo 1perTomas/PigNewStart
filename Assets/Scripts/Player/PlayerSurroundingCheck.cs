@@ -89,8 +89,8 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
             else
             {
-
                 playerController.hangTimeTimer -= Time.deltaTime;
+
                 if (playerController.hangTimeTimer > 0f)
                 {
                     canJump = true;
@@ -110,9 +110,7 @@ public class PlayerSurroundingCheck : MonoBehaviour
             {
                 playerController.playerMovement.wallJumpReady = false;
             }
-
         }
-
         else
         {
             canJump = false;
@@ -133,9 +131,7 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D Collision)
     {
-
         isColliding = true;
-
         //if(Collision.gameObject.CompareTag("Ground"))
         //{
         //    touchingGround = true;
@@ -172,38 +168,6 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
     private void CheckLayerSurroundings(LayerMask layer)
     {
-        // isGrounded = Physics2D.OverlapCircle(GroundCheck.position, groundCheckRadius, layer);
-        //isGrounded = (Physics2D.Raycast(new Vector2(GroundCheck.position.x, GroundCheck.position.y), transform.up, 0.5f, layer));
-        //Physics2D.Raycast(new Vector2(GroundCheck.position.x - sprintWallHit, GroundCheck.position.y), transform.up, 0.1f, layer) ||
-
-        // Physics2D.Raycast(new Vector2(GroundCheck.position.x + sprintWallHit, GroundCheck.position.y), transform.up, 0.1f, layer));
-
-        // if (
-        //  // Physics2D.Raycast(new Vector2(GroundCheck.position.x - sprintWallHit, GroundCheck.position.y), transform.up,0.1f, layer) ||
-        //  // Physics2D.Raycast(new Vector2(GroundCheck.position.x, GroundCheck.position.y), transform.up,0.1f, layer) ||
-        //  // Physics2D.Raycast(new Vector2(GroundCheck.position.x + sprintWallHit, GroundCheck.position.y), transform.up,0.1f, layer) ||
-        //   Physics2D.OverlapArea(new Vector2 (GroundCheck.position.x - 0.14f, GroundCheck.position.y), new Vector2(GroundCheck.position.x + 0.14f, GroundCheck.position.y + 0.1f), layer))
-        //  {
-        //      isGrounded = true;
-        //  }
-        //  else
-        //  {
-        //      isGrounded = false;
-        //  }
-
-
-        //isGrounded = Physics2D.OverlapBox(GroundCheck.position, new Vector2(0.28f, 0.15f), 0f, layer);
-        //
-        // isGrounded = Physics2D.OverlapArea(new Vector2(GroundCheck.position.x -0.125f, GroundCheck.position.y), new Vector2(GroundCheck.position.x + 0.015f, GroundCheck.position.y + 0.1f), layer);
-        // isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, layer);
-        // isTouchingWallHigh = Physics2D.Raycast(wallSlideCheck.position, transform.right, wallCheckDistance, layer);
-        // isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance, layer);
-        // isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
-
-
-
-        // isTouchingMovableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance, layer);
-
         if (playerController.playerMovement.isProne)
         {
             isTouchingCeilingProne = Physics2D.OverlapCircle(CeilingCheckCrawling.position, CeilingCheckRadius, layer);

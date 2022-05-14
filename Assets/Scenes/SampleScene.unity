@@ -73960,7 +73960,7 @@ MonoBehaviour:
   crawlingSpeed: 2
   slidingSpeed: 4.5
   wallSlideSpeed: 0.45
-  turningRateAir: 0.1
+  turningRateAir: 0.08
   acceleration: 0.15
 --- !u!114 &1759083738
 MonoBehaviour:

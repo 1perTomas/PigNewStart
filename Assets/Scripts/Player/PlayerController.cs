@@ -185,7 +185,6 @@ public class PlayerController : MonoBehaviour
 
     private void FallGravity()
     {
-
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * Time.deltaTime * fallMultiplier;
