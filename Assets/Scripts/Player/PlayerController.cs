@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     internal PlayerDirectionPriority playerDirectionPriority;
 
+    [SerializeField]
+    internal PlayerJump playerJump;
+
 
     //private float movementInputDirection;
     internal float currentSpeed;
@@ -94,13 +97,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update() //for inputs (keeps running)
     {
-        // if (rb.velocity.y < 0)
-        // {
-        //     rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier -1) * Time.deltaTime;
-        // }
-
-
-
         speedList.SpeedSet();
         playerMovement.NewMovements();
 
@@ -108,13 +104,6 @@ public class PlayerController : MonoBehaviour
         playerSurroundings.CheckSurroundings();
         playerSurroundings.CheckIfCanJump();
         playerSurroundings.CheckIfCanHangLedge();
-
-
-
-        // if (playerMovement.isStanding)
-        // {
-        //     slidingTimer = slidingTimerSet;
-        // }
 
         FallGravity();
         ColliderAdjust();

@@ -73683,6 +73683,7 @@ GameObject:
   - component: {fileID: 1759083738}
   - component: {fileID: 1759083737}
   - component: {fileID: 1759083739}
+  - component: {fileID: 1759083740}
   m_Layer: 17
   m_Name: Player
   m_TagString: Player
@@ -73770,7 +73771,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1759083725}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 64.87, y: 0.55, z: 0}
+  m_LocalPosition: {x: 61.259, y: 0.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2028075685}
@@ -73830,6 +73831,7 @@ MonoBehaviour:
   playerState: {fileID: 1759083738}
   speedList: {fileID: 1759083737}
   playerDirectionPriority: {fileID: 1759083739}
+  playerJump: {fileID: 1759083740}
   turnTimerSet: 0.1
   climbLedgeTimerSet: 0.32
   walkSpeed: 3.5
@@ -73987,6 +73989,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 1759083730}
+--- !u!114 &1759083740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759083725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6856e9a1e2794240926fb085a76799b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 1759083730}
+  jumpForce: 6.6
 --- !u!1 &1762218701
 GameObject:
   m_ObjectHideFlags: 0

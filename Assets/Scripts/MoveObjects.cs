@@ -43,10 +43,8 @@ public class MoveObjects : MonoBehaviour
                 && playerController.playerMovement.isStandingNew
                 && !playerController.playerInput.isJumpPressed) // can't jump and drag object upwards
             {
-                playerController.playerMovement.isInteracting = true;
+
                 isInteracting = true;
-
-
 
                 if (playerController.playerMovement.isFacingRight)
                 {
@@ -62,7 +60,8 @@ public class MoveObjects : MonoBehaviour
         else if (isInteracting && playerController.playerInput.isInteractTapped)
         {
             isInteracting = false;
-            // playerController.playerMovement.isInteracting = false;
+            //playerController.playerMovement.isInteracting = false;
+
         }
     }
 
@@ -71,7 +70,7 @@ public class MoveObjects : MonoBehaviour
 
         if (isInteracting)
         {
-
+            //playerController.playerMovement.isInteracting = true;
             box.GetComponent<Rigidbody2D>().isKinematic = true;
             box.GetComponent<Rigidbody2D>().simulated = false;
             box.GetComponent<Rigidbody2D>().transform.SetParent(transform);
@@ -96,7 +95,7 @@ public class MoveObjects : MonoBehaviour
         else if (box != null)
         {
             // box.GetComponent<Rigidbody2D>().isKinematic = false;
-
+            //playerController.playerMovement.isInteracting = false;
             box.GetComponent<Rigidbody2D>().simulated = true;
             box.GetComponent<Rigidbody2D>().transform.SetParent(null);
         }

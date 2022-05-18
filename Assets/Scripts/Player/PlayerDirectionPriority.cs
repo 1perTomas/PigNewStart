@@ -13,16 +13,9 @@ public class PlayerDirectionPriority : MonoBehaviour
         {
             if (playerController.playerInput.isLeftPressed)
             {
-                playerController.playerMovement.isMoving = true;
-
                 if (playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
-
-                    if (playerController.playerMovement.isSlidingNew) //if changes direction when sliding, stops sliding, crawls other direction
-                    {
-                        playerController.playerMovement.CrawlNew();
-                    }
                 }
                 playerController.playerMovement.isFacingRight = false;
                 playerController.playerMovement.Move();
@@ -31,8 +24,6 @@ public class PlayerDirectionPriority : MonoBehaviour
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isRightPressed)
             {
-                playerController.playerMovement.isMoving = true;
-
                 if (!playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
@@ -43,7 +34,6 @@ public class PlayerDirectionPriority : MonoBehaviour
 
             else
             {
-                playerController.playerMovement.isMoving = false;
                 playerController.playerMovement.IdleStop();
             }
         }
@@ -56,15 +46,9 @@ public class PlayerDirectionPriority : MonoBehaviour
             if (playerController.playerInput.isRightPressed)
             //-----------------------------------------------------------------------------------Input Left
             {
-                playerController.playerMovement.isMoving = true;
                 if (!playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
-
-                    if (playerController.playerMovement.isSlidingNew) //if changes direction when sliding, stops sliding, crawls other direction
-                    {
-                        playerController.playerMovement.CrawlNew();
-                    }
                 }
                 playerController.playerMovement.isFacingRight = true;
                 playerController.playerMovement.Move();
@@ -73,8 +57,6 @@ public class PlayerDirectionPriority : MonoBehaviour
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isLeftPressed)
             {
-                playerController.playerMovement.isMoving = true;
-
                 if (playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
@@ -85,7 +67,6 @@ public class PlayerDirectionPriority : MonoBehaviour
 
             else
             {
-                playerController.playerMovement.isMoving = false;
                 playerController.playerMovement.IdleStop();
             }
         }

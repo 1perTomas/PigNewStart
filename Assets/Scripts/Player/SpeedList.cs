@@ -27,6 +27,11 @@ public class SpeedList : MonoBehaviour
 
     internal void SpeedSet()
     {
+        // if (playerController.playerMovement.isInteracting)
+        // {
+        //     ChangeSpeedNew(2);
+        // }
+
         // different acceleration for ground and air
         if (playerController.playerSurroundings.isGrounded) // on ground
         {
@@ -51,6 +56,7 @@ public class SpeedList : MonoBehaviour
                 {
                     ChangeSpeedNew(runningSpeed);
                 }
+
             }
 
             else // prone
@@ -80,6 +86,7 @@ public class SpeedList : MonoBehaviour
         else if (playerController.playerMovement.isWallSliding)
         {
 
+            ChangeSpeed(0);
             //canTurn = false;
 
             if (playerController.playerMovement.wallJumpReady)
@@ -101,6 +108,17 @@ public class SpeedList : MonoBehaviour
 
         else // in air
         {
+            if (!playerController.playerMovement.isMoving) // slows to stop when nothing is pressed
+            {
+                turningRateAir = 0.04f;
+                ChangeSpeedNew(0);
+            }
+
+            else
+            {
+                turningRateAir = 0.08f;
+            }
+
             if (playerController.playerMovement.isMoving && playerController.currentSpeed != runningSpeed) // speed in air 
             {
                 ChangeSpeedNew(walkSpeed);
