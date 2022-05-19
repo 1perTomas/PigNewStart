@@ -11,6 +11,7 @@ public class PlayerDirectionPriority : MonoBehaviour
     {
         if (playerController.playerMovement.canTurn)
         {
+            playerController.playerMovement.isMoving = true;
             if (playerController.playerInput.isLeftPressed)
             {
                 if (playerController.playerMovement.isFacingRight)
@@ -24,6 +25,7 @@ public class PlayerDirectionPriority : MonoBehaviour
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isRightPressed)
             {
+                playerController.playerMovement.isMoving = true;
                 if (!playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
@@ -34,6 +36,7 @@ public class PlayerDirectionPriority : MonoBehaviour
 
             else
             {
+                playerController.playerMovement.isMoving = false;
                 playerController.playerMovement.IdleStop();
             }
         }
@@ -46,6 +49,7 @@ public class PlayerDirectionPriority : MonoBehaviour
             if (playerController.playerInput.isRightPressed)
             //-----------------------------------------------------------------------------------Input Left
             {
+                playerController.playerMovement.isMoving = true;
                 if (!playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
@@ -57,6 +61,7 @@ public class PlayerDirectionPriority : MonoBehaviour
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isLeftPressed)
             {
+                playerController.playerMovement.isMoving = true;
                 if (playerController.playerMovement.isFacingRight)
                 {
                     playerController.speedList.FlipSpeedValues();
@@ -67,6 +72,7 @@ public class PlayerDirectionPriority : MonoBehaviour
 
             else
             {
+                playerController.playerMovement.isMoving = false;
                 playerController.playerMovement.IdleStop();
             }
         }

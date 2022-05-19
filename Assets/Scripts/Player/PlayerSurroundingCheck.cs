@@ -102,14 +102,14 @@ public class PlayerSurroundingCheck : MonoBehaviour
                 }
             }
 
-            if (!isGrounded && isTouchingWallBehind && playerController.playerMovement.isMoving)
-            {
-                playerController.playerMovement.wallJumpReady = true;
-            }
-            else
-            {
-                playerController.playerMovement.wallJumpReady = false;
-            }
+           // if (!isGrounded && isTouchingWallBehind && playerController.playerMovement.isMoving)
+           // {
+           //     playerController.playerMovement.wallJumpReady = true;
+           // }
+           // else
+           // {
+           //     playerController.playerMovement.wallJumpReady = false;
+           // }
         }
         else
         {

@@ -124,14 +124,16 @@ public class SpeedList : MonoBehaviour
                 ChangeSpeedNew(walkSpeed);
             }
 
-            if (playerController.playerMovement.isWallSliding || playerController.playerMovement.isHangingLedge)
-            {
-                ChangeSpeed(0);
-            }
+            
 
-            else if (playerController.playerMovement.wallJumpReady)
+            if (playerController.playerMovement.wallJumpReady)
             {
                 ChangeSpeed(walkSpeed);
+            }
+
+            else if (playerController.playerMovement.isWallSliding || playerController.playerMovement.isHangingLedge)
+            {
+                ChangeSpeed(0);
             }
         }
     }

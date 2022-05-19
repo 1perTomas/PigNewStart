@@ -57,6 +57,7 @@ public class PlayerJump : MonoBehaviour
     internal void WallJump(float jumpPower) /////////CHECK THIS
     {
         playerController.playerMovement.isWallSliding = false;
+        playerController.playerMovement.isHangingLedge = false;
         playerController.hangTimeTimer = 0;
         jumpBufferCount = 0;
 

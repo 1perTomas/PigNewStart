@@ -232,6 +232,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (playerController.playerSurroundings.isGrounded)
             {
+                wallJumpReady = false;
                 EnableMovement(); // CHECK
 
                 if (canMove)
@@ -550,6 +551,7 @@ public class PlayerMovement : MonoBehaviour
 
                     else if (!playerController.playerSurroundings.isGrounded)       //////////CHECK THIS
                     {
+                        wallJumpReady = false;
                         //jumpAntiSpam += Time.deltaTime; //////////CHECK THIS
                         EnableMovement();                                           //////////CHECK THIS
                     }
@@ -583,14 +585,14 @@ public class PlayerMovement : MonoBehaviour
 
         playerController.rb.velocity = new Vector2(playerController.currentSpeed, playerController.rb.velocity.y);
 
-        if (playerController.rb.velocity.x != 0 && !isIdleNew && !isProneIdle)
-        {
-            isMoving = true;
-        }
-        else
-        {
-            isMoving = false;
-        }
+        //if (playerController.rb.velocity.x != 0 && !isIdleNew && !isProneIdle)
+        //{
+        //    isMoving = true;
+        //}
+        //else
+        //{
+        //    isMoving = false;
+        //}
     }
 
     internal void GoProne()
