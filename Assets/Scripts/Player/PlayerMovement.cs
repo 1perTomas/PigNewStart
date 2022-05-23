@@ -49,12 +49,8 @@ public class PlayerMovement : MonoBehaviour
 
     //internal float jumpAntiSpam;
 
-    public float jumpForce = 6.6f;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
-
-    public float turningRateWalk;
-    public float turningRateSprint;
 
     internal bool wallJumpReady = false;
 
@@ -72,8 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
     internal void ClimbLedge()
     {
-        canMove = false;
-        canTurn = false;
+        DisableMovement();
 
         if (isFacingRight && !playerController.playerInput.isLeftPressed && canClimb)
         {
@@ -98,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isClimbingLedge)
         {
-            DisableMovement();
+            //DisableMovement();
             FreezePlayerLocation(velX, velY);
             playerController.climbLedgeTimer += Time.deltaTime;
 
@@ -171,12 +166,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (leftPriority)
         {
-            playerController.playerDirectionPriority.PriorityDirectionLeft();
+            playerController.playerMove.PriorityDirectionLeft();
         }
 
         else
         {
-            playerController.playerDirectionPriority.PriorityDirectionRight();
+            playerController.playerMove.PriorityDirectionRight();
         }
     }
     private void CheckInteraction()
@@ -258,7 +253,7 @@ public class PlayerMovement : MonoBehaviour
                             //--------------------SLIDE-----------------
                             if (isSprintingNew
                             && playerController.playerInput.isDownPressed
-                            && playerController.currentSpeed == playerController.speedList.runningSpeed)
+                            && playerController.speedList.currentSpeed == playerController.speedList.runningSpeed)
                             {
                                 SlideNew();
                             }
@@ -273,7 +268,7 @@ public class PlayerMovement : MonoBehaviour
 
                             //----------------SPRINT--------------------------
                             else if (isWalkingNew && playerController.playerInput.isSprintPressed
-                                     && ((isFacingRight && playerController.currentSpeed >= playerController.speedList.walkSpeed) || (!isFacingRight && playerController.currentSpeed <= playerController.speedList.walkSpeed)))
+                                     && ((isFacingRight && playerController.speedList.currentSpeed >= playerController.speedList.walkSpeed) || (!isFacingRight && playerController.speedList.currentSpeed <= playerController.speedList.walkSpeed)))
                             {
                                 //----------------------------SPRINT INTO WALL--------------------
                                 if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
@@ -364,8 +359,8 @@ public class PlayerMovement : MonoBehaviour
                             playerController.slidingTimer -= Time.deltaTime;
                             if (!playerController.playerInput.isSprintPressed
                                 || playerController.slidingTimer < 0.05
-                                || (isFacingRight && playerController.currentSpeed < playerController.speedList.slidingSpeed)
-                                || (!isFacingRight && playerController.currentSpeed > playerController.speedList.slidingSpeed))
+                                || (isFacingRight && playerController.speedList.currentSpeed < playerController.speedList.slidingSpeed)
+                                || (!isFacingRight && playerController.speedList.currentSpeed > playerController.speedList.slidingSpeed))
                             {
                                 CrawlNew();
                             }
@@ -569,31 +564,25 @@ public class PlayerMovement : MonoBehaviour
 
     //-----------------------------------------S T A T E   F U N C T I O N S-----------------------------------------------------------------
 
-    internal void Move()
-    {
-
-
-        if (isFacingRight && playerController.speedList.walkSpeed < 0)
-        {
-            playerController.speedList.FlipSpeedValues();
-        }
-
-        else if (!isFacingRight && playerController.speedList.walkSpeed > 0)
-        {
-            playerController.speedList.FlipSpeedValues();
-        }
-
-        playerController.rb.velocity = new Vector2(playerController.currentSpeed, playerController.rb.velocity.y);
-
-        //if (playerController.rb.velocity.x != 0 && !isIdleNew && !isProneIdle)
-        //{
-        //    isMoving = true;
-        //}
-        //else
-        //{
-        //    isMoving = false;
-        //}
-    }
+    // internal void Move()
+    // {
+    //     if ((isFacingRight && playerController.speedList.walkSpeed < 0)
+    //         || (!isFacingRight && playerController.speedList.walkSpeed > 0))
+    //     {
+    //         playerController.speedList.FlipSpeedValues();
+    //     }
+    //
+    //     playerController.rb.velocity = new Vector2(playerController.currentSpeed, playerController.rb.velocity.y);
+    //
+    //    // if (playerController.rb.velocity.x != 0)
+    //    // {
+    //    //     isMoving = true;
+    //    // }
+    //    // else
+    //    // {
+    //    //     isMoving = false;
+    //    // }
+    // }
 
     internal void GoProne()
     {
@@ -715,7 +704,7 @@ public class PlayerMovement : MonoBehaviour
 
     internal void IdleStop()
     {
-        Move();
+        playerController.playerMove.Move();
         NearestPixel();
         if (isStandingNew)
         {
@@ -732,6 +721,4 @@ public class PlayerMovement : MonoBehaviour
             GoProne();
         }
     }
-
-
 }

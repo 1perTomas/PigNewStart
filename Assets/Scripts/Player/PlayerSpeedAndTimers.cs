@@ -5,14 +5,6 @@ using UnityEngine;
 public class PlayerSpeedAndTimers : MonoBehaviour
 {
 
-
-
-    internal float walkSpeed = 4f;
-    internal float runningSpeed = 6f;
-    internal float CrawlingSpeed = 2f;
-    internal float SlidingSpeed = 4.5f;
-
-
     //----------------------------------Timers
     internal float turnTimer = 0;
     internal float turnTimerSet = 0.1f;
@@ -37,9 +29,4 @@ public class PlayerSpeedAndTimers : MonoBehaviour
 
     internal float slideTransitionTimer;
     internal float slideTransitionTimerSet = 0.5f;
-
-
-
-
-
 }

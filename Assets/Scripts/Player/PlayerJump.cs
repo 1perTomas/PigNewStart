@@ -64,13 +64,13 @@ public class PlayerJump : MonoBehaviour
         if (playerController.playerMovement.isFacingRight)
         {
             playerController.playerMovement.isFacingRight = false;
-            playerController.rb.velocity = new Vector2(playerController.currentSpeed, jumpPower);
+            playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, jumpPower);
         }
 
         else
         {
             playerController.playerMovement.isFacingRight = true;
-            playerController.rb.velocity = new Vector2(playerController.currentSpeed, jumpPower);
+            playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, jumpPower);
         }
     }
 }

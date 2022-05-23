@@ -8,6 +8,8 @@ public class SpeedList : MonoBehaviour
     [SerializeField]
     PlayerController playerController;
 
+    internal float currentSpeed;
+
     public float walkSpeed = 3.5f;
     public float runningSpeed = 6f;
     public float crawlingSpeed = 2f;
@@ -27,17 +29,11 @@ public class SpeedList : MonoBehaviour
 
     internal void SpeedSet()
     {
-        // if (playerController.playerMovement.isInteracting)
-        // {
-        //     ChangeSpeedNew(2);
-        // }
-
-        // different acceleration for ground and air
         if (playerController.playerSurroundings.isGrounded) // on ground
         {
             if (playerController.playerMovement.isStandingNew) //standing
             {
-                if ((playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge) && playerController.currentSpeed != 0) // stops when hitting wall
+                if ((playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge) && playerController.speedList.currentSpeed != 0) // stops when hitting wall
                 {
                     ChangeSpeed(0);
                 }
@@ -56,12 +52,11 @@ public class SpeedList : MonoBehaviour
                 {
                     ChangeSpeedNew(runningSpeed);
                 }
-
             }
 
             else // prone
             {
-                if (playerController.playerSurroundings.isTouchingWall && playerController.currentSpeed != 0) // stops when hitting wall
+                if (playerController.playerSurroundings.isTouchingWall && currentSpeed != 0) // stops when hitting wall
                 {
                     ChangeSpeed(0);
                 }
@@ -85,9 +80,7 @@ public class SpeedList : MonoBehaviour
 
         else if (playerController.playerMovement.isWallSliding)
         {
-
             ChangeSpeed(0);
-            //canTurn = false;
 
             if (playerController.playerMovement.wallJumpReady)
             {
@@ -119,12 +112,10 @@ public class SpeedList : MonoBehaviour
                 turningRateAir = 0.08f;
             }
 
-            if (playerController.playerMovement.isMoving && playerController.currentSpeed != runningSpeed) // speed in air 
+            if (playerController.playerMovement.isMoving && currentSpeed != runningSpeed) // speed in air 
             {
                 ChangeSpeedNew(walkSpeed);
             }
-
-            
 
             if (playerController.playerMovement.wallJumpReady)
             {
@@ -140,47 +131,46 @@ public class SpeedList : MonoBehaviour
 
     internal void ChangeSpeed(float newSpeed)
     {
-        playerController.currentSpeed = newSpeed;
+        currentSpeed = newSpeed;
     }
 
     internal void ChangeSpeedNew(float newSpeed)
     {
-        if (playerController.currentSpeed != newSpeed)
+        if (currentSpeed != newSpeed)
         {
-
-            if (playerController.currentSpeed < newSpeed)
+            if (currentSpeed < newSpeed)
             {
                 if (playerController.playerSurroundings.isGrounded)
                 {
-                    playerController.currentSpeed += (acceleration);
+                    currentSpeed += (acceleration);
                 }
 
                 else
                 {
-                    playerController.currentSpeed += (turningRateAir);
+                    currentSpeed += (turningRateAir);
                 }
 
-                if (playerController.currentSpeed > newSpeed)
+                if (currentSpeed > newSpeed)
                 {
-                    playerController.currentSpeed = newSpeed;
+                    currentSpeed = newSpeed;
                 }
             }
 
-            if (playerController.currentSpeed > newSpeed)
+            if (currentSpeed > newSpeed)
             {
                 if (playerController.playerSurroundings.isGrounded)
                 {
-                    playerController.currentSpeed -= (acceleration);
+                    currentSpeed -= (acceleration);
                 }
 
                 else
                 {
-                    playerController.currentSpeed -= (turningRateAir);
+                    currentSpeed -= (turningRateAir);
                 }
 
-                if (playerController.currentSpeed < newSpeed)
+                if (currentSpeed < newSpeed)
                 {
-                    playerController.currentSpeed = newSpeed;
+                    currentSpeed = newSpeed;
                 }
             }
         }

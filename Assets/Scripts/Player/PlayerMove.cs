@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDirectionPriority : MonoBehaviour
+public class PlayerMove : MonoBehaviour
 {
     [SerializeField]
     PlayerController playerController;
@@ -11,27 +11,19 @@ public class PlayerDirectionPriority : MonoBehaviour
     {
         if (playerController.playerMovement.canTurn)
         {
-            playerController.playerMovement.isMoving = true;
             if (playerController.playerInput.isLeftPressed)
             {
-                if (playerController.playerMovement.isFacingRight)
-                {
-                    playerController.speedList.FlipSpeedValues();
-                }
+                playerController.playerMovement.isMoving = true;
                 playerController.playerMovement.isFacingRight = false;
-                playerController.playerMovement.Move();
+                Move();
             }
 
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isRightPressed)
             {
                 playerController.playerMovement.isMoving = true;
-                if (!playerController.playerMovement.isFacingRight)
-                {
-                    playerController.speedList.FlipSpeedValues();
-                }
                 playerController.playerMovement.isFacingRight = true;
-                playerController.playerMovement.Move();
+                Move();
             }
 
             else
@@ -50,24 +42,16 @@ public class PlayerDirectionPriority : MonoBehaviour
             //-----------------------------------------------------------------------------------Input Left
             {
                 playerController.playerMovement.isMoving = true;
-                if (!playerController.playerMovement.isFacingRight)
-                {
-                    playerController.speedList.FlipSpeedValues();
-                }
                 playerController.playerMovement.isFacingRight = true;
-                playerController.playerMovement.Move();
+                Move();
             }
 
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isLeftPressed)
             {
                 playerController.playerMovement.isMoving = true;
-                if (playerController.playerMovement.isFacingRight)
-                {
-                    playerController.speedList.FlipSpeedValues();
-                }
                 playerController.playerMovement.isFacingRight = false;
-                playerController.playerMovement.Move();
+                Move();
             }
 
             else
@@ -76,5 +60,16 @@ public class PlayerDirectionPriority : MonoBehaviour
                 playerController.playerMovement.IdleStop();
             }
         }
+    }
+
+    internal void Move()
+    {
+        if ((playerController.playerMovement.isFacingRight && playerController.speedList.walkSpeed < 0)
+            || (!playerController.playerMovement.isFacingRight && playerController.speedList.walkSpeed > 0))
+        {
+            playerController.speedList.FlipSpeedValues();
+        }
+
+        playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, playerController.rb.velocity.y);
     }
 }
