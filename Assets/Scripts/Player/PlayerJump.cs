@@ -13,6 +13,9 @@ public class PlayerJump : MonoBehaviour
     internal float jumpBufferCount;
     internal float jumpBufferLength = 0.2f;
 
+    internal float fallMultiplier = 1.2f;
+    internal float riseMultiplier = 1f;
+
     void Update()
     {
         if (playerController.playerSurroundings.isGrounded || playerController.playerMovement.isHangingLedge || playerController.playerMovement.isWallSliding)
@@ -49,7 +52,7 @@ public class PlayerJump : MonoBehaviour
 
     internal void JumpNew(float jumpPower)
     {
-        playerController.hangTimeTimer = 0;
+        playerController.playerTimers.hangTimeTimer = 0;
         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpPower);
         jumpBufferCount = 0;
     }
@@ -58,19 +61,31 @@ public class PlayerJump : MonoBehaviour
     {
         playerController.playerMovement.isWallSliding = false;
         playerController.playerMovement.isHangingLedge = false;
-        playerController.hangTimeTimer = 0;
+        playerController.playerTimers.hangTimeTimer = 0;
         jumpBufferCount = 0;
 
-        if (playerController.playerMovement.isFacingRight)
+        if (playerController.playerState.isFacingRight)
         {
-            playerController.playerMovement.isFacingRight = false;
+            playerController.playerState.isFacingRight = false;
             playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, jumpPower);
         }
 
         else
         {
-            playerController.playerMovement.isFacingRight = true;
+            playerController.playerState.isFacingRight = true;
             playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, jumpPower);
+        }
+    }
+
+    internal void FallGravity()
+    {
+        if (playerController.rb.velocity.y < 0)
+        {
+            playerController.rb.velocity += Vector2.up * Physics2D.gravity.y * Time.deltaTime * fallMultiplier;
+        }
+        else if (playerController.rb.velocity.y < 5)
+        {
+            playerController.rb.velocity += Vector2.up * Physics2D.gravity.y * Time.deltaTime * riseMultiplier;
         }
     }
 }

@@ -147,44 +147,44 @@ public class PixelPerfectCam : MonoBehaviour
 
                 if (target.position.x > cameraLocation.x + horizontalOffset && target.position.y > cameraLocation.y + (verticalOffset - 1))
                 {
-                    cameraAdjustment(xPos, horizontalOffset, -1, yPos, verticalOffset, -1);
+                    CameraAdjustment(xPos, horizontalOffset, -1, yPos, verticalOffset, -1);
 
                 }
 
                 else if (target.position.x > cameraLocation.x + horizontalOffset && target.position.y < cameraLocation.y - (verticalOffset + 1))
                 {
-                    cameraAdjustment(xPos, horizontalOffset, -1, yPos, verticalOffset, 1);
+                    CameraAdjustment(xPos, horizontalOffset, -1, yPos, verticalOffset, 1);
                 }
 
                 else if (target.position.x < cameraLocation.x - horizontalOffset && target.position.y > cameraLocation.y + (verticalOffset - 1))
                 {
-                    cameraAdjustment(xPos, horizontalOffset, 1, yPos, verticalOffset, -1);
+                    CameraAdjustment(xPos, horizontalOffset, 1, yPos, verticalOffset, -1);
                 }
 
                 else if (target.position.x < cameraLocation.x - horizontalOffset && target.position.y < cameraLocation.y - (verticalOffset + 1))
                 {
-                    cameraAdjustment(xPos, horizontalOffset, 1, yPos, verticalOffset, 1);
+                    CameraAdjustment(xPos, horizontalOffset, 1, yPos, verticalOffset, 1);
                 }
 
 
                 else if (target.position.x > cameraLocation.x + horizontalOffset) // follow if moving right
                 {
-                    cameraAdjustment(xPos, horizontalOffset, -1, cameraLocation.y, verticalOffset, 0);
+                    CameraAdjustment(xPos, horizontalOffset, -1, cameraLocation.y, verticalOffset, 0);
                 }
 
                 else if (target.position.x < cameraLocation.x - horizontalOffset) // follows if moving left
                 {
-                    cameraAdjustment(xPos, horizontalOffset, 1, cameraLocation.y, verticalOffset, 0);
+                    CameraAdjustment(xPos, horizontalOffset, 1, cameraLocation.y, verticalOffset, 0);
                 }
 
                 else if (target.position.y > cameraLocation.y + (verticalOffset - 1)) // follows in moving up
                 {
-                    cameraAdjustment(cameraLocation.x, horizontalOffset, 0, yPos, verticalOffset, -1);
+                    CameraAdjustment(cameraLocation.x, horizontalOffset, 0, yPos, verticalOffset, -1);
                 }
 
                 else if (target.position.y < cameraLocation.y - (verticalOffset + 1)) // follows if moving down
                 {
-                    cameraAdjustment(cameraLocation.x, horizontalOffset, 0, yPos, verticalOffset, 1f);
+                    CameraAdjustment(cameraLocation.x, horizontalOffset, 0, yPos, verticalOffset, 1f);
                 }
             }
 
@@ -207,9 +207,9 @@ public class PixelPerfectCam : MonoBehaviour
                 if (playerController.playerSurroundings.isOnPlatform)
                 {
                     print("works");
-                    if (playerController.playerMovement.isFacingRight)
+                    if (playerController.playerState.isFacingRight)
                     {
-                        cameraAdjustmentLedge(nextX, nextY, 0.5f);
+                        CameraAdjustmentLedge(nextX, nextY, 0.5f);
                       //  Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU + (0.5f), nextY / _pixelLockedPPU + 1.1f, -20);
                       //  climbDif = desiredPosition - cameraLocation;
                       //  _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
@@ -217,7 +217,7 @@ public class PixelPerfectCam : MonoBehaviour
                     }
                     else
                     {
-                        cameraAdjustmentLedge(nextX, nextY, -0.5f);
+                        CameraAdjustmentLedge(nextX, nextY, -0.5f);
                        // Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU - (0.5f), nextY / _pixelLockedPPU + 1.1f, -20);
                        // climbDif = desiredPosition - cameraLocation;
                        // _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
@@ -227,7 +227,7 @@ public class PixelPerfectCam : MonoBehaviour
 
                 else
                 {
-                    cameraAdjustmentLedge(nextX, nextY, 0);
+                    CameraAdjustmentLedge(nextX, nextY, 0);
                    // Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU, nextY / _pixelLockedPPU + 1.1f, -20);
                    // climbDif = desiredPosition - cameraLocation;
                    // _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
@@ -241,7 +241,7 @@ public class PixelPerfectCam : MonoBehaviour
     }
 
 
-    private void cameraAdjustment(float xLocation, float hOffset, float xDirection, float yLocation, float vOffset, float yDirection)
+    private void CameraAdjustment(float xLocation, float hOffset, float xDirection, float yLocation, float vOffset, float yDirection)
     {
         _camera.transform.position = new Vector3(xLocation + hOffset * xDirection, yLocation + vOffset * yDirection, -20);
 
@@ -249,7 +249,7 @@ public class PixelPerfectCam : MonoBehaviour
         //isInZone = false;
     }
 
-    private void cameraAdjustmentLedge(float nextX, float nextY, float offset)
+    private void CameraAdjustmentLedge(float nextX, float nextY, float offset)
     {
         Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU + (offset), nextY / _pixelLockedPPU + 1.1f, -20);
         climbDif = desiredPosition - cameraLocation;

@@ -11,7 +11,7 @@ public class MoveObjects : MonoBehaviour
 
     public float distance = 1f;
     public LayerMask boxMask;
-    internal bool isInteracting = false;
+    //internal bool isInteracting = false;
     internal bool canGrab;
     private float extraSize;
     internal bool pushRight;
@@ -37,70 +37,67 @@ public class MoveObjects : MonoBehaviour
         if (playerController.playerSurroundings.isGrounded && canInteract && canInteract.collider.CompareTag("MovableObject"))
         {
             box = canInteract.collider.gameObject;
-
-            if (!isInteracting
-                && playerController.playerInput.isInteractTapped
-                && playerController.playerMovement.isStandingNew
-                && !playerController.playerInput.isJumpPressed) // can't jump and drag object upwards
-            {
-
-                isInteracting = true;
-
-                if (playerController.playerMovement.isFacingRight)
-                {
-                    pushRight = true;
-                }
-
-                else
-                {
-                    pushRight = false;
-                }
-            }
+            canGrab = true;
         }
-        else if (isInteracting && playerController.playerInput.isInteractTapped)
+        else if (playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped)
         {
-            isInteracting = false;
-            //playerController.playerMovement.isInteracting = false;
+            playerController.playerState.isInteracting = false;
 
+
+            box.GetComponent<Rigidbody2D>().transform.SetParent(null);
+            //box.GetComponent<Rigidbody2D>().position = new Vector2(box.GetComponent<Rigidbody2D>().position.x - 0.15f, box.GetComponent<Rigidbody2D>().position.y);
+            //playerController.rb.position = new Vector2(playerController.rb.position.x+0.05f, playerController.rb.position.y + 0.05f);
+        }
+
+        else
+        {
+            canGrab = false;
         }
     }
 
     private void LateUpdate()
     {
 
-        if (isInteracting)
+        if (playerController.playerState.isInteracting)
         {
-            //playerController.playerMovement.isInteracting = true;
             box.GetComponent<Rigidbody2D>().isKinematic = true;
             box.GetComponent<Rigidbody2D>().simulated = false;
             box.GetComponent<Rigidbody2D>().transform.SetParent(transform);
 
             if (pushRight)
             {
-
-                playerController.GetComponent<BoxCollider2D>().offset = new Vector2((playerController.playerState.StandingBox.x + box.GetComponent<SpriteRenderer>().bounds.size.x) / 2 - (playerController.playerState.StandingBox.x / 2), -0.069f);
-                playerController.GetComponent<BoxCollider2D>().size = new Vector2(box.GetComponent<SpriteRenderer>().bounds.size.x + playerController.playerState.StandingBox.x, playerController.playerState.StandingBox.y);
-
+                AdjustColliderBox(1);
             }
             else
             {
-
-                playerController.GetComponent<BoxCollider2D>().offset = new Vector2(-((playerController.playerState.StandingBox.x + box.GetComponent<SpriteRenderer>().bounds.size.x) / 2 - (playerController.playerState.StandingBox.x / 2)), -0.069f);
-                playerController.GetComponent<BoxCollider2D>().size = new Vector2((box.GetComponent<SpriteRenderer>().bounds.size.x + playerController.playerState.StandingBox.x), playerController.playerState.StandingBox.y);
-
+                AdjustColliderBox(-1);
             }
 
         }
 
         else if (box != null)
         {
-            // box.GetComponent<Rigidbody2D>().isKinematic = false;
-            //playerController.playerMovement.isInteracting = false;
+
             box.GetComponent<Rigidbody2D>().simulated = true;
-            box.GetComponent<Rigidbody2D>().transform.SetParent(null);
+            // box.GetComponent<Rigidbody2D>().isKinematic = false;
+            playerController.playerMovement.isInteracting = false;
+            // playerController.BoxColliderFull();
+            // box.GetComponent<Rigidbody2D>().simulated = true;
+            // 
+            // box.GetComponent<Rigidbody2D>().transform.SetParent(null);
         }
 
     }
 
+    internal void LetGo()
+    {
+
+    }
+
+    internal void AdjustColliderBox(int direction)
+    {
+        playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * ((playerController.playerState.StandingBox.x + box.GetComponent<SpriteRenderer>().bounds.size.x) / 2 - (playerController.playerState.StandingBox.x / 2)), -0.069f);
+        playerController.GetComponent<BoxCollider2D>().size = new Vector2(box.GetComponent<SpriteRenderer>().bounds.size.x + playerController.playerState.StandingBox.x, playerController.playerState.StandingBox.y);
+    }
 
 }

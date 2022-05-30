@@ -13,22 +13,22 @@ public class PlayerMove : MonoBehaviour
         {
             if (playerController.playerInput.isLeftPressed)
             {
-                playerController.playerMovement.isMoving = true;
-                playerController.playerMovement.isFacingRight = false;
+                playerController.playerState.isMoving = true;
+                playerController.playerState.isFacingRight = false;
                 Move();
             }
 
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isRightPressed)
             {
-                playerController.playerMovement.isMoving = true;
-                playerController.playerMovement.isFacingRight = true;
+                playerController.playerState.isMoving = true;
+                playerController.playerState.isFacingRight = true;
                 Move();
             }
 
             else
             {
-                playerController.playerMovement.isMoving = false;
+                playerController.playerState.isMoving = false;
                 playerController.playerMovement.IdleStop();
             }
         }
@@ -41,22 +41,22 @@ public class PlayerMove : MonoBehaviour
             if (playerController.playerInput.isRightPressed)
             //-----------------------------------------------------------------------------------Input Left
             {
-                playerController.playerMovement.isMoving = true;
-                playerController.playerMovement.isFacingRight = true;
+                playerController.playerState.isMoving = true;
+                playerController.playerState.isFacingRight = true;
                 Move();
             }
 
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isLeftPressed)
             {
-                playerController.playerMovement.isMoving = true;
-                playerController.playerMovement.isFacingRight = false;
+                playerController.playerState.isMoving = true;
+                playerController.playerState.isFacingRight = false;
                 Move();
             }
 
             else
             {
-                playerController.playerMovement.isMoving = false;
+                playerController.playerState.isMoving = false;
                 playerController.playerMovement.IdleStop();
             }
         }
@@ -64,12 +64,12 @@ public class PlayerMove : MonoBehaviour
 
     internal void Move()
     {
-        if ((playerController.playerMovement.isFacingRight && playerController.speedList.walkSpeed < 0)
-            || (!playerController.playerMovement.isFacingRight && playerController.speedList.walkSpeed > 0))
+        if ((playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0)
+            || (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed > 0))
         {
             playerController.speedList.FlipSpeedValues();
         }
-
+        
         playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, playerController.rb.velocity.y);
     }
 }

@@ -53,35 +53,32 @@ public class PlayerSurroundingCheck : MonoBehaviour
     public LayerMask whatIsGround;
 
 
-
-
-
-
     internal void CheckSurroundings()
     {
         CheckLayerSurroundings(whatIsGround);
+        CheckIfCanHangLedge();
+        CheckIfCanJump();
         // AirGlitch();
     }
-
     internal void CheckIfCanJump()
     {
 
-        if (playerController.moveObject.isInteracting)
+        if (playerController.playerState.isInteracting)
         {
             canJump = false;
         }
 
         else if
 
-         (!playerController.playerMovement.isCrawlingNew
+         (!playerController.playerMovement.isCrawling
          && !playerController.playerMovement.isProneIdle
          && !playerController.playerMovement.isWallSliding)
         {
-            if (isGrounded && /*playerController.rb.velocity.y < 0 &&*/ playerController.hangTimeTimer != playerController.hangTime)
+            if (isGrounded && /*playerController.rb.velocity.y < 0 &&*/ playerController.playerTimers.hangTimeTimer != playerController.playerTimers.hangTime)
             {
-                playerController.hangTimeTimer = playerController.hangTime; // can jump if presses jump a bit over the ledge
+                playerController.playerTimers.hangTimeTimer = playerController.playerTimers.hangTime; // can jump if presses jump a bit over the ledge
                 canJump = true;
-                if (playerController.hangTimeTimer <= 0f)
+                if (playerController.playerTimers.hangTimeTimer <= 0f)
                 {
 
                 }
@@ -89,15 +86,15 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
             else
             {
-                playerController.hangTimeTimer -= Time.deltaTime;
+                playerController.playerTimers.hangTimeTimer -= Time.deltaTime;
 
-                if (playerController.hangTimeTimer > 0f)
+                if (playerController.playerTimers.hangTimeTimer > 0f)
                 {
                     canJump = true;
                 }
                 else
                 {
-                    playerController.hangTimeTimer = 0f;
+                    playerController.playerTimers.hangTimeTimer = 0f;
                     canJump = false;
                 }
             }
@@ -108,7 +105,6 @@ public class PlayerSurroundingCheck : MonoBehaviour
         }
     }
 
-
     internal void CheckIfCanHangLedge()
     {
         if (!isTouchingWall
@@ -118,7 +114,6 @@ public class PlayerSurroundingCheck : MonoBehaviour
             canHangLedge = true;
         }
     }
-
 
     private void OnCollisionEnter2D(Collision2D Collision)
     {
@@ -150,8 +145,6 @@ public class PlayerSurroundingCheck : MonoBehaviour
         // }
     }
 
-
-
     internal void CanGrabObject(LayerMask layer)
     {
         isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, layer);
@@ -169,32 +162,34 @@ public class PlayerSurroundingCheck : MonoBehaviour
             isTouchingCeilingProne = false;
         }
 
-        if (!playerController.playerMovement.isFacingRight)
+        if (playerController.playerState.isFacingRight)
         {
-            isAbleToClimb = Physics2D.Raycast(ClimbCheck.position, transform.right, wallCheckDistance * -1, layer);
-            isGrounded = Physics2D.OverlapArea(new Vector2(GroundCheck.position.x - 0.1f, GroundCheck.position.y), new Vector2(GroundCheck.position.x + 0.1f, GroundCheck.position.y + 0.1f), layer);
-            isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance * -1, layer);
-            isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, layer);
-            isTouchingWallHigh = Physics2D.Raycast(wallSlideCheck.position, transform.right, wallCheckDistance * -1, layer);
-            isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * -1, layer);
-            isTouchingLedgeJump = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * -1, layer);
-            isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
-
-            isTouchingMovableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * -1, layer);
+            DetectSurroundings(1, layer);
+            //isAbleToClimb = Physics2D.Raycast(ClimbCheck.position, transform.right, wallCheckDistance * -1, layer);
+            //isGrounded = Physics2D.OverlapArea(new Vector2(GroundCheck.position.x - 0.1f, GroundCheck.position.y), new Vector2(GroundCheck.position.x + 0.1f, GroundCheck.position.y + 0.1f), layer);
+            //isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance * -1, layer);
+            //isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, layer);
+            //isTouchingWallHigh = Physics2D.Raycast(wallSlideCheck.position, transform.right, wallCheckDistance * -1, layer);
+            //isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * -1, layer);
+            //isTouchingLedgeJump = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * -1, layer);
+            //isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
+            //
+            //isTouchingMovableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * -1, layer);
         }
 
         else
         {
-            isAbleToClimb = Physics2D.Raycast(ClimbCheck.position, transform.right, wallCheckDistance, layer);
-            isGrounded = Physics2D.OverlapArea(new Vector2(GroundCheck.position.x - 0.1f /* change number so back touching wall wouldnt be grounded */, GroundCheck.position.y), new Vector2(GroundCheck.position.x + 0.01f, GroundCheck.position.y + 0.1f), layer);
-            isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, layer);
-            isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance * -1, layer);
-            isTouchingWallHigh = Physics2D.Raycast(wallSlideCheck.position, transform.right, wallCheckDistance, layer);
-            isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance, layer);
-            isTouchingLedgeJump = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance, layer);
-            isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
-
-            isTouchingMovableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance, layer);
+            DetectSurroundings(-1, layer);
+            //isAbleToClimb = Physics2D.Raycast(ClimbCheck.position, transform.right, wallCheckDistance, layer);
+            //isGrounded = Physics2D.OverlapArea(new Vector2(GroundCheck.position.x - 0.1f /* change number so back touching wall wouldnt be grounded */, GroundCheck.position.y), new Vector2/(GroundCheck.position.x/ + 0.01f, GroundCheck.position.y + 0.1f), layer);
+            //isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, layer);
+            //isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance * -1, layer);
+            //isTouchingWallHigh = Physics2D.Raycast(wallSlideCheck.position, transform.right, wallCheckDistance, layer);
+            //isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance, layer);
+            //isTouchingLedgeJump = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance, layer);
+            //isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
+            //
+            //isTouchingMovableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance, layer);
         }
     }
 
@@ -216,6 +211,20 @@ public class PlayerSurroundingCheck : MonoBehaviour
     //
     //     Gizmos.DrawLine(LedgeCheck.position, new Vector3(LedgeCheck.position.x + wallCheckDistance, LedgeCheck.position.y, LedgeCheck.position.z));
     // }
+
+    private void DetectSurroundings(int direction, LayerMask layer)
+    {
+        isAbleToClimb = Physics2D.Raycast(ClimbCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isGrounded = Physics2D.OverlapArea(new Vector2(GroundCheck.position.x - 0.1f, GroundCheck.position.y), new Vector2(GroundCheck.position.x + 0.1f, GroundCheck.position.y + 0.1f), layer);
+        isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance * -direction, layer);
+        isTouchingWallHigh = Physics2D.Raycast(wallSlideCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isTouchingLedgeJump = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
+        isTouchingMovableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * direction, layer);
+    }
+
 
     private void AirGlitch()
     {

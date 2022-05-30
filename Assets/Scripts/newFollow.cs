@@ -45,11 +45,10 @@ public class newFollow : MonoBehaviour
     {
         GetComponent<PixelPerfectCam>();
         GetComponent<PlayerController>();
-        
-        isFacingRight = playerController.playerMovement.isFacingRight;
+
+        isFacingRight = playerController.playerState.isFacingRight;
         isClimbing = pixelCam.isClimbingLedge;
         cameraLocX = pixelCam.transform.position.x;
-
     }
 
     private void LateUpdate()
@@ -57,19 +56,13 @@ public class newFollow : MonoBehaviour
         NearestPixel();
         CameraAdjust();
         CameraAdjustClimbing();
-
-
-
     }
-
-
 
     private void CameraAdjustClimbing()
     {
         if (isClimbing && pixelCam.climbDif != null)
         {
             Vector3 desiredPosition = new Vector3((transform.position.x + pixelCam.climbDif.x), startPosition.y, layerDepth);
-
             transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * ratio * Time.deltaTime);
         }
     }
@@ -87,11 +80,9 @@ public class newFollow : MonoBehaviour
         }
     }
 
-
-        private void NearestPixel()
+    private void NearestPixel()
     {
-        float pixelCoord = Mathf.Round(((startPosition.x + travel.x * ratio)) / (0.03125f/64)); // added /4 for smoother movement
-        pixelPos = (pixelCoord * 0.03125f/64);
-        
+        float pixelCoord = Mathf.Round(((startPosition.x + travel.x * ratio)) / (0.03125f / 64)); // added /4 for smoother movement
+        pixelPos = (pixelCoord * 0.03125f / 64);
     }
 }

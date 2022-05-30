@@ -41,6 +41,7 @@ public class PlayerAnimationManager : MonoBehaviour
     const string PLAYER_JUMPAPEX_L = "JumpApexLeft";
     const string PLAYER_HANGINGLEDGE_L = "LedgeHangLeft";
     const string PLAYER_CLIMBLEDGE_L = "ClimbLedgeLeft";
+    const string PLAYER_WALLJUMPREADY_L = "WallJumpReadyLeft";
 
 
     private void Start()
@@ -52,7 +53,7 @@ public class PlayerAnimationManager : MonoBehaviour
     {
         if (playerController.playerMovement.isClimbingLedge)
         {
-            if (playerController.playerMovement.isFacingRight
+            if (playerController.playerState.isFacingRight
              && playerController.currentState != PLAYER_CLIMBLEDGE_L) //so it wouldn't flip while climbing and pressing a/d
             {
                 playerController.ChangeAnimationState(PLAYER_CLIMBLEDGE_R);
@@ -66,20 +67,20 @@ public class PlayerAnimationManager : MonoBehaviour
         else if (playerController.playerSurroundings.isGrounded)
         {
 
-            if (playerController.playerMovement.isCrawlingNew || playerController.playerMovement.isProneIdle)
+            if (playerController.playerMovement.isCrawling || playerController.playerMovement.isProneIdle)
             {
-                if (playerController.crawlTimer > 0)
+                if (playerController.playerTimers.crawlTimer > 0)
                 {
-                    playerController.crawlTimer -= Time.deltaTime;
-                    playerController.standUpTimer = playerController.standUpTimerSet;
+                    playerController.playerTimers.crawlTimer -= Time.deltaTime;
+                    playerController.playerTimers.standUpTimer = playerController.playerTimers.standUpTimerSet;
 
-                    if (playerController.playerMovement.isFacingRight)
+                    if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_GOPRONE_R);
 
                     }
 
-                    else if (!playerController.playerMovement.isFacingRight)
+                    else if (!playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_GOPRONE_L);
                     }
@@ -87,7 +88,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
                 else if (playerController.playerMovement.isProneIdle)
                 {
-                    if (playerController.playerMovement.isFacingRight)
+                    if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_CRAWLING_R);
 
@@ -99,10 +100,10 @@ public class PlayerAnimationManager : MonoBehaviour
                     }
                 }
 
-                else if (playerController.playerMovement.isCrawlingNew/*playerController.crawlTimer <= 0
+                else if (playerController.playerMovement.isCrawling/*playerController.crawlTimer <= 0
                      && !playerController.playerMovement.isSlidingNew*/)
                 {
-                    if (playerController.playerMovement.isFacingRight)
+                    if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_CRAWLING_R);
 
@@ -116,11 +117,11 @@ public class PlayerAnimationManager : MonoBehaviour
 
           
 
-            else if (!playerController.playerMovement.isCrawlingNew
+            else if (!playerController.playerMovement.isCrawling
                    && playerController.playerInput.isJumpPressed
                    && !playerController.playerSurroundings.isGrounded)
             {
-                if (playerController.playerMovement.isFacingRight)
+                if (playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_JUMP_R);
                 }
@@ -128,12 +129,12 @@ public class PlayerAnimationManager : MonoBehaviour
 
 
 
-            else if (playerController.playerMovement.isSprintingNew
+            else if (playerController.playerMovement.isSprinting
                  
                  && !playerController.playerSurroundings.isTouchingWall
                  && !playerController.playerSurroundings.isTouchingLedge)
             {
-                if (playerController.playerMovement.isFacingRight)
+                if (playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_RUNNING_R);
                 }
@@ -142,9 +143,9 @@ public class PlayerAnimationManager : MonoBehaviour
                     playerController.ChangeAnimationState(PLAYER_RUNNING_L);
                 }
             }
-            else if (playerController.playerMovement.isSlidingNew)
+            else if (playerController.playerMovement.isSliding)
             {
-                if (playerController.playerMovement.isFacingRight)
+                if (playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_SLIDE_R);
                 }
@@ -156,18 +157,18 @@ public class PlayerAnimationManager : MonoBehaviour
 
 
             else if ((playerController.currentState == PLAYER_CRAWLING_R
-                  && !playerController.playerMovement.isCrawlingNew
-                  && playerController.standUpTimer > 0)
+                  && !playerController.playerMovement.isCrawling
+                  && playerController.playerTimers.standUpTimer > 0)
                       ||
                      (playerController.currentState == PLAYER_CRAWLING_R
-                  && playerController.playerMovement.isWalkingNew
-                  && !playerController.playerMovement.isCrawlingNew
-                  && playerController.standUpTimer > 0))
+                  && playerController.playerMovement.isWalking
+                  && !playerController.playerMovement.isCrawling
+                  && playerController.playerTimers.standUpTimer > 0))
 
             {
-                playerController.crawlTimer = playerController.crawlTimerSet;
+                playerController.playerTimers.crawlTimer = playerController.playerTimers.crawlTimerSet;
 
-                if (playerController.playerMovement.isFacingRight
+                if (playerController.playerState.isFacingRight
                  && playerController.currentState == PLAYER_CRAWLING_R)
 
                 {
@@ -176,30 +177,30 @@ public class PlayerAnimationManager : MonoBehaviour
 
             }
             else if ((playerController.currentState == PLAYER_CRAWLING_L
-                  && !playerController.playerMovement.isCrawlingNew
-                  && playerController.standUpTimer > 0)
+                  && !playerController.playerMovement.isCrawling
+                  && playerController.playerTimers.standUpTimer > 0)
                       ||
                      (playerController.currentState == PLAYER_CRAWLING_L
-                  && playerController.playerMovement.isWalkingNew
-                  && !playerController.playerMovement.isCrawlingNew
-                  && playerController.standUpTimer > 0))
+                  && playerController.playerMovement.isWalking
+                  && !playerController.playerMovement.isCrawling
+                  && playerController.playerTimers.standUpTimer > 0))
             {
-                playerController.crawlTimer = playerController.crawlTimerSet;
+                playerController.playerTimers.crawlTimer = playerController.playerTimers.crawlTimerSet;
 
-                if (!playerController.playerMovement.isFacingRight)
+                if (!playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_STANDUP_L);
                 }
 
             }
             else if (playerController.currentState == PLAYER_STANDUP_R
-                  && playerController.standUpTimer > 0)
+                  && playerController.playerTimers.standUpTimer > 0)
             {
-                playerController.standUpTimer -= Time.deltaTime;
+                playerController.playerTimers.standUpTimer -= Time.deltaTime;
 
-                if (playerController.standUpTimer <= 0)
+                if (playerController.playerTimers.standUpTimer <= 0)
                 {
-                    if (playerController.playerMovement.isFacingRight)
+                    if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_IDLE);
 
@@ -208,23 +209,23 @@ public class PlayerAnimationManager : MonoBehaviour
             }
 
             else if (playerController.currentState == PLAYER_STANDUP_L
-                  && playerController.standUpTimer > 0 /*&& isWalkingNew*/)
+                  && playerController.playerTimers.standUpTimer > 0 /*&& isWalking*/)
             {
-                playerController.standUpTimer -= Time.deltaTime;
+                playerController.playerTimers.standUpTimer -= Time.deltaTime;
 
-                if (playerController.standUpTimer <= 0)
+                if (playerController.playerTimers.standUpTimer <= 0)
                 {
                     playerController.ChangeAnimationState(PLAYER_IDLE_L);
-                    playerController.crawlTimer = playerController.crawlTimerSet;
+                    playerController.playerTimers.crawlTimer = playerController.playerTimers.crawlTimerSet;
                 }
             }
 
-            else if (playerController.playerMovement.isWalkingNew
-                 && !playerController.playerMovement.isCrawlingNew
+            else if (playerController.playerMovement.isWalking
+                 && !playerController.playerMovement.isCrawling
                  && !playerController.playerSurroundings.isTouchingWall
                  && !playerController.playerSurroundings.isTouchingLedge)
             {
-                if (playerController.playerMovement.isFacingRight)
+                if (playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_WALK_R);
                 }
@@ -235,7 +236,7 @@ public class PlayerAnimationManager : MonoBehaviour
             }
             else
             {
-                if (playerController.playerMovement.isFacingRight)
+                if (playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_IDLE);
                 }
@@ -248,9 +249,17 @@ public class PlayerAnimationManager : MonoBehaviour
 
         }
 
+        else if (playerController.playerMovement.wallJumpReady)
+        {
+            if(playerController.playerState.isFacingRight)
+            {
+                playerController.ChangeAnimationState(PLAYER_WALLJUMPREADY_L);
+            }
+        }
+
         else if (playerController.playerMovement.isWallSliding)
         {
-            if (playerController.playerMovement.isFacingRight)
+            if (playerController.playerState.isFacingRight)
             {
 
                 playerController.ChangeAnimationState(PLAYER_WALLSLIDE_R);
@@ -267,7 +276,7 @@ public class PlayerAnimationManager : MonoBehaviour
             if (playerController.playerMovement.isHangingLedge
             && !playerController.playerMovement.isClimbingLedge)
             {
-                if (playerController.playerMovement.isFacingRight)
+                if (playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_HANGINGLEDGE_R);
                 }
@@ -278,14 +287,14 @@ public class PlayerAnimationManager : MonoBehaviour
             }
 
             else if (playerController.rb.velocity.y > 0
-                  && playerController.playerMovement.isFacingRight
+                  && playerController.playerState.isFacingRight
                    && !playerController.playerSurroundings.isGrounded)
             {
                 playerController.ChangeAnimationState(PLAYER_JUMP_R);
             }
 
             else if (playerController.rb.velocity.y > 0
-                 && !playerController.playerMovement.isFacingRight
+                 && !playerController.playerState.isFacingRight
                   && !playerController.playerSurroundings.isGrounded)
             {
                 playerController.ChangeAnimationState(PLAYER_JUMP_L);
@@ -295,7 +304,7 @@ public class PlayerAnimationManager : MonoBehaviour
                  && !playerController.playerMovement.isWallSliding
                  && !playerController.playerSurroundings.canJump)
             {
-                if (playerController.playerMovement.isFacingRight)
+                if (playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_FALL_R);
                 }
@@ -307,14 +316,14 @@ public class PlayerAnimationManager : MonoBehaviour
 
             else if (playerController.rb.velocity.y > 0
                   && playerController.rb.velocity.y < 2
-                  && playerController.playerMovement.isFacingRight /*&& playerController.currentState != PLAYER_JUMP_R*/)
+                  && playerController.playerState.isFacingRight /*&& playerController.currentState != PLAYER_JUMP_R*/)
             {
                 playerController.ChangeAnimationState(PLAYER_JUMPSLOW_R);
             }
 
             else if (playerController.rb.velocity.y > 0
                   && playerController.rb.velocity.y < 2
-                  && !playerController.playerMovement.isFacingRight)
+                  && !playerController.playerState.isFacingRight)
             // && playerController.currentState != PLAYER_JUMP_L)
             {
                 playerController.ChangeAnimationState(PLAYER_JUMPSLOW_L);
@@ -326,7 +335,7 @@ public class PlayerAnimationManager : MonoBehaviour
                   && !playerController.playerMovement.isHangingLedge
                   && !playerController.playerSurroundings.isGrounded)
             {
-                if (playerController.playerMovement.isFacingRight)
+                if (playerController.playerState.isFacingRight)
                 {
                     playerController.ChangeAnimationState(PLAYER_JUMPAPEX_R);
                 }

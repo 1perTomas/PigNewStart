@@ -16,6 +16,8 @@ public class SpeedList : MonoBehaviour
     public float slidingSpeed = 4.5f;
     public float wallSlideSpeed = 0.45f;
 
+    internal float pushPullSpeed = 1.25f; 
+
     public float turningRateAir = 0.08f;
     public float acceleration = 0.15f;
 
@@ -25,30 +27,43 @@ public class SpeedList : MonoBehaviour
         runningSpeed *= -1;
         crawlingSpeed *= -1;
         slidingSpeed *= -1;
+        pushPullSpeed *= -1;
     }
 
     internal void SpeedSet()
     {
         if (playerController.playerSurroundings.isGrounded) // on ground
         {
-            if (playerController.playerMovement.isStandingNew) //standing
+            if (playerController.playerState.isInteracting)
+            {
+                if (playerController.playerState.isMoving)
+                {
+                    ChangeSpeed(pushPullSpeed);
+                }
+                else
+                {
+                    ChangeSpeed(0);
+                }
+            }
+
+            else if (playerController.playerMovement.isStanding) //standing
             {
                 if ((playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge) && playerController.speedList.currentSpeed != 0) // stops when hitting wall
                 {
                     ChangeSpeed(0);
                 }
 
-                if (!playerController.playerMovement.isMoving) // slows to stop when nothing is pressed
+                if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
                 {
                     ChangeSpeedNew(0);
                 }
 
-                if (playerController.playerMovement.isWalkingNew)
+                if (playerController.playerMovement.isWalking)
                 {
                     ChangeSpeedNew(walkSpeed);
                 }
 
-                if (playerController.playerMovement.isSprintingNew)
+                if (playerController.playerMovement.isSprinting)
                 {
                     ChangeSpeedNew(runningSpeed);
                 }
@@ -61,17 +76,17 @@ public class SpeedList : MonoBehaviour
                     ChangeSpeed(0);
                 }
 
-                if (!playerController.playerMovement.isMoving) // slows to stop when nothing is pressed
+                if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
                 {
                     ChangeSpeedNew(0);
                 }
 
-                if (playerController.playerMovement.isCrawlingNew) // crawl speed
+                if (playerController.playerMovement.isCrawling) // crawl speed
                 {
                     ChangeSpeedNew(crawlingSpeed);
                 }
 
-                if (playerController.playerMovement.isSlidingNew) // slide speed
+                if (playerController.playerMovement.isSliding) // slide speed
                 {
                     ChangeSpeedNew(slidingSpeed);
                 }
@@ -101,7 +116,7 @@ public class SpeedList : MonoBehaviour
 
         else // in air
         {
-            if (!playerController.playerMovement.isMoving) // slows to stop when nothing is pressed
+            if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
             {
                 turningRateAir = 0.04f;
                 ChangeSpeedNew(0);
@@ -112,7 +127,7 @@ public class SpeedList : MonoBehaviour
                 turningRateAir = 0.08f;
             }
 
-            if (playerController.playerMovement.isMoving && currentSpeed != runningSpeed) // speed in air 
+            if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
             {
                 ChangeSpeedNew(walkSpeed);
             }
