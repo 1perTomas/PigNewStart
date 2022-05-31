@@ -18,7 +18,9 @@ public class MoveObjects : MonoBehaviour
     private float interactCount;
     private float interactTime = 0.15f;
 
-    RaycastHit2D canInteract;
+    internal string objectType;
+
+    internal RaycastHit2D canInteract;
     private GameObject box;
 
 
@@ -38,6 +40,7 @@ public class MoveObjects : MonoBehaviour
         {
             box = canInteract.collider.gameObject;
             canGrab = true;
+            objectType = "Movable";
         }
         else if (playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped)
         {

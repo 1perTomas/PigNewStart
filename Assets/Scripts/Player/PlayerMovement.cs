@@ -196,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 playerController.playerJump.jumpBufferCount = playerController.playerJump.jumpBufferLength;
 
-                if (playerController.playerSurroundings.canJump) // JUMP
+                if (playerController.playerState.canJump) // JUMP
                 {
                     playerController.playerJump.Jump();
                 }
@@ -204,7 +204,7 @@ public class PlayerMovement : MonoBehaviour
 
             else if (playerController.playerJump.jumpBufferCount > 0)
             {
-                if (playerController.playerSurroundings.canJump && playerController.playerInput.isJumpPressed && playerController.playerSurroundings.isGrounded)
+                if (playerController.playerState.canJump && playerController.playerInput.isJumpPressed && playerController.playerSurroundings.isGrounded)
                 {
                     playerController.playerJump.Jump();
                 }

@@ -15,6 +15,8 @@ public class PlayerState : MonoBehaviour
     internal bool isMoving;
     internal bool isInteracting = false;
 
+    internal bool canJump;
+
 
     // Start is called before the first frame update
     void Start()

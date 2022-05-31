@@ -302,7 +302,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
             else if (playerController.rb.velocity.y < -2
                  && !playerController.playerMovement.isWallSliding
-                 && !playerController.playerSurroundings.canJump)
+                 && !playerController.playerState.canJump)
             {
                 if (playerController.playerState.isFacingRight)
                 {

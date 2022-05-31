@@ -29,7 +29,7 @@ public class Jump5Times : MonoBehaviour
     private void CheckForQuest()
     {
 
-        if (player.GetComponent<PlayerController>().playerInput.isJumpTapped && player.GetComponent<PlayerController>().playerSurroundings.canJump)
+        if (player.GetComponent<PlayerController>().playerInput.isJumpTapped && player.GetComponent<PlayerController>().playerState.canJump)
         {
 
             jumpCount += 1;

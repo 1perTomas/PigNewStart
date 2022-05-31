@@ -8,7 +8,13 @@ public class PlayerInteraction : MonoBehaviour
     PlayerController playerController;
     //facing direction
 
-
+    internal void Interactions()
+    {
+        if (playerController.moveObject.objectType == "Movable")
+        {
+            PushPull();
+        }
+    }
 
 
     //move in interaction left right

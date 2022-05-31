@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
     internal PlayerTimers playerTimers;
 
     [SerializeField]
+    internal PlayerDetectObject playerDetectObject;
+
+    [SerializeField]
     internal PlayerInteraction playerInteraction;
 
 
@@ -72,7 +75,7 @@ public class PlayerController : MonoBehaviour
 
         if (playerState.isInteracting)
         {
-            playerInteraction.PushPull();
+            playerInteraction.Interactions();
         }
 
         else
