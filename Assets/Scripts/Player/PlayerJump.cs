@@ -59,22 +59,12 @@ public class PlayerJump : MonoBehaviour
 
     internal void WallJump(float jumpPower) /////////CHECK THIS
     {
+        playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, jumpPower);
+
         playerController.playerMovement.isWallSliding = false;
         playerController.playerMovement.isHangingLedge = false;
         playerController.playerTimers.hangTimeTimer = 0;
         jumpBufferCount = 0;
-
-        if (playerController.playerState.isFacingRight)
-        {
-            playerController.playerState.isFacingRight = false;
-            playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, jumpPower);
-        }
-
-        else
-        {
-            playerController.playerState.isFacingRight = true;
-            playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, jumpPower);
-        }
     }
 
     internal void FallGravity()

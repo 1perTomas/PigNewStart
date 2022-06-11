@@ -19,7 +19,7 @@ public class SpeedList : MonoBehaviour
     internal float pushPullSpeed = 1.25f; 
 
     public float turningRateAir = 0.08f;
-    public float acceleration = 0.15f;
+    public float acceleration = 0.18f;
 
     internal void FlipSpeedValues()
     {

@@ -15,7 +15,7 @@ public class PlayerMove : MonoBehaviour
             {
                 playerController.playerState.isMoving = true;
                 playerController.playerState.isFacingRight = false;
-                Move();
+                //Move();
             }
 
             //---------------------------------------------------------------------------------Input Right
@@ -23,13 +23,13 @@ public class PlayerMove : MonoBehaviour
             {
                 playerController.playerState.isMoving = true;
                 playerController.playerState.isFacingRight = true;
-                Move();
+                //Move();
             }
 
             else
             {
                 playerController.playerState.isMoving = false;
-                playerController.playerMovement.IdleStop();
+               playerController.playerMovement.IdleStop();
             }
         }
     }
@@ -43,7 +43,8 @@ public class PlayerMove : MonoBehaviour
             {
                 playerController.playerState.isMoving = true;
                 playerController.playerState.isFacingRight = true;
-                Move();
+
+              //  Move();
             }
 
             //---------------------------------------------------------------------------------Input Right
@@ -51,7 +52,7 @@ public class PlayerMove : MonoBehaviour
             {
                 playerController.playerState.isMoving = true;
                 playerController.playerState.isFacingRight = false;
-                Move();
+               // Move();
             }
 
             else
@@ -64,12 +65,16 @@ public class PlayerMove : MonoBehaviour
 
     internal void Move()
     {
-        if ((playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0)
-            || (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed > 0))
-        {
-            playerController.speedList.FlipSpeedValues();
-        }
-        
-        playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, playerController.rb.velocity.y);
-    }
+       // if ((playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0)
+       //     || (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed > 0))
+       // {
+       //     playerController.speedList.FlipSpeedValues();
+       // }
+
+       //if (playerController.playerState.isMoving)
+       //{
+            playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, playerController.rb.velocity.y);
+        //}
+
+            }
 }

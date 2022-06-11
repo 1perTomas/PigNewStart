@@ -23,8 +23,18 @@ public class PlayerInput : MonoBehaviour
     internal bool isJumpReleased;
     internal bool isInteractTapped;
 
+    private KeyCode left;
+    private KeyCode right;
+    private KeyCode up;
+    private KeyCode down;
+    private KeyCode jump;
+    private KeyCode sprint;
+    private KeyCode interact;
+    private KeyCode pause;
+
     internal void CheckButtonInput()
     {
+        // if (keySetup == 1)
 
         if (!PauseMenu.gameIsPaused)
         {

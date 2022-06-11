@@ -8,6 +8,7 @@ TagManager:
   - MovableObject
   - DialogueTest
   - Ground
+  - CarriableObject
   layers:
   - Default
   - TransparentFX

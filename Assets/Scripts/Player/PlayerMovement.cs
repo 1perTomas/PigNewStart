@@ -51,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
 
     internal bool wallJumpReady = false;
 
+    public float wallSlideSense;
+
 
 
     private void HangingLedge() // put into wall interaction function
@@ -96,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (playerController.playerTimers.climbLedgeTimer > playerController.playerTimers.climbLedgeTimerSet || !isClimbingLedge)
             {
-                EnableMovement();
+                //EnableMovement();
                 isClimbingLedge = false;
                 playerController.playerTimers.climbLedgeTimer = 0;
             }
@@ -149,6 +151,12 @@ public class PlayerMovement : MonoBehaviour
 
     internal void MoveDetection() // checks the direction that is pressed
     {
+        if ((playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0)
+          || (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed > 0))
+        {
+            playerController.speedList.FlipSpeedValues();
+        }
+
         if (playerController.playerInput.isLeftTapped)
         {
             leftPriority = true;
@@ -171,15 +179,15 @@ public class PlayerMovement : MonoBehaviour
     }
     private void CheckInteraction()
     {
-       // if (playerController.playerState.isInteracting)
-       // {
-       //     isInteracting = true;
-       // }
-       //
-       // else
-       // {
-       //     isInteracting = false;
-       // }
+        // if (playerController.playerState.isInteracting)
+        // {
+        //     isInteracting = true;
+        // }
+        //
+        // else
+        // {
+        //     isInteracting = false;
+        // }
     }
 
     // private void PriorityDirectionLeft() - now in PlayerDirectionPriority
@@ -439,6 +447,7 @@ public class PlayerMovement : MonoBehaviour
                         if ((playerController.playerState.isFacingRight && playerController.playerInput.isLeftPressed && !playerController.playerInput.isRightPressed)
                         || (!playerController.playerState.isFacingRight && playerController.playerInput.isRightPressed && !playerController.playerInput.isLeftPressed))
                         {
+                            
                             wallJumpReady = true;
                             canClimb = false;
                         }
@@ -447,6 +456,7 @@ public class PlayerMovement : MonoBehaviour
                         {
                             wallJumpReady = false;
                             canClimb = true;
+                            //slideBlock = false;
                         }
 
                         if (playerController.playerSurroundings.isAbleToClimb)
@@ -462,15 +472,16 @@ public class PlayerMovement : MonoBehaviour
 
                         if (wallJumpReady)
                         {
-                            if (playerController.playerState.isFacingRight && playerController.speedList.walkSpeed > 0)
+                            if ((playerController.playerState.isFacingRight && playerController.speedList.walkSpeed > 0) 
+                            || (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0))
                             {
                                 playerController.speedList.FlipSpeedValues();
                             }
 
-                            else if (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0)
-                            {
-                                playerController.speedList.FlipSpeedValues();
-                            }
+                           // else if (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0)
+                           // {
+                           //     playerController.speedList.FlipSpeedValues();
+                           // }
 
                             else
                             {
@@ -543,6 +554,7 @@ public class PlayerMovement : MonoBehaviour
 
                     else if (!playerController.playerSurroundings.isGrounded)       //////////CHECK THIS
                     {
+
                         wallJumpReady = false;
                         //jumpAntiSpam += Time.deltaTime; //////////CHECK THIS
                         EnableMovement();                                           //////////CHECK THIS
@@ -614,6 +626,7 @@ public class PlayerMovement : MonoBehaviour
         if (playerController.playerSurroundings.isTouchingWall
             && !playerController.playerSurroundings.isGrounded)
         {
+           // playerController.rb.gravityScale = 3;
             if (!playerController.playerSurroundings.isTouchingLedge
                 && playerController.playerSurroundings.canHangLedge
                 && playerController.rb.velocity.y < 2)
@@ -625,10 +638,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 isHangingLedge = false;
             }
-            if ((playerController.playerSurroundings.isTouchingLedge
-      && playerController.rb.velocity.y < -1)) //sticks better to walljumps
+            if (playerController.playerSurroundings.isTouchingLedge
+      && (playerController.rb.velocity.y < wallSlideSense/*-1*/ )) //sticks better to walljumps
             {
                 isWallSliding = true;
+                //playerController.rb.gravityScale = 1;
             }
         }
         else
@@ -654,7 +668,7 @@ public class PlayerMovement : MonoBehaviour
 
     internal void IdleStop()
     {
-        playerController.playerMove.Move();
+       // playerController.playerMove.Move();
         NearestPixel();
         if (isStanding)
         {

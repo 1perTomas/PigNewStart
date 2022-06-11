@@ -10,7 +10,17 @@ public class PlayerInteraction : MonoBehaviour
 
     internal void Interactions()
     {
+       if (!playerController.playerSurroundings.isGrounded)
+       {
+           playerController.playerState.isInteracting = false;
+       }
+
         if (playerController.moveObject.objectType == "Movable")
+        {
+            PushPull();
+        }
+
+       else if (playerController.moveObject.objectType == "Carriable")
         {
             PushPull();
         }

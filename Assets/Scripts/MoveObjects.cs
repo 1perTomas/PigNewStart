@@ -36,13 +36,21 @@ public class MoveObjects : MonoBehaviour
         Physics2D.queriesStartInColliders = false;
         canInteract = playerController.playerSurroundings.isTouchingMovableObject;
 
-        if (playerController.playerSurroundings.isGrounded && canInteract && canInteract.collider.CompareTag("MovableObject"))
+        if (playerController.playerSurroundings.isGrounded && canInteract)
         {
             box = canInteract.collider.gameObject;
             canGrab = true;
-            objectType = "Movable";
+            if (canInteract.collider.CompareTag("MovableObject"))
+            {
+                objectType = "Movable";
+            }
+
+            else if (canInteract.collider.CompareTag("CarriableObject"))
+            {
+                objectType = "Carriable";
+            }
         }
-        else if (playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped)
+        else if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) || !playerController.playerSurroundings.isGrounded)
         {
             playerController.playerState.isInteracting = false;
 
@@ -67,13 +75,29 @@ public class MoveObjects : MonoBehaviour
             box.GetComponent<Rigidbody2D>().simulated = false;
             box.GetComponent<Rigidbody2D>().transform.SetParent(transform);
 
-            if (pushRight)
+            if (objectType == "Movable")
             {
-                AdjustColliderBox(1);
+                if (playerController.playerState.isFacingRight)
+                {
+                    AdjustColliderBox(1);
+                }
+                else
+                {
+                    AdjustColliderBox(-1);
+                }
             }
-            else
+
+            else if (objectType == "Carriable")
             {
-                AdjustColliderBox(-1);
+                if (playerController.playerState.isFacingRight)
+                {
+                    box.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
+                    AdjustColliderBox(1);
+                }
+                else
+                {
+                    AdjustColliderBox(-1);
+                }
             }
 
         }
@@ -82,7 +106,7 @@ public class MoveObjects : MonoBehaviour
         {
 
             box.GetComponent<Rigidbody2D>().simulated = true;
-            // box.GetComponent<Rigidbody2D>().isKinematic = false;
+            box.GetComponent<Rigidbody2D>().isKinematic = false;
             playerController.playerMovement.isInteracting = false;
             // playerController.BoxColliderFull();
             // box.GetComponent<Rigidbody2D>().simulated = true;

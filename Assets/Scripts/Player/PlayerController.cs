@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     internal PlayerInteraction playerInteraction;
 
+    [SerializeField]
+    internal PlayerStuckInGround playerStuckInGround;
+
 
     internal Rigidbody2D rb;
     private Animator anim;
@@ -64,28 +67,45 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update() //for inputs (keeps running)
     {
+        playerStuckInGround.AirTime();
         speedList.SpeedSet();
 
 
-        playerInput.CheckButtonInput();
-        playerSurroundings.CheckSurroundings();
 
-        playerJump.FallGravity();
-        playerState.ColliderAdjust();
 
         if (playerState.isInteracting)
         {
             playerInteraction.Interactions();
         }
 
+        else if (playerState.isStuckInGround)
+        {
+            playerStuckInGround.WiggleWiggle();
+        }
+
         else
         {
             playerMovement.NewMovements();
         }
+
+
+        playerInput.CheckButtonInput();
+
+
+
+        // playerState.ColliderAdjust();
+
+
     }
 
     private void FixedUpdate() //for physics (after button inputs)?
     {
+        playerState.SetState(); // check
+
+        playerState.ColliderAdjust();
+        playerJump.FallGravity();
+        playerMove.Move();
+        playerSurroundings.CheckSurroundings();
         playerMovement.SpecialMovement();
         playerMovement.WallInteraction();
 
@@ -117,4 +137,6 @@ public class PlayerController : MonoBehaviour
     //         rb.velocity += Vector2.up * Physics2D.gravity.y * Time.deltaTime * riseMultiplier;
     //     }
     // }
+
+
 }

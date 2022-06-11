@@ -14,8 +14,11 @@ public class PlayerState : MonoBehaviour
     internal bool isFacingRight = true;
     internal bool isMoving;
     internal bool isInteracting = false;
+    internal bool isStuckInGround = false;
 
     internal bool canJump;
+
+    internal int state;
 
 
     // Start is called before the first frame update
@@ -47,5 +50,24 @@ public class PlayerState : MonoBehaviour
         {
             BoxColliderProne();
         }
+    }
+
+    internal void SetState()
+    {
+        if (isInteracting)
+        {
+            state = 1;
+        }
+
+        else if (isStuckInGround)
+        {
+            state = 2;
+        }
+
+        else
+        {
+            state = 3;
+        }
+
     }
 }

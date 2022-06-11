@@ -31,4 +31,14 @@ public class PlayerTimers : MonoBehaviour
 
     internal float jumpBufferLength = .05f;
     internal float jumpBufferCount;
+
+    internal void RunTimer (float timer)
+    {
+        timer += Time.deltaTime;
+    }
+
+    internal void ResetTimer(float timer)
+    {
+        timer = 0;
+    }
 }
