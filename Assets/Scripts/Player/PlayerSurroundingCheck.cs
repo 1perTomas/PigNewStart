@@ -7,6 +7,8 @@ public class PlayerSurroundingCheck : MonoBehaviour
     [SerializeField]
     PlayerController playerController;
 
+
+
     internal bool isColliding;
 
     public Transform GroundCheck;
@@ -41,9 +43,14 @@ public class PlayerSurroundingCheck : MonoBehaviour
     internal bool isTouchingRectangleFloor;
     internal bool isAbleToClimb;
 
+    internal bool canInteract;
+
     internal bool isTouchingWallBehind;
 
-    internal RaycastHit2D isTouchingMovableObject;
+
+    internal GameObject interactableObject;
+    internal RaycastHit2D isTouchingInteractableObject;
+    internal string objectType;
 
     //internal bool canJump;
     internal bool canHangLedge;
@@ -58,6 +65,9 @@ public class PlayerSurroundingCheck : MonoBehaviour
         CheckLayerSurroundings(whatIsGround);
         CheckIfCanHangLedge();
         CheckIfCanJump();
+
+
+
         // AirGlitch();
     }
     internal void CheckIfCanJump()
@@ -162,35 +172,52 @@ public class PlayerSurroundingCheck : MonoBehaviour
             isTouchingCeilingProne = false;
         }
 
-        if (playerController.playerState.isFacingRight)
+        if (playerController.playerState.isInteracting)
         {
-            DetectSurroundings(1, layer);
-        }
+            if (playerController.playerInteraction.pushingObjectRight)
+            {
+                DetectSurroundings(1, layer);
+            }
 
+            else
+            {
+                DetectSurroundings(-1, layer);
+            }
+        }
         else
         {
-            DetectSurroundings(-1, layer);
+            if (playerController.playerState.isFacingRight)
+            {
+                DetectSurroundings(1, layer);
+            }
+
+            else
+            {
+                DetectSurroundings(-1, layer);
+            }
         }
     }
 
 
 
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.DrawLine(GroundCheck.position, new Vector3(GroundCheck.position.x, GroundCheck.position.y+0.1f));
-    //   
-    //     //Gizmos.DrawWireSphere(GroundCheck.position, groundCheckRadius;
-    //    // Gizmos.DrawLine(GroundCheck.position, new Vector3(GroundCheck.position.x + 0.28f, GroundCheck.position.y, GroundCheck.position.z));
-    //
-    //     Gizmos.DrawWireSphere(CeilingCheck.position, CeilingCheckRadius);
-    //     Gizmos.DrawWireSphere(CeilingCheckCrawling.position, CeilingCheckRadius);
-    //
-    //
-    //
-    //     Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y, wallCheck.position.z));
-    //
-    //     Gizmos.DrawLine(LedgeCheck.position, new Vector3(LedgeCheck.position.x + wallCheckDistance, LedgeCheck.position.y, LedgeCheck.position.z));
-    // }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(GroundCheck.position, new Vector3(GroundCheck.position.x, GroundCheck.position.y + 0.1f));
+
+        //Gizmos.DrawWireSphere(GroundCheck.position, groundCheckRadius;
+        // Gizmos.DrawLine(GroundCheck.position, new Vector3(GroundCheck.position.x + 0.28f, GroundCheck.position.y, GroundCheck.position.z));
+
+        Gizmos.DrawWireSphere(CeilingCheck.position, CeilingCheckRadius);
+        Gizmos.DrawWireSphere(CeilingCheckCrawling.position, CeilingCheckRadius);
+
+
+
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y, wallCheck.position.z));
+
+        Gizmos.DrawLine(LedgeCheck.position, new Vector3(LedgeCheck.position.x + wallCheckDistance, LedgeCheck.position.y, LedgeCheck.position.z));
+    }
 
     private void DetectSurroundings(int direction, LayerMask layer)
     {
@@ -202,7 +229,7 @@ public class PlayerSurroundingCheck : MonoBehaviour
         isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * direction, layer);
         isTouchingLedgeJump = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * direction, layer);
         isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
-        isTouchingMovableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * direction, layer);
+        isTouchingInteractableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * direction, layer);
     }
 
 

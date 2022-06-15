@@ -85,10 +85,10 @@ public class PlayerStuckInGround : MonoBehaviour
             }
         }
 
-        if (wiggleCount >= 12)
+        if (wiggleCount >= 8)
         {
             GetUnstuck();
-            
+
         }
 
         if (wiggleTimer > 0.5f)
@@ -109,8 +109,4 @@ public class PlayerStuckInGround : MonoBehaviour
         wiggleLeft = false;
         wiggleCount = 0;
     }
-
-
-
-
 }

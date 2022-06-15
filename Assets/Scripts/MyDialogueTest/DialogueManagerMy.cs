@@ -47,7 +47,7 @@ public class DialogueManagerMy : MonoBehaviour
                 questConditions.isQuestActive = true;
                 dialogueBox.SetActive(false);
                 playerController.playerMovement.canMove = true;
-                playerController.playerMovement.isInteracting = false;
+                //playerController.playerState.isInteracting = false;
 
                 
             }
@@ -58,7 +58,7 @@ public class DialogueManagerMy : MonoBehaviour
                 dialogueBox.transform.position = new Vector2(positionOnScreen.x, positionOnScreen.y+150f); 
                 dialogueBox.SetActive(true);
                 dialogueText.text = dialogue;
-                playerController.playerMovement.isInteracting = true;
+                //playerController.playerState.isInteracting = true;
                 playerController.playerMovement.canMove = false;
 
                 if (questConditions.conditionFulfilled)

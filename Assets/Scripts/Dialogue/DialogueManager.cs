@@ -48,12 +48,12 @@ public class DialogueManager : MonoBehaviour
     {
         if (dialogueActive)
         {
-            playerController.playerMovement.isInteracting = true;
+           // playerController.playerState.isInteracting = true;
             playerController.playerMovement.canMove = false;
         }
         else
         {
-            playerController.playerMovement.isInteracting = false;
+           // playerController.playerState.isInteracting = false;
            // playerController.playerMovement.canMove = true;
         }
 

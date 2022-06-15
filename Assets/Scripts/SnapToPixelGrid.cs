@@ -34,9 +34,12 @@ public class SnapToPixelGrid : MonoBehaviour
     private void NearestPixel()
     {
 
-        float pixelCoord = Mathf.Round(transform.localPosition.x / 0.03125f);
-        float pixelPos = (pixelCoord * 0.03125f);
-        transform.localPosition = new Vector3(pixelPos, transform.localPosition.y, transform.localPosition.z);
+        float pixelCoordx = Mathf.Round(transform.localPosition.x / 0.03125f);
+        float pixelPosx = (pixelCoordx * 0.03125f);
+        float pixelCoordy = Mathf.Round(transform.localPosition.x / 0.03125f);
+        float pixelPosy = (pixelCoordx * 0.03125f);
+
+        transform.localPosition = new Vector3(pixelPosx, transform.localPosition.y, transform.localPosition.z);
 
     }
 }

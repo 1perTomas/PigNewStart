@@ -40,8 +40,28 @@ public class PlayerState : MonoBehaviour
         GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.2765f); // 0 - (prone y size /2)  + (full y offset /2) 
     }
 
+    internal void AdjustColliderBoxMovable(int direction)
+    {
+        playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * ((playerController.playerState.StandingBox.x + playerController.playerInteraction.interactableObject.GetComponent<SpriteRenderer>().bounds.size.x) / 2 - (playerController.playerState.StandingBox.x / 2)), -0.069f);
+        playerController.GetComponent<BoxCollider2D>().size = new Vector2(playerController.playerInteraction.interactableObject.GetComponent<SpriteRenderer>().bounds.size.x + playerController.playerState.StandingBox.x, playerController.playerState.StandingBox.y);
+    }
+
     internal void ColliderAdjust()
     {
+        // if (isInteracting)
+        // {
+        //     if (isFacingRight)
+        //     {
+        //        StartCoroutine(AdjustColliderBoxMovable(1));
+        //     }
+        //     else
+        //     {
+        //         AdjustColliderBoxMovable(1);
+        //     }
+        // }
+        //
+        // else
+        // {
         if (playerController.playerMovement.isStanding)
         {
             BoxColliderFull();
@@ -50,6 +70,7 @@ public class PlayerState : MonoBehaviour
         {
             BoxColliderProne();
         }
+        // }
     }
 
     internal void SetState()

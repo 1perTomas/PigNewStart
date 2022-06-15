@@ -28297,7 +28297,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.01905572}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -28308,7 +28308,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 0.9718886}
+  m_Size: {x: 2, y: 1}
   m_EdgeRadius: 0
 --- !u!50 &629125497
 Rigidbody2D:
@@ -28389,7 +28389,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 629125493}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 60.06, y: 0.5, z: 0}
+  m_LocalPosition: {x: 59.52, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -74188,7 +74188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1759083725}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 63.32, y: 6.55, z: 0}
+  m_LocalPosition: {x: 60.95, y: 0.59, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2028075685}
@@ -74348,7 +74348,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1759083725}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9763907d60d37de4e84bc887d5a70cf9, type: 3}
   m_Name: 
@@ -75339,7 +75339,7 @@ GameObject:
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1785036243
 Transform:
@@ -78084,6 +78084,15 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
+  - first: {x: 115, y: 0, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      m_AllTileFlags: 1073741825
   - first: {x: 142, y: 0, z: 0}
     second:
       serializedVersion: 2
@@ -80561,17 +80570,17 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 572
+  - m_RefCount: 573
     m_Data: {fileID: 11400000, guid: 4d02473f93852444ea8c18b3b18ed8fb, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 572
+  - m_RefCount: 573
     m_Data: {fileID: 21300000, guid: f96af396bbbb12e4399c9334920612ce, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileMatrixArray:
-  - m_RefCount: 572
+  - m_RefCount: 573
     m_Data:
       e00: 1
       e01: 0
@@ -80626,7 +80635,7 @@ Tilemap:
       e32: 0
       e33: 0
   m_TileColorArray:
-  - m_RefCount: 572
+  - m_RefCount: 573
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -80774,26 +80783,14 @@ CompositeCollider2D:
         Y: -30000000
       - X: 525000000
         Y: -30000000
-    - - X: 574999959
+    - - X: 624999959
         Y: -100
-      - X: 574999900
+      - X: 624999900
         Y: -41
-      - X: 574999900
+      - X: 624999900
         Y: 0
-      - X: 530000100
-        Y: 0
-      - X: 530000100
-        Y: 9999900
-      - X: 555000100
-        Y: 9999900
-      - X: 555000100
-        Y: 4999959
-      - X: 555000041
-        Y: 4999900
-      - X: 580000041
-        Y: 4999900
       - X: 580000100
-        Y: 4999959
+        Y: 0
       - X: 580000100
         Y: 34999900
       - X: 595000041
@@ -80861,18 +80858,6 @@ CompositeCollider2D:
       - X: 630000100
         Y: -41
       - X: 630000041
-        Y: -100
-      - X: 624999959
-        Y: -100
-      - X: 624999900
-        Y: -41
-      - X: 624999900
-        Y: 0
-      - X: 580000100
-        Y: 0
-      - X: 580000100
-        Y: -41
-      - X: 580000041
         Y: -100
     - - X: 615000100
         Y: 99999900
@@ -81004,6 +80989,20 @@ CompositeCollider2D:
         Y: 5000000
       - X: -25000000
         Y: 5000000
+    - - X: 530000100
+        Y: 0
+      - X: 530000100
+        Y: 9999900
+      - X: 555000100
+        Y: 9999900
+      - X: 555000100
+        Y: 4999959
+      - X: 555000041
+        Y: 4999900
+      - X: 574999900
+        Y: 4999900
+      - X: 574999900
+        Y: 0
     - - X: 420000000
         Y: 4999900
       - X: 419999959
@@ -81053,11 +81052,7 @@ CompositeCollider2D:
       - {x: 39.5, y: -1.0000294}
       - {x: 39.50003, y: -3}
     - - {x: 70.999985, y: 0.0000294}
-      - {x: 53.00001, y: 0.0000294}
-      - {x: 53.00004, y: 0.99999}
-      - {x: 55.500015, y: 0.9999606}
-      - {x: 55.500034, y: 0.49999002}
-      - {x: 58.000015, y: 0.5000252}
+      - {x: 58.000015, y: 0.0000294}
       - {x: 58.00004, y: 3.49999}
       - {x: 60.000015, y: 3.5000336}
       - {x: 59.999973, y: 8.50001}
@@ -81100,6 +81095,10 @@ CompositeCollider2D:
       - {x: 66.49998, y: 4.00001}
       - {x: 64.999985, y: 3.9999747}
       - {x: 65.00002, y: 3.49999}
+    - - {x: 31.999971, y: 0.5}
+      - {x: 31.999971, y: 3.5}
+      - {x: 30, y: 3.499971}
+      - {x: 30.000029, y: 0.5}
     - - {x: -2.5000293, y: 0.5}
       - {x: -2.5000293, y: 1}
       - {x: -3, y: 1.0000294}
@@ -81108,10 +81107,12 @@ CompositeCollider2D:
       - {x: -3.5000296, y: 1}
       - {x: -4.5, y: 0.99997073}
       - {x: -4.499971, y: 0.5}
-    - - {x: 31.999971, y: 0.5}
-      - {x: 31.999971, y: 3.5}
-      - {x: 30, y: 3.499971}
-      - {x: 30.000029, y: 0.5}
+    - - {x: 57.49999, y: 0.0000294}
+      - {x: 53.00001, y: 0.0000294}
+      - {x: 53.00004, y: 0.99999}
+      - {x: 55.500015, y: 0.9999606}
+      - {x: 55.500034, y: 0.49999002}
+      - {x: 57.49999, y: 0.4999606}
     - - {x: 41.999973, y: 0}
       - {x: 41.99996, y: 0.5}
       - {x: 41, y: 0.4999707}
@@ -81134,10 +81135,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 0
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -92500,7 +92501,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2117121326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66.13, y: 4.41, z: 0}
+  m_LocalPosition: {x: 64.107, y: 6.39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

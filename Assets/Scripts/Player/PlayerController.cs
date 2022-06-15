@@ -69,10 +69,10 @@ public class PlayerController : MonoBehaviour
     {
         playerStuckInGround.AirTime();
         speedList.SpeedSet();
+        
 
 
-
-
+        
         if (playerState.isInteracting)
         {
             playerInteraction.Interactions();
@@ -102,12 +102,17 @@ public class PlayerController : MonoBehaviour
     {
         playerState.SetState(); // check
 
-        playerState.ColliderAdjust();
+        
         playerJump.FallGravity();
         playerMove.Move();
         playerSurroundings.CheckSurroundings();
+        playerInteraction.LetGo();
+
+        playerDetectObject.CheckForObjects();
+        
         playerMovement.SpecialMovement();
         playerMovement.WallInteraction();
+        playerState.ColliderAdjust();
 
         PlayerAnimationManager.AnimationManager();
     }
