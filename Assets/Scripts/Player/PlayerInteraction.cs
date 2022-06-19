@@ -31,65 +31,48 @@ public class PlayerInteraction : MonoBehaviour
 
         if (playerController.playerDetectObject.objectType == "Movable")
         {
+            //interactableObject = playerController.playerDetectObject.touchingObject;
             PushPull();
         }
 
-        else if (objectType == "Carriable")
+        if (playerController.playerDetectObject.objectType == "Carriable")
         {
+            //interactableObject = playerController.playerDetectObject.touchingObject;
             PushPull();
         }
 
-        if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) || !playerController.playerSurroundings.isGrounded)
+        if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) /*|| !playerController.playerSurroundings.isGrounded*/)
         {
             holding = false;
         }
     }
 
-    //internal void WhatObject()
-    //{
-    //    if (playerController.playerSurroundings.isTouchingInteractableObject)
-    //    {
-    //        interactableObject = playerController.playerDetectObject.objectItself.collider.gameObject;
-    //    }
-    //}
-
     internal void PushPull()
     {
-        if (playerController.playerInput.isLeftPressed) //turn around work around, otherwise cant move in another direction if hitting wall
-        {
-            pushingObjectRight = false;
-        }
-
-        else if (playerController.playerInput.isRightPressed)
-        {
-            pushingObjectRight = true;
-        }
-
-        if (playerController.playerInput.isLeftPressed && !playerController.playerSurroundings.isTouchingWall
-            && !playerController.playerSurroundings.isTouchingLedge)
+        Debug.Log("Pickup");
+        if (playerController.playerInput.isLeftPressed)
         {
             if (playerController.speedList.walkSpeed > 0)
             {
                 playerController.speedList.FlipSpeedValues();
             }
+
             else
             {
-                playerController.playerMove.Move();
                 playerController.playerState.isMoving = true;
             }
         }
 
 
-        else if (playerController.playerInput.isRightPressed && !playerController.playerSurroundings.isTouchingWall
-            && !playerController.playerSurroundings.isTouchingLedge && pushingObjectRight)
+        else if (playerController.playerInput.isRightPressed)
         {
             if (playerController.speedList.walkSpeed < 0)
             {
                 playerController.speedList.FlipSpeedValues();
             }
+
             else
             {
-                playerController.playerMove.Move();
                 playerController.playerState.isMoving = true;
             }
         }
@@ -109,7 +92,6 @@ public class PlayerInteraction : MonoBehaviour
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().simulated = false;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.SetParent(transform);
-            playerController.playerSurroundings.wallCheckDistance = 2.21f;
         }
     }
 
@@ -117,16 +99,29 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!holding && playerController.playerState.isInteracting)
         {
-            // if (interactableObject != null && !holding && playerController.playerState.isInteracting)
-            // {
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().simulated = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.SetParent(null);
             playerController.playerState.isInteracting = false;
-            playerController.playerSurroundings.wallCheckDistance = 0.21f;
-            // }}
         }
+    }
 
+    internal void LockObject()
+    {
+        interactableObject = playerController.playerDetectObject.touchingObject;
+    }
+
+    internal void AdjustColliderBoxMovable(int direction)
+    {
+       // playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * ((playerController.playerState.StandingBox.x + playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.x) / 2 - (playerController.playerState.StandingBox.x / 2)), -0.069f);
+       // playerController.GetComponent<BoxCollider2D>().size = new Vector2(playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.x + playerController.playerState.StandingBox.x, playerController.playerState.StandingBox.y);
+    }
+
+    internal void AdjustColliderBoxCarriable(int direction)
+    {
+       // // needs another raycast to see if the carriable hits any obstacles, if it does - adjust collider to it's size
+       // playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * (playerController.playerState.StandingBox.x), (playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y) - 0.069f);
+       // playerController.GetComponent<BoxCollider2D>().size = new Vector2(playerController.playerState.StandingBox.x, playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y + playerController.playerState.StandingBox.y);
     }
 
 }

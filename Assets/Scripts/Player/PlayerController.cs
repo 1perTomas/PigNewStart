@@ -17,9 +17,6 @@ public class PlayerController : MonoBehaviour
     internal PlayerSurroundingCheck playerSurroundings;
 
     [SerializeField]
-    internal MoveObjects moveObject;
-
-    [SerializeField]
     internal PlayerState playerState;
 
     [SerializeField]
@@ -42,6 +39,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     internal PlayerStuckInGround playerStuckInGround;
+
+    [SerializeField]
+    internal PlayerColliders playerColliders;
 
 
     internal Rigidbody2D rb;
@@ -69,8 +69,8 @@ public class PlayerController : MonoBehaviour
     {
         playerStuckInGround.AirTime();
         speedList.SpeedSet();
-        
 
+        
 
         
         if (playerState.isInteracting)
@@ -112,9 +112,11 @@ public class PlayerController : MonoBehaviour
         
         playerMovement.SpecialMovement();
         playerMovement.WallInteraction();
-        playerState.ColliderAdjust();
+        playerColliders.ColliderAdjust();
 
         PlayerAnimationManager.AnimationManager();
+
+        playerState.GetHit();
     }
 
 

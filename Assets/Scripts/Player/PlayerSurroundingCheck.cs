@@ -174,7 +174,7 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
         if (playerController.playerState.isInteracting)
         {
-            if (playerController.playerInteraction.pushingObjectRight)
+            if (playerController.playerState.isFacingRight)
             {
                 DetectSurroundings(1, layer);
             }

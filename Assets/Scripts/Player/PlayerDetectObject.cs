@@ -9,6 +9,7 @@ public class PlayerDetectObject : MonoBehaviour
 
     internal bool isTouchingObject;
     internal RaycastHit2D objectItself;
+    internal GameObject touchingObject;
 
     internal string objectType;
     internal bool canInteract;
@@ -19,6 +20,7 @@ public class PlayerDetectObject : MonoBehaviour
     {
         isTouchingObject = playerController.playerSurroundings.isTouchingInteractableObject;
         objectItself = playerController.playerSurroundings.isTouchingInteractableObject;
+        
     }
 
     internal void CheckForObjects()
@@ -31,6 +33,7 @@ public class PlayerDetectObject : MonoBehaviour
 
         if (isTouchingObject && !playerController.playerState.isInteracting) //prevents from taking tags while interacting
         {
+            touchingObject = playerController.playerSurroundings.isTouchingInteractableObject.collider.gameObject;
 
             if (objectItself.collider.CompareTag("MovableObject"))
             {
@@ -48,6 +51,7 @@ public class PlayerDetectObject : MonoBehaviour
             isTouchingObject = false;
             objectType = null;
             canInteract = false;
+            touchingObject = null;
         }
     }
 
