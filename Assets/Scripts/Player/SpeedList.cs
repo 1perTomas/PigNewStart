@@ -16,7 +16,8 @@ public class SpeedList : MonoBehaviour
     public float slidingSpeed = 4.5f;
     public float wallSlideSpeed = 0.45f;
 
-    internal float pushPullSpeed = 1.25f; 
+    internal float heavyObjectSpeed = 1.25f;
+    internal float lightObjectSpeed = 1.75f;
 
     public float turningRateAir = 0.08f;
     public float acceleration = 0.18f;
@@ -27,7 +28,8 @@ public class SpeedList : MonoBehaviour
         runningSpeed *= -1;
         crawlingSpeed *= -1;
         slidingSpeed *= -1;
-        pushPullSpeed *= -1;
+        heavyObjectSpeed *= -1;
+        lightObjectSpeed *= -1;
     }
 
     internal void SpeedSet()
@@ -38,7 +40,31 @@ public class SpeedList : MonoBehaviour
             {
                 if (playerController.playerState.isMoving)
                 {
-                    ChangeSpeed(pushPullSpeed);
+                    if (playerController.playerDetectObject.objectType == "Carriable")
+                    {
+                        if (playerController.playerInteraction.isCarrying)
+                        {
+                            ChangeSpeed(walkSpeed);
+                        }
+                        else
+                        {
+
+                            if ((playerController.playerState.isFacingRight && walkSpeed > 0) || (!playerController.playerState.isFacingRight && walkSpeed < 0))
+                            {
+                                ChangeSpeed(lightObjectSpeed);
+                            }
+
+                            else
+                            {
+                                ChangeSpeed(heavyObjectSpeed);
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        ChangeSpeed(heavyObjectSpeed);
+                    }
                 }
                 else
                 {

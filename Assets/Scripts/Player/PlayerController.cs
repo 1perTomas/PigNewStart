@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
 
         PlayerAnimationManager.AnimationManager();
 
-        playerState.GetHit();
+        //playerState.GetHit();
     }
 
 

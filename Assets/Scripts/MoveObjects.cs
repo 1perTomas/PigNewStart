@@ -60,55 +60,6 @@ public class MoveObjects : MonoBehaviour
         }
     }
    
-   // private void LateUpdate()
-   // {
-   //
-   //     if (playerController.playerState.isInteracting)
-   //     {
-   //         box.GetComponent<Rigidbody2D>().isKinematic = true;
-   //         box.GetComponent<Rigidbody2D>().simulated = false;
-   //         box.GetComponent<Rigidbody2D>().transform.SetParent(transform);
-   //
-   //         if (objectType == "Movable")
-   //         {
-   //             if (playerController.playerState.isFacingRight)
-   //             {
-   //                 AdjustColliderBoxMovable(1);
-   //             }
-   //             else
-   //             {
-   //                 AdjustColliderBoxMovable(-1);
-   //             }
-   //         }
-   //
-   //         else if (objectType == "Carriable")
-   //         {
-   //             
-   //                 box.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
-   //             AdjustColliderBoxCarriable();
-   //         }
-   //
-   //         if (playerController.playerInput.isInteractTapped)
-   //         {
-   //             LetGo();
-   //         }
-   //
-   //     }
-   //
-   //     else if (box != null)
-   //     {
-   //     
-   //         box.GetComponent<Rigidbody2D>().simulated = true;
-   //         box.GetComponent<Rigidbody2D>().isKinematic = false;
-   //         playerController.playerState.isInteracting = false;
-   //         // playerController.BoxColliderFull();
-   //         // box.GetComponent<Rigidbody2D>().simulated = true;
-   //         // 
-   //         // box.GetComponent<Rigidbody2D>().transform.SetParent(null);
-   //     }
-   //
-   // }
-   
     internal void LetGo()
     {
          box.GetComponent<Rigidbody2D>().simulated = true;
@@ -116,17 +67,4 @@ public class MoveObjects : MonoBehaviour
          playerController.playerState.isInteracting = false;
         box.GetComponent<Rigidbody2D>().transform.SetParent(null);
     }
-
-   // internal void AdjustColliderBoxMovable(int direction)
-   // {
-   //     playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * ((playerController.playerState.StandingBox.x + box.GetComponent<SpriteRenderer>().bounds.size.x) / 2 - (playerController.playerState.StandingBox.x / 2)), -0.069f);
-   //     playerController.GetComponent<BoxCollider2D>().size = new Vector2(box.GetComponent<SpriteRenderer>().bounds.size.x + playerController.playerState.StandingBox.x, playerController.playerState.StandingBox.y);
-   // }
-   //
-   // internal void AdjustColliderBoxCarriable()
-   // {
-   //     playerController.GetComponent<BoxCollider2D>().offset = new Vector2(0.015f, -0.069f + (box.GetComponent<SpriteRenderer>().bounds.size.y) / 2);
-   //     playerController.GetComponent<BoxCollider2D>().size = new Vector2(box.GetComponent<SpriteRenderer>().bounds.size.x, box.GetComponent<SpriteRenderer>().bounds.size.y + playerController.playerState.StandingBox.y+0.13f); // figure out last number
-   // }
-
 }

@@ -13,13 +13,32 @@ public class PlayerInteraction : MonoBehaviour
 
     internal bool holding;
     internal bool canGrab;
+    internal bool isCarrying;
+    internal bool isDisengaging;
+
+    internal float disengageTimer;
+    float angleDegrees;
+    float radiusLength;
 
     internal bool pushingObjectRight;
     internal GameObject interactableObject;
+    internal Vector2 originalObjectPosition;
+
+    private void Start()
+    {
+        angleDegrees = 89f;
+        radiusLength = 0.8f;
+    }
 
     void Update()
     {
         // Physics2D.queriesStartInColliders = false;
+    }
+
+    private void FixedUpdate()
+    {
+        Disengage();
+        PutDown();
     }
 
     internal void Interactions() //
@@ -39,11 +58,37 @@ public class PlayerInteraction : MonoBehaviour
         {
             //interactableObject = playerController.playerDetectObject.touchingObject;
             PushPull();
+
+            if (playerController.playerInput.isUpTapped && !isCarrying)
+            {
+                LiftUp();
+            }
+
+            else if (playerController.playerInput.isDownTapped && isCarrying)
+            {
+                PutDown();
+            }
         }
 
         if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) /*|| !playerController.playerSurroundings.isGrounded*/)
         {
-            holding = false;
+            if (isCarrying)
+            {
+                isDisengaging = true;
+               // if (disengageTimer >= 0.1f)
+               // {
+               //     PutDown();
+               //     holding = false;
+               //     isDisengaging = false;
+               // }
+            }
+
+            
+        }
+
+        else if ((playerController.playerState.isInteracting && playerController.playerInput.isSprintPressed))
+        {
+            Disengage();
         }
     }
 
@@ -84,6 +129,36 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
+    internal void PutDown() // tidy up
+    {
+        if (isCarrying)
+        {
+            if (disengageTimer >= 0.1f)
+            {
+
+                holding = false;
+                isDisengaging = false;
+
+
+                //putting down the object
+                playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
+
+                isCarrying = false;
+                disengageTimer = 0;
+                angleDegrees = 89f;
+            }
+        }
+    }
+
+    internal void LiftUp()
+    {
+        if (!isCarrying)
+        {
+            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
+            isCarrying = true;
+        }
+    }
+
     internal void PickUp() //allows the object to be manipulated
     {
         if (!playerController.playerState.isInteracting)
@@ -92,6 +167,7 @@ public class PlayerInteraction : MonoBehaviour
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().simulated = false;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.SetParent(transform);
+            originalObjectPosition = playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition;
         }
     }
 
@@ -111,18 +187,56 @@ public class PlayerInteraction : MonoBehaviour
         interactableObject = playerController.playerDetectObject.touchingObject;
     }
 
-    internal void AdjustColliderBoxMovable(int direction)
+    internal void Disengage()
     {
-       // playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * ((playerController.playerState.StandingBox.x + playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.x) / 2 - (playerController.playerState.StandingBox.x / 2)), -0.069f);
-       // playerController.GetComponent<BoxCollider2D>().size = new Vector2(playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.x + playerController.playerState.StandingBox.x, playerController.playerState.StandingBox.y);
+
+        if (isDisengaging)
+        {
+            //float angleDegrees = 89;
+            if (playerController.playerState.isFacingRight)
+            {
+                angleDegrees -= Time.deltaTime * 800;
+            }
+
+            else
+            {
+                angleDegrees += Time.deltaTime * 800;
+            }
+
+            if (radiusLength > 0.57f)
+            {
+                    radiusLength -= Time.deltaTime * 3;           
+            }
+            //float decreasingDegrees;
+
+            if (disengageTimer < 0.1f)
+            {
+                playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
+                     new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
+                //new Vector2(radiusLength * Mathf.Cos(angleDegrees * Mathf.PI / 180), radiusLength * Mathf.Sin(angleDegrees * Mathf.PI / 180));
+            }
+
+            if (angleDegrees > -1f && angleDegrees < 1f)
+            {
+                Debug.Log(disengageTimer);
+                //takes 0.35 time to go from 90 to 0 degrees
+            }
+
+            //Vector2 newPosition2 = new Vector2(0.8f * Mathf.Cos(angleDegrees * Mathf.PI / 180), 0.8f * Mathf.Sin(angleDegrees * Mathf.PI / 180));
+
+            //Debug.Log(0.8f * Mathf.Sin((89*Mathf.PI/180)) + "+" + 0.8f * Mathf.Cos(89 * Mathf.PI / 180));
+            //Vector2 newPosition = new Vector2(0.8f * Mathf.Sin(90), 0.8f * Mathf.Cos(90));
+
+            disengageTimer += Time.deltaTime;
+        }
+
+
+        //basically LetGo() with a timegate for animations (4frames?)
     }
 
-    internal void AdjustColliderBoxCarriable(int direction)
+    internal float ConvertToRadian (float degrees)
     {
-       // // needs another raycast to see if the carriable hits any obstacles, if it does - adjust collider to it's size
-       // playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * (playerController.playerState.StandingBox.x), (playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y) - 0.069f);
-       // playerController.GetComponent<BoxCollider2D>().size = new Vector2(playerController.playerState.StandingBox.x, playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y + playerController.playerState.StandingBox.y);
+        return degrees * Mathf.PI / 180;
     }
-
 }
 

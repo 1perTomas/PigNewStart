@@ -65,9 +65,6 @@ public class PlayerSurroundingCheck : MonoBehaviour
         CheckLayerSurroundings(whatIsGround);
         CheckIfCanHangLedge();
         CheckIfCanJump();
-
-
-
         // AirGlitch();
     }
     internal void CheckIfCanJump()

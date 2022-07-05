@@ -20,15 +20,11 @@ public class PlayerMovement : MonoBehaviour
     internal bool isCrawling;
     internal bool isTurning;
 
-
     internal bool isPushing;
 
     internal bool isHangingLedge;
     internal bool isClimbingLedge;
     internal bool isWallSliding;
-
-
-    //internal bool isInteracting;
 
     internal bool leftPriority;
 
@@ -36,24 +32,15 @@ public class PlayerMovement : MonoBehaviour
     internal bool canTurn = true;
     internal bool canMove = true;
     internal bool canSlide = false;
-    //internal bool isMoving;
 
     internal Vector2 hangingPosition;
-
 
     internal float velX = 0;
     internal float velY = 0;
 
-    // internal float jumpBufferCount;
-    // internal float jumpBufferLength = 0.2f;
-
-    //internal float jumpAntiSpam;
-
     internal bool wallJumpReady = false;
 
     public float wallSlideSense;
-
-
 
     private void HangingLedge() // put into wall interaction function
     {
@@ -123,9 +110,6 @@ public class PlayerMovement : MonoBehaviour
         canTurn = true;
     }
 
-    //internal void ChangeSpeed(float newSpeed) - now in SpeedList
-    //internal void ChangeSpeedNew(float newSpeed) - now in SpeedList
-
     internal void WallSlideSpeedIdle()
     {
         if (playerController.speedList.wallSlideSpeed > 0.45f)
@@ -177,18 +161,6 @@ public class PlayerMovement : MonoBehaviour
             playerController.playerMove.PriorityDirectionRight();
         }
     }
-    private void CheckInteraction()
-    {
-        // if (playerController.playerState.isInteracting)
-        // {
-        //     isInteracting = true;
-        // }
-        //
-        // else
-        // {
-        //     isInteracting = false;
-        // }
-    }
 
     // private void PriorityDirectionLeft() - now in PlayerDirectionPriority
     // private void PriorityDirectionRight() - now in PlayerDirectionPriority
@@ -198,7 +170,6 @@ public class PlayerMovement : MonoBehaviour
     {
         {
             MoveDetection();
-            CheckInteraction();
 
             if (playerController.playerInput.isJumpTapped)
             {
@@ -276,7 +247,8 @@ public class PlayerMovement : MonoBehaviour
 
                             //----------------SPRINT--------------------------
                             else if (isWalking && playerController.playerInput.isSprintPressed
-                                     && ((playerController.playerState.isFacingRight && playerController.speedList.currentSpeed >= playerController.speedList.walkSpeed) || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed <= playerController.speedList.walkSpeed)))
+                                     && ((playerController.playerState.isFacingRight && playerController.speedList.currentSpeed >= playerController.speedList.walkSpeed) 
+                                     || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed <= playerController.speedList.walkSpeed)))
                             {
                                 //----------------------------SPRINT INTO WALL--------------------
                                 if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
@@ -553,12 +525,10 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
 
-                    else if (!playerController.playerSurroundings.isGrounded)       //////////CHECK THIS
+                    else if (!playerController.playerSurroundings.isGrounded)
                     {
-
                         wallJumpReady = false;
-                        //jumpAntiSpam += Time.deltaTime; //////////CHECK THIS
-                        EnableMovement();                                           //////////CHECK THIS
+                        EnableMovement();                                         
                     }
 
                     else

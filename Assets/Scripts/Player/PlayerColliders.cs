@@ -39,7 +39,7 @@ public class PlayerColliders : MonoBehaviour
     {
         // needs another raycast to see if the carriable hits any obstacles, if it does - adjust collider to it's size
         playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * 0.015f, (playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y) / 2 - 0.069f);
-        playerController.GetComponent<BoxCollider2D>().size = new Vector2(StandingBox.x, playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y +StandingBox.y);
+        playerController.GetComponent<BoxCollider2D>().size = new Vector2(StandingBox.x, playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y + StandingBox.y);
     }
 
 
@@ -62,18 +62,32 @@ public class PlayerColliders : MonoBehaviour
 
             else if (playerController.playerDetectObject.objectType == "Carriable")
             {
-                if (playerController.playerState.isFacingRight)
+                if (playerController.playerInteraction.isCarrying)
                 {
-                    playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
-                    AdjustColliderBoxCarriable(1);
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        //playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
+                        AdjustColliderBoxCarriable(1);
+                    }
+
+                    else
+                    {
+                        //playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
+                        AdjustColliderBoxCarriable(-1);
+                    }
                 }
 
                 else
                 {
-                    playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
-                    AdjustColliderBoxCarriable(-1);
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        AdjustColliderBoxMovable(1);
+                    }
+                    else
+                    {
+                        AdjustColliderBoxMovable(-1);
+                    }
                 }
-
 
             }
         }

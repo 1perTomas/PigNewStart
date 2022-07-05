@@ -14,13 +14,10 @@ public class PlayerDetectObject : MonoBehaviour
     internal string objectType;
     internal bool canInteract;
 
-
-
     internal void FindObject()
     {
         isTouchingObject = playerController.playerSurroundings.isTouchingInteractableObject;
         objectItself = playerController.playerSurroundings.isTouchingInteractableObject;
-        
     }
 
     internal void CheckForObjects()
