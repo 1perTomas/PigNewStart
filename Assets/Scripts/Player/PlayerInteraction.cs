@@ -11,10 +11,12 @@ public class PlayerInteraction : MonoBehaviour
     internal string objectType;
     internal RaycastHit2D canInteract; //brings back an object
 
-    internal bool holding;
+    internal bool isHolding;
     internal bool canGrab;
     internal bool isCarrying;
     internal bool isDisengaging;
+
+    internal int continueHolding;
 
     internal float disengageTimer;
     float angleDegrees;
@@ -38,7 +40,8 @@ public class PlayerInteraction : MonoBehaviour
     private void FixedUpdate()
     {
         Disengage();
-        PutDown();
+        //PutDown();
+
     }
 
     internal void Interactions() //
@@ -66,7 +69,8 @@ public class PlayerInteraction : MonoBehaviour
 
             else if (playerController.playerInput.isDownTapped && isCarrying)
             {
-                PutDown();
+                isDisengaging = true;
+                continueHolding = 1;
             }
         }
 
@@ -75,20 +79,12 @@ public class PlayerInteraction : MonoBehaviour
             if (isCarrying)
             {
                 isDisengaging = true;
-               // if (disengageTimer >= 0.1f)
-               // {
-               //     PutDown();
-               //     holding = false;
-               //     isDisengaging = false;
-               // }
+                continueHolding = 0;
             }
-
-            
-        }
-
-        else if ((playerController.playerState.isInteracting && playerController.playerInput.isSprintPressed))
-        {
-            Disengage();
+            else
+            {
+                isHolding = false;
+            }
         }
     }
 
@@ -135,17 +131,21 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (disengageTimer >= 0.1f)
             {
-
-                holding = false;
+                isCarrying = false;
                 isDisengaging = false;
-
-
                 //putting down the object
                 playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
-
-                isCarrying = false;
-                disengageTimer = 0;
                 angleDegrees = 89f;
+
+                if (continueHolding == 0)
+                {
+                    isHolding = false;
+                }
+
+                else if (continueHolding == 1)
+                {
+                    isHolding = true;
+                }
             }
         }
     }
@@ -154,6 +154,9 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!isCarrying)
         {
+            angleDegrees = 89f;
+            continueHolding = 2;
+            disengageTimer = 0;
             playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
             isCarrying = true;
         }
@@ -163,7 +166,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!playerController.playerState.isInteracting)
         {
-            holding = true;
+            isHolding = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().simulated = false;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.SetParent(transform);
@@ -173,7 +176,7 @@ public class PlayerInteraction : MonoBehaviour
 
     internal void LetGo() // detaches and returns object properties
     {
-        if (!holding && playerController.playerState.isInteracting)
+        if (!isHolding && playerController.playerState.isInteracting) // check if isInteracting condition needed
         {
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().simulated = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
@@ -205,15 +208,30 @@ public class PlayerInteraction : MonoBehaviour
 
             if (radiusLength > 0.57f)
             {
-                    radiusLength -= Time.deltaTime * 3;           
+                radiusLength -= Time.deltaTime * 3;
             }
-            //float decreasingDegrees;
 
             if (disengageTimer < 0.1f)
             {
                 playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
                      new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
-                //new Vector2(radiusLength * Mathf.Cos(angleDegrees * Mathf.PI / 180), radiusLength * Mathf.Sin(angleDegrees * Mathf.PI / 180));
+            }
+
+            else
+            {
+                playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
+                isDisengaging = false;
+                isCarrying = false;
+
+                if (continueHolding == 0)
+                {
+                    isHolding = false;
+                }
+
+                else if (continueHolding == 1)
+                {
+                    isHolding = true;
+                }
             }
 
             if (angleDegrees > -1f && angleDegrees < 1f)
@@ -222,19 +240,16 @@ public class PlayerInteraction : MonoBehaviour
                 //takes 0.35 time to go from 90 to 0 degrees
             }
 
-            //Vector2 newPosition2 = new Vector2(0.8f * Mathf.Cos(angleDegrees * Mathf.PI / 180), 0.8f * Mathf.Sin(angleDegrees * Mathf.PI / 180));
-
-            //Debug.Log(0.8f * Mathf.Sin((89*Mathf.PI/180)) + "+" + 0.8f * Mathf.Cos(89 * Mathf.PI / 180));
-            //Vector2 newPosition = new Vector2(0.8f * Mathf.Sin(90), 0.8f * Mathf.Cos(90));
-
             disengageTimer += Time.deltaTime;
         }
+
+     
 
 
         //basically LetGo() with a timegate for animations (4frames?)
     }
 
-    internal float ConvertToRadian (float degrees)
+    internal float ConvertToRadian(float degrees)
     {
         return degrees * Mathf.PI / 180;
     }

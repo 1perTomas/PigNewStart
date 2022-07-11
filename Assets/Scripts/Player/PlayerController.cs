@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
         playerJump.FallGravity();
         playerMove.Move();
         playerSurroundings.CheckSurroundings();
-        playerInteraction.LetGo();
+       playerInteraction.LetGo();
 
         playerDetectObject.CheckForObjects();
         

@@ -8,6 +8,22 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     PlayerController playerController;
 
+    public enum CharacterMovement
+    {
+        Idle,
+        Walking,
+        Sprinting,
+        Sliding,
+        Prone,
+        Crawling,
+        Hanging,
+        Wallsliding,
+        Climbing,
+        Jumping
+    };
+
+    internal CharacterMovement currentState;
+
     //internal bool isFacingRight = true;
 
     internal bool isStanding = true;
@@ -33,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
     internal bool canMove = true;
     internal bool canSlide = false;
 
+
+
     internal Vector2 hangingPosition;
 
     internal float velX = 0;
@@ -41,6 +59,151 @@ public class PlayerMovement : MonoBehaviour
     internal bool wallJumpReady = false;
 
     public float wallSlideSense;
+
+
+
+    internal void Movement()
+    {
+        //if (isGrounded) and else for wall and air movement
+
+        switch (currentState)
+        {
+            case CharacterMovement.Walking:
+                Debug.Log("I'm walking");
+
+                //--------------------STATE CHANGES--------------------//
+
+                if (!playerController.playerState.isMoving)
+                {
+                    currentState = CharacterMovement.Idle;
+                }
+
+                if (playerController.playerInput.isDownPressed)
+                {
+                    currentState = CharacterMovement.Crawling;
+                }
+
+                if (playerController.playerInput.isSprintPressed
+                && ((playerController.playerState.isFacingRight && playerController.speedList.currentSpeed >= playerController.speedList.walkSpeed)
+                || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed <= playerController.speedList.walkSpeed)))
+                {
+                    currentState = CharacterMovement.Sprinting;
+                }
+
+                Walk();
+
+                break;
+
+            case CharacterMovement.Sprinting:
+                Debug.Log("I'm Sprinting");
+
+               
+
+                //--------------------STATE CHANGES--------------------//
+
+                if (playerController.playerInput.isDownPressed
+                && playerController.speedList.currentSpeed == playerController.speedList.runningSpeed)
+                {
+                    currentState = CharacterMovement.Sliding;
+                }
+
+                if (!playerController.playerInput.isSprintPressed
+                || playerController.playerState.isFacingRight && playerController.rb.velocity.x < 0
+                || !playerController.playerState.isFacingRight && playerController.rb.velocity.x > 0)
+                {
+                    currentState = CharacterMovement.Walking;
+                }
+
+                Sprint();
+
+                break;
+
+            case CharacterMovement.Sliding:
+                Debug.Log("I'm Sliding");
+
+               
+
+                //--------------------STATE CHANGES--------------------//
+
+                if (!playerController.playerInput.isDownPressed)
+                {
+                    currentState = CharacterMovement.Sprinting;
+                }
+
+                if (!playerController.playerInput.isSprintPressed
+                || playerController.playerTimers.slidingTimer < 0.05
+                || playerController.playerState.isFacingRight && playerController.playerInput.isLeftPressed
+                || !playerController.playerState.isFacingRight && playerController.playerInput.isRightPressed)
+                {
+                    currentState = CharacterMovement.Crawling;
+                }
+
+                Slide();
+
+                break;
+
+            case CharacterMovement.Prone:
+                Debug.Log("I'm Prone");
+
+
+                //--------------------STATE CHANGES--------------------//
+
+                if (playerController.playerState.isMoving)
+                {
+                    currentState = CharacterMovement.Crawling;
+                }
+
+                if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
+                {
+                    currentState = CharacterMovement.Idle;
+                }
+
+                GoProne();
+                IdleStop();
+
+                break;
+
+            case CharacterMovement.Crawling:
+                Debug.Log("I'm Crawling");
+              
+
+                //--------------------STATE CHANGES--------------------//
+
+                if (!playerController.playerState.isMoving)
+                {
+                    currentState = CharacterMovement.Prone;
+                }
+
+                if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
+                {
+                    currentState = CharacterMovement.Walking;
+                }
+
+                Crawl();
+
+                break;
+
+            default:
+                Debug.Log("I'm Idle");
+
+                //--------------------STATE CHANGES--------------------//
+
+                if (playerController.playerState.isMoving)
+                {
+                    currentState = CharacterMovement.Walking;
+                }
+
+                if (playerController.playerInput.isDownPressed)
+                {
+                    currentState = CharacterMovement.Prone;
+                }
+
+                IdleStop();
+
+                break;
+        }
+
+    }
 
     private void HangingLedge() // put into wall interaction function
     {
@@ -51,6 +214,8 @@ public class PlayerMovement : MonoBehaviour
             isHangingLedge = true;
         }
     }
+
+
 
     internal void ClimbLedge()
     {
@@ -168,6 +333,14 @@ public class PlayerMovement : MonoBehaviour
     //---------------------------------------------M O V E M E N T   L O G I C-------------------------------------------------------------------------
     internal void NewMovements()
     {
+
+        if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
+        {
+            WallBounce();
+            IdleStop();
+        }
+
+        Movement();
         {
             MoveDetection();
 
@@ -212,112 +385,114 @@ public class PlayerMovement : MonoBehaviour
                     {
                         if (playerController.playerDetectObject.canInteract)
                         {
-                            if (playerController.playerInput.isInteractTapped)
+                            if (playerController.playerInput.isInteractTapped && !playerController.playerInput.isJumpPressed)
                             {
                                 playerController.playerInteraction.PickUp();
                                 playerController.playerState.isInteracting = true;
                             }
 
                         }
-                        else
-                        {
-                            playerController.playerTimers.slidingTimer = playerController.playerTimers.slidingTimerSet;
-                            playerController.playerTimers.crawlTimer = playerController.playerTimers.crawlTimerSet; // CHECK IF WORKING CRAWL
 
+
+                        //playerController.playerTimers.slidingTimer = playerController.playerTimers.slidingTimerSet;
+                        playerController.playerTimers.crawlTimer = playerController.playerTimers.crawlTimerSet; // CHECK IF WORKING CRAWL
+
+                        if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
+                        {
+                            WallBounce();
+                            IdleStop();
+                        }
+
+                        //--------------------SLIDE----------------- // Transfered
+                        if (isSprinting
+                        && playerController.playerInput.isDownPressed
+                        && playerController.speedList.currentSpeed == playerController.speedList.runningSpeed)
+                        {
+                            // Slide();
+                        }
+
+                        //------------------STOP SPRINT ------------------- // transfered
+                        else if ((isSprinting && playerController.playerInput.isSprintReleased)
+                            || (isSprinting && !playerController.playerInput.isLeftPressed && !playerController.playerState.isFacingRight)
+                            || (isSprinting && playerController.playerState.isFacingRight && !playerController.playerInput.isRightPressed))
+                        {
+                            //isSprinting = false;
+                        }
+
+                        //----------------SPRINT-------------------------- // transfered
+                        else if (isWalking && playerController.playerInput.isSprintPressed
+                                 && ((playerController.playerState.isFacingRight && playerController.speedList.currentSpeed >= playerController.speedList.walkSpeed)
+                                 || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed <= playerController.speedList.walkSpeed)))
+                        {
+                            //----------------------------SPRINT INTO WALL--------------------
                             if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
                             {
-                                IdleStop();
+                                // if (playerController.playerState.isFacingRight)
+                                // {
+                                //     WallBounce();
+                                // }
+                                // else
+                                // {
+                                //     WallBounce();
+                                // }
+                                // IdleStop();
                             }
-
-                            //--------------------SLIDE-----------------
-                            if (isSprinting
-                            && playerController.playerInput.isDownPressed
-                            && playerController.speedList.currentSpeed == playerController.speedList.runningSpeed)
-                            {
-                                Slide();
-                            }
-
-                            //------------------STOP SPRINT -------------------
-                            else if ((isSprinting && playerController.playerInput.isSprintReleased)
-                                || (isSprinting && !playerController.playerInput.isLeftPressed && !playerController.playerState.isFacingRight)
-                                || (isSprinting && playerController.playerState.isFacingRight && !playerController.playerInput.isRightPressed))
-                            {
-                                isSprinting = false;
-                            }
-
-                            //----------------SPRINT--------------------------
-                            else if (isWalking && playerController.playerInput.isSprintPressed
-                                     && ((playerController.playerState.isFacingRight && playerController.speedList.currentSpeed >= playerController.speedList.walkSpeed) 
-                                     || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed <= playerController.speedList.walkSpeed)))
-                            {
-                                //----------------------------SPRINT INTO WALL--------------------
-                                if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
-                                {
-                                    if (playerController.playerState.isFacingRight)
-                                    {
-                                        WallBounce();
-                                    }
-                                    else
-                                    {
-                                        WallBounce();
-                                    }
-                                    IdleStop();
-                                }
-                                else
-                                {
-                                    Sprint();
-                                }
-                            }
-
-                            //-----------------------CRAWL----------------------
-                            else if (isWalking
-                                    && playerController.playerInput.isDownPressed)
-                            {
-                                Crawl();
-                            }
-
-                            //----------------------PRONE------------------------
-                            else if (isIdle
-                                    && playerController.playerInput.isDownPressed)
-                            {
-                                GoProne();
-                                NearestPixel();
-                                isProneIdle = true; //lets go prone if is moving into a wall
-                            }
-
-                            //---------------------WALK-------------------------
-                            else if ((playerController.playerInput.isLeftPressed && !isSprinting)
-                                || (playerController.playerInput.isRightPressed && !isSprinting))
-                            {
-                                //--------------------HIT WALL----------------------
-                                if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
-                                {
-                                    IdleStop();
-                                    WallBounce();
-                                }
-                                //------------------WALK---------------------
-                                else
-                                {
-                                    Walk();
-                                }
-                            }
-
-                            //-------------------STOP---------------------------
                             else
                             {
-                                if (!isSprinting)
-                                {
-                                    IdleStop();
+                                //Sprint();
+                            }
+                        }
 
-                                    if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
-                                    {
-                                        WallBounce();
-                                    }
+                        //-----------------------CRAWL---------------------- // transfered
+                        else if (isWalking
+                                && playerController.playerInput.isDownPressed)
+                        {
+                            //Crawl();
+                        }
+
+                        //----------------------PRONE------------------------ // transfered
+                        else if (isIdle
+                                && playerController.playerInput.isDownPressed)
+                        {
+                            // GoProne();
+                            // NearestPixel();
+                            // isProneIdle = true; //lets go prone if is moving into a wall
+                        }
+
+                        //---------------------WALK-------------------------
+                        else if ((playerController.playerInput.isLeftPressed && !isSprinting)
+                            || (playerController.playerInput.isRightPressed && !isSprinting))
+                        {
+                            //--------------------HIT WALL----------------------
+                            // if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
+                            // {
+                            //     WallBounce();
+                            //     IdleStop();
+                            //
+                            // }
+                            // //------------------WALK--------------------- //transfered
+                            // else
+                            // {
+                            //     Walk();
+                            // }
+                        }
+
+                        //-------------------STOP--------------------------- // transfered
+                        else
+                        {
+                            if (!isSprinting)
+                            {
+                                //  IdleStop();
+
+                                if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
+                                {
+                                    //   WallBounce();
                                 }
                             }
                         }
+
                     }
-                    else if (isProne) // ----------------------------------------IS PRONE ----- POSITION
+                    else if (isProne) // ----------------------------------------IS PRONE ----- POSITION // transfered
                     {
 
 
@@ -328,61 +503,61 @@ public class PlayerMovement : MonoBehaviour
 
                         if (playerController.playerState.isMoving && !isSliding) //assigns a state if climbs up a ledge while holding direction
                         {
-                            Crawl();
+                            //Crawl();
                         }
 
                         //-------------------------SLIDE TO CRAWL---------------------------
 
                         if (isSliding)
                         {
-                            playerController.playerTimers.slidingTimer -= Time.deltaTime;
-                            if (!playerController.playerInput.isSprintPressed
-                                || playerController.playerTimers.slidingTimer < 0.05
-                                || (playerController.playerState.isFacingRight && playerController.speedList.currentSpeed < playerController.speedList.slidingSpeed)
-                                || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed > playerController.speedList.slidingSpeed))
-                            {
-                                Crawl();
-                            }
-
-                            //------------------SLIDE TO SPRINT------------------------------
-                            else if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
-                            {
-                                Sprint();
-                            }
+                            // //playerController.playerTimers.slidingTimer -= Time.deltaTime;
+                            // if (!playerController.playerInput.isSprintPressed
+                            //     || playerController.playerTimers.slidingTimer < 0.05
+                            //     || (playerController.playerState.isFacingRight && playerController.speedList.currentSpeed < playerController.speedList.slidingSpeed)
+                            //     || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed > playerController.speedList.slidingSpeed))
+                            // {
+                            //     // Crawl();
+                            // }
+                            //
+                            // //------------------SLIDE TO SPRINT------------------------------
+                            // else if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
+                            // {
+                            //     Sprint();
+                            // }
                         }
 
                         else if (isCrawling)
                         {
-                            //------------------CRAWL TO STAND--------------------------------
+                            //------------------CRAWL TO STAND-------------------------------- transfered
                             if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
                             {
-                                StandUp();
+                               // StandUp();
                             }
 
-                            //-----------------IDLE PRONE-------------------------------------
+                            //-----------------IDLE PRONE------------------------------------- // transfered
                             else if ((playerController.playerState.isFacingRight && !playerController.playerInput.isRightPressed)
                                 || (!playerController.playerState.isFacingRight && !playerController.playerInput.isLeftPressed)
                                 || (playerController.playerSurroundings.isTouchingWall))
                             {
-                                IdleStop();
+                              //  IdleStop();
                             }
                         }
 
                         else if (isProneIdle)
                         {
-                            //---------------------------PRONE TO STAND-------------------------------
+                            //---------------------------PRONE TO STAND------------------------------- transfered
                             if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
                             {
-                                StandUp();
+                                //StandUp();
                             }
 
                             else if ((playerController.playerInput.isLeftPressed || playerController.playerInput.isRightPressed) && !playerController.playerSurroundings.isTouchingWall)
                             {
-                                Crawl();
+                                // Crawl();
                             }
                             else
                             {
-                                GoProne();
+                                //GoProne();
                             }
                         }
                     }
@@ -528,7 +703,7 @@ public class PlayerMovement : MonoBehaviour
                     else if (!playerController.playerSurroundings.isGrounded)
                     {
                         wallJumpReady = false;
-                        EnableMovement();                                         
+                        EnableMovement();
                     }
 
                     else
@@ -560,10 +735,13 @@ public class PlayerMovement : MonoBehaviour
         isCrawling = false;
         isSliding = false;
         isStanding = true;
+
+        playerController.playerTimers.slidingTimer = playerController.playerTimers.slidingTimerSet;
     }
 
     internal void Slide()
     {
+        playerController.playerTimers.slidingTimer -= Time.deltaTime;
         GoProne();
         isSliding = true;
         playerController.playerTimers.slideTransitionTimer = playerController.playerTimers.slideTransitionTimerSet;
@@ -639,6 +817,8 @@ public class PlayerMovement : MonoBehaviour
 
     internal void IdleStop()
     {
+        
+        playerController.playerState.isMoving = false;
         // playerController.playerMove.Move();
         NearestPixel();
         if (isStanding)

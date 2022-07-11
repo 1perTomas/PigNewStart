@@ -7,13 +7,14 @@ public class PlayerState : MonoBehaviour
     [SerializeField]
     PlayerController playerController;
 
+
     internal bool isFacingRight = true;
     internal bool isMoving;
     internal bool isInteracting = false;
     internal bool isStuckInGround = false;
     internal bool isDamaged = false;
 
-    internal float damagedFall;
+      internal float damagedFall;
 
     internal bool canJump;
     internal int state;
@@ -23,6 +24,7 @@ public class PlayerState : MonoBehaviour
 
     internal void TakeDamage()
     {
+        
         if (health > 0)
         {
             health -= 1;

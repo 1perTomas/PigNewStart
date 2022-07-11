@@ -52,7 +52,29 @@ public class PlayerAnimationManager : MonoBehaviour
 
     private void Start()
     {
+      
+    }
 
+
+    internal void AnimationManagerStateTest()
+    {
+        switch (playerController.playerMovement.currentState)
+        {
+            case PlayerMovement.CharacterMovement.Walking:
+                {
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_WALK_R);
+                    }
+                    else
+                    {
+                        playerController.ChangeAnimationState(PLAYER_WALK_L);
+                    }
+
+                    break;
+                }
+
+        }
     }
 
     internal void AnimationManager() // conditions to play animations
