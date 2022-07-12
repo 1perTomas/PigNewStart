@@ -16,10 +16,13 @@ public class PlayerMovement : MonoBehaviour
         Sliding,
         Prone,
         Crawling,
-        Hanging,
+        HangingLedge,
         Wallsliding,
+        WallJumpHanging,
+        WallJumpSliding,
         Climbing,
-        Jumping
+        Jumping,
+        Falling
     };
 
     internal CharacterMovement currentState;
@@ -64,143 +67,309 @@ public class PlayerMovement : MonoBehaviour
 
     internal void Movement()
     {
+
+        if (playerController.playerSurroundings.isTouchingWall
+        || (playerController.playerSurroundings.isTouchingLedge && isStanding))
+        {
+            IdleStop();
+        }
+
         //if (isGrounded) and else for wall and air movement
 
-        switch (currentState)
+        if (playerController.playerSurroundings.isGrounded)
         {
-            case CharacterMovement.Walking:
-                Debug.Log("I'm walking");
+            switch (currentState)
+            {
+                case CharacterMovement.Walking:
+                    Debug.Log("I'm walking");
 
-                //--------------------STATE CHANGES--------------------//
+                    //--------------------STATE CHANGES--------------------//
 
-                if (!playerController.playerState.isMoving)
-                {
-                    currentState = CharacterMovement.Idle;
-                }
+                    if (!playerController.playerState.isMoving)
+                    {
+                        currentState = CharacterMovement.Idle;
+                    }
 
-                if (playerController.playerInput.isDownPressed)
-                {
-                    currentState = CharacterMovement.Crawling;
-                }
+                    if (playerController.playerInput.isDownPressed)
+                    {
+                        currentState = CharacterMovement.Crawling;
+                    }
 
-                if (playerController.playerInput.isSprintPressed
-                && ((playerController.playerState.isFacingRight && playerController.speedList.currentSpeed >= playerController.speedList.walkSpeed)
-                || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed <= playerController.speedList.walkSpeed)))
-                {
-                    currentState = CharacterMovement.Sprinting;
-                }
+                    if (playerController.playerInput.isSprintPressed
+                    && ((playerController.playerState.isFacingRight && playerController.speedList.currentSpeed >= playerController.speedList.walkSpeed)
+                    || (!playerController.playerState.isFacingRight && playerController.speedList.currentSpeed <= playerController.speedList.walkSpeed)))
+                    {
+                        currentState = CharacterMovement.Sprinting;
+                    }
 
-                Walk();
+                    Walk();
 
-                break;
+                    break;
 
-            case CharacterMovement.Sprinting:
-                Debug.Log("I'm Sprinting");
-
-               
-
-                //--------------------STATE CHANGES--------------------//
-
-                if (playerController.playerInput.isDownPressed
-                && playerController.speedList.currentSpeed == playerController.speedList.runningSpeed)
-                {
-                    currentState = CharacterMovement.Sliding;
-                }
-
-                if (!playerController.playerInput.isSprintPressed
-                || playerController.playerState.isFacingRight && playerController.rb.velocity.x < 0
-                || !playerController.playerState.isFacingRight && playerController.rb.velocity.x > 0)
-                {
-                    currentState = CharacterMovement.Walking;
-                }
-
-                Sprint();
-
-                break;
-
-            case CharacterMovement.Sliding:
-                Debug.Log("I'm Sliding");
-
-               
-
-                //--------------------STATE CHANGES--------------------//
-
-                if (!playerController.playerInput.isDownPressed)
-                {
-                    currentState = CharacterMovement.Sprinting;
-                }
-
-                if (!playerController.playerInput.isSprintPressed
-                || playerController.playerTimers.slidingTimer < 0.05
-                || playerController.playerState.isFacingRight && playerController.playerInput.isLeftPressed
-                || !playerController.playerState.isFacingRight && playerController.playerInput.isRightPressed)
-                {
-                    currentState = CharacterMovement.Crawling;
-                }
-
-                Slide();
-
-                break;
-
-            case CharacterMovement.Prone:
-                Debug.Log("I'm Prone");
+                case CharacterMovement.Sprinting:
+                    Debug.Log("I'm Sprinting");
 
 
-                //--------------------STATE CHANGES--------------------//
 
-                if (playerController.playerState.isMoving)
-                {
-                    currentState = CharacterMovement.Crawling;
-                }
+                    //--------------------STATE CHANGES--------------------//
 
-                if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
-                {
-                    currentState = CharacterMovement.Idle;
-                }
+                    if (playerController.playerInput.isDownPressed
+                    && playerController.speedList.currentSpeed == playerController.speedList.runningSpeed)
+                    {
+                        currentState = CharacterMovement.Sliding;
+                    }
 
-                GoProne();
-                IdleStop();
+                    if (!playerController.playerInput.isSprintPressed
+                    || playerController.playerState.isFacingRight && playerController.rb.velocity.x < 0
+                    || !playerController.playerState.isFacingRight && playerController.rb.velocity.x > 0)
+                    {
+                        currentState = CharacterMovement.Walking;
+                    }
 
-                break;
+                    Sprint();
 
-            case CharacterMovement.Crawling:
-                Debug.Log("I'm Crawling");
-              
+                    break;
 
-                //--------------------STATE CHANGES--------------------//
+                case CharacterMovement.Sliding:
+                    Debug.Log("I'm Sliding");
 
-                if (!playerController.playerState.isMoving)
-                {
-                    currentState = CharacterMovement.Prone;
-                }
 
-                if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
-                {
-                    currentState = CharacterMovement.Walking;
-                }
+                    //--------------------STATE CHANGES--------------------//
 
-                Crawl();
+                    if (!playerController.playerInput.isDownPressed)
+                    {
+                        currentState = CharacterMovement.Sprinting;
+                    }
 
-                break;
+                    if (!playerController.playerInput.isSprintPressed
+                    || playerController.playerTimers.slidingTimer < 0.05
+                    || playerController.playerState.isFacingRight && playerController.playerInput.isLeftPressed
+                    || !playerController.playerState.isFacingRight && playerController.playerInput.isRightPressed)
+                    {
+                        currentState = CharacterMovement.Crawling;
+                    }
 
-            default:
-                Debug.Log("I'm Idle");
+                    Slide();
 
-                //--------------------STATE CHANGES--------------------//
+                    break;
 
-                if (playerController.playerState.isMoving)
-                {
-                    currentState = CharacterMovement.Walking;
-                }
+                case CharacterMovement.Prone:
+                    Debug.Log("I'm Prone");
 
-                if (playerController.playerInput.isDownPressed)
-                {
-                    currentState = CharacterMovement.Prone;
-                }
 
-                IdleStop();
+                    //--------------------STATE CHANGES--------------------//
 
-                break;
+                    if (playerController.playerState.isMoving)
+                    {
+                        currentState = CharacterMovement.Crawling;
+                    }
+
+                    if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
+                    {
+                        currentState = CharacterMovement.Idle;
+                    }
+
+                    GoProne();
+                    IdleStop();
+
+                    break;
+
+                case CharacterMovement.Crawling:
+                    Debug.Log("I'm Crawling");
+
+
+                    //--------------------STATE CHANGES--------------------//
+
+                    if (!playerController.playerState.isMoving)
+                    {
+                        currentState = CharacterMovement.Prone;
+                    }
+
+                    if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
+                    {
+                        currentState = CharacterMovement.Walking;
+                    }
+
+                    Crawl();
+
+                    break;
+
+                case CharacterMovement.Idle:
+
+                    Debug.Log("I'm Idle");
+
+                    //--------------------STATE CHANGES--------------------//
+
+                    if (playerController.playerState.isMoving)
+                    {
+                        currentState = CharacterMovement.Walking;
+                    }
+
+                    if (playerController.playerInput.isDownPressed)
+                    {
+                        currentState = CharacterMovement.Prone;
+                    }
+
+
+                    IdleStop();
+                    break;
+
+                default:
+
+                    if (!playerController.playerInput.isLeftPressed
+                        || !playerController.playerInput.isRightPressed)
+                    {
+                        currentState = CharacterMovement.Idle;
+                    }
+
+                    if (playerController.playerInput.isDownPressed
+                    && playerController.speedList.currentSpeed == playerController.speedList.runningSpeed)
+                    {
+                        currentState = CharacterMovement.Sliding;
+                    }
+
+                        Debug.Log("Unassigned State on ground");
+
+                    break;
+            }
+        }
+
+        else
+        {
+            switch (currentState)
+            {
+
+                case CharacterMovement.Jumping:
+                    Debug.Log("I'm Jumping");
+
+                    if (playerController.rb.velocity.y < 0)
+                    {
+                        currentState = CharacterMovement.Falling;
+                    }
+
+                    break;
+
+
+                case CharacterMovement.Falling:
+                    Debug.Log("I'm Falling");
+
+
+                    break;
+
+                case CharacterMovement.Wallsliding:
+                    Debug.Log("I'm Wallsliding");
+
+                    if ((playerController.playerState.isFacingRight && playerController.playerInput.isLeftPressed && !playerController.playerInput.isRightPressed)
+                    || (!playerController.playerState.isFacingRight && playerController.playerInput.isRightPressed && !playerController.playerInput.isLeftPressed))
+                    {
+                        currentState = CharacterMovement.WallJumpSliding;
+                    }
+
+                    if (!playerController.playerSurroundings.isTouchingLedge)
+                    {
+                        currentState = CharacterMovement.HangingLedge;
+                    }
+
+                    if (playerController.playerInput.isDownPressed)
+                    {
+                        //increase slide speed
+                    }
+                    break;
+
+
+                case CharacterMovement.WallJumpSliding:
+                    Debug.Log("I'm ready to slide jump");
+
+                    if (!playerController.playerInput.isLeftPressed
+                    || playerController.playerInput.isRightPressed)
+                    {
+                        currentState = CharacterMovement.Wallsliding;
+                    }
+
+                    if (playerController.playerInput.isDownTapped)
+                    {
+                        //dropDown();
+                        currentState = CharacterMovement.Falling;
+                    }
+
+                    if (playerController.playerInput.isJumpTapped)
+                    {
+                        //Jump();
+                        currentState = CharacterMovement.Jumping;
+                    }
+
+
+                    break;
+
+                case CharacterMovement.WallJumpHanging:
+                    Debug.Log("I'm ready to hang jump");
+
+                    if (!playerController.playerInput.isLeftPressed
+                    || playerController.playerInput.isRightPressed)
+                    {
+                        currentState = CharacterMovement.HangingLedge;
+                    }
+
+                    if (playerController.playerInput.isDownTapped)
+                    {
+                        //dropDown();
+                        currentState = CharacterMovement.Falling;
+                    }
+
+                    if (playerController.playerInput.isJumpTapped)
+                    {
+                        //Jump();
+                        currentState = CharacterMovement.Jumping;
+                    }
+
+
+                    break;
+
+
+                case CharacterMovement.HangingLedge:
+                    Debug.Log("I'm Hanging");
+
+                    if (playerController.playerInput.isDownPressed)
+                    {
+                        currentState = CharacterMovement.Wallsliding;
+                    }
+
+                    if ((playerController.playerState.isFacingRight && playerController.playerInput.isLeftPressed && !playerController.playerInput.isRightPressed)
+                    || (!playerController.playerState.isFacingRight && playerController.playerInput.isRightPressed && !playerController.playerInput.isLeftPressed))
+                    {
+                        currentState = CharacterMovement.WallJumpHanging;
+                    }
+
+                    if (playerController.playerInput.isUpTapped
+                    || playerController.playerInput.isJumpTapped)
+
+                    {
+                        currentState = CharacterMovement.Climbing;
+                    }
+
+
+                    break;
+
+
+
+
+
+
+                default:
+                    Debug.Log("Unassigned State in air");
+                    if (playerController.rb.velocity.y > 0)
+                    {
+                        currentState = CharacterMovement.Jumping;
+                    }
+
+                    else
+                    {
+                        currentState = CharacterMovement.Falling;
+                    }
+
+
+                    break;
+            }
         }
 
     }
@@ -334,15 +503,17 @@ public class PlayerMovement : MonoBehaviour
     internal void NewMovements()
     {
 
-        if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
-        {
-            WallBounce();
-            IdleStop();
-        }
+        // if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
+        // {
+        //     WallBounce();
+        //     IdleStop();
+        // }
 
+        MoveDetection();
         Movement();
+
         {
-            MoveDetection();
+            // MoveDetection();
 
             if (playerController.playerInput.isJumpTapped)
             {
@@ -399,8 +570,8 @@ public class PlayerMovement : MonoBehaviour
 
                         if (playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge)
                         {
-                            WallBounce();
-                            IdleStop();
+                            // WallBounce();
+                            // IdleStop();
                         }
 
                         //--------------------SLIDE----------------- // Transfered
@@ -498,7 +669,7 @@ public class PlayerMovement : MonoBehaviour
 
                         if (playerController.playerSurroundings.isTouchingWall || (!playerController.playerInput.isRightPressed && !playerController.playerInput.isLeftPressed)) //if touches wall - stop
                         {
-                            IdleStop();
+                            //IdleStop();
                         }
 
                         if (playerController.playerState.isMoving && !isSliding) //assigns a state if climbs up a ledge while holding direction
@@ -531,7 +702,7 @@ public class PlayerMovement : MonoBehaviour
                             //------------------CRAWL TO STAND-------------------------------- transfered
                             if (!playerController.playerInput.isDownPressed && !playerController.playerSurroundings.isTouchingCeilingProne)
                             {
-                               // StandUp();
+                                // StandUp();
                             }
 
                             //-----------------IDLE PRONE------------------------------------- // transfered
@@ -539,7 +710,7 @@ public class PlayerMovement : MonoBehaviour
                                 || (!playerController.playerState.isFacingRight && !playerController.playerInput.isLeftPressed)
                                 || (playerController.playerSurroundings.isTouchingWall))
                             {
-                              //  IdleStop();
+                                //  IdleStop();
                             }
                         }
 
@@ -817,7 +988,7 @@ public class PlayerMovement : MonoBehaviour
 
     internal void IdleStop()
     {
-        
+
         playerController.playerState.isMoving = false;
         // playerController.playerMove.Move();
         NearestPixel();
