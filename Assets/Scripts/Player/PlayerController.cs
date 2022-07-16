@@ -114,7 +114,9 @@ public class PlayerController : MonoBehaviour
         playerMovement.WallInteraction();
         playerColliders.ColliderAdjust();
 
-        PlayerAnimationManager.AnimationManager();
+
+        PlayerAnimationManager.AnimationManagerStateTest();
+        //PlayerAnimationManager.AnimationManager();
 
         //playerState.GetHit();
     }

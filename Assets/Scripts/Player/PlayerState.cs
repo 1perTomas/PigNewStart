@@ -7,6 +7,32 @@ public class PlayerState : MonoBehaviour
     [SerializeField]
     PlayerController playerController;
 
+    public enum CharacterMovement
+    {
+        Idle,
+        Walking,
+        Sprinting,
+        Sliding,
+        Prone,
+        Crawling,
+        HangingLedge,
+        Wallsliding,
+        WallJumpHanging,
+        WallJumpSliding,
+        Climbing,
+        Jumping,
+        Falling
+    };
+
+    public enum CharacterState
+    {
+        FreeMovement,
+        Interaction,
+        DamageRecoil,
+        Dialogue
+    };
+
+    internal CharacterMovement currentState;
 
     internal bool isFacingRight = true;
     internal bool isMoving;

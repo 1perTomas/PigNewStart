@@ -58,10 +58,10 @@ public class PlayerAnimationManager : MonoBehaviour
 
     internal void AnimationManagerStateTest()
     {
-        switch (playerController.playerMovement.currentState)
+        switch (playerController.playerState.currentState)
         {
-            case PlayerMovement.CharacterMovement.Walking:
-                {
+            case PlayerState.CharacterMovement.Walking:
+                
                     if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_WALK_R);
@@ -72,8 +72,114 @@ public class PlayerAnimationManager : MonoBehaviour
                     }
 
                     break;
+
+
+            case PlayerState.CharacterMovement.Idle:
+
+                if (playerController.playerState.isFacingRight)
+                {
+                    playerController.ChangeAnimationState(PLAYER_IDLE);
+                }
+                                else
+                {
+                    playerController.ChangeAnimationState(PLAYER_IDLE_L);
                 }
 
+                break;
+
+            case PlayerState.CharacterMovement.Sprinting:
+
+                if (playerController.playerState.isFacingRight)
+                {
+                    playerController.ChangeAnimationState(PLAYER_RUNNING_R);
+                }
+                else
+                {
+                    playerController.ChangeAnimationState(PLAYER_RUNNING_L);
+                }
+
+                break;
+
+            case PlayerState.CharacterMovement.Prone:
+
+                if (playerController.playerTimers.crawlTimer < playerController.playerTimers.crawlTimerSet)
+                {
+                    playerController.playerTimers.crawlTimer += Time.deltaTime;
+                    playerController.playerTimers.standUpTimer = playerController.playerTimers.standUpTimerSet;
+
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_GOPRONE_R);
+
+                    }
+
+                    else if (!playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_GOPRONE_L);
+                    }
+                }
+
+                else
+                {
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_CRAWLING_R);
+
+                    }
+                    else
+                    {
+                        playerController.ChangeAnimationState(PLAYER_CRAWLING_L);
+                    }
+                }
+
+                break;
+
+            case PlayerState.CharacterMovement.Crawling:
+
+                if (playerController.playerTimers.crawlTimer < playerController.playerTimers.crawlTimerSet)
+                {
+                    playerController.playerTimers.crawlTimer += Time.deltaTime;
+                    playerController.playerTimers.standUpTimer = playerController.playerTimers.standUpTimerSet;
+
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_GOPRONE_R);
+
+                    }
+
+                    else if (!playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_GOPRONE_L);
+                    }
+                }
+
+                else
+                {
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_CRAWLING_R);
+
+                    }
+                    else
+                    {
+                        playerController.ChangeAnimationState(PLAYER_CRAWLING_L);
+                    }
+                }
+
+                break;
+
+            case PlayerState.CharacterMovement.Sliding:
+
+                if (playerController.playerState.isFacingRight)
+                {
+                    playerController.ChangeAnimationState(PLAYER_SLIDE_R);
+                }
+                else
+                {
+                    playerController.ChangeAnimationState(PLAYER_SLIDE_L);
+                }
+
+                break;
         }
     }
 
@@ -201,7 +307,7 @@ public class PlayerAnimationManager : MonoBehaviour
                       && playerController.playerTimers.standUpTimer > 0))
 
                 {
-                    playerController.playerTimers.crawlTimer = playerController.playerTimers.crawlTimerSet;
+                    playerController.playerTimers.crawlTimer = 0;
 
                     if (playerController.playerState.isFacingRight
                      && playerController.currentState == PLAYER_CRAWLING_R)
@@ -220,7 +326,7 @@ public class PlayerAnimationManager : MonoBehaviour
                       && !playerController.playerMovement.isCrawling
                       && playerController.playerTimers.standUpTimer > 0))
                 {
-                    playerController.playerTimers.crawlTimer = playerController.playerTimers.crawlTimerSet;
+                    playerController.playerTimers.crawlTimer = 0;
 
                     if (!playerController.playerState.isFacingRight)
                     {
@@ -251,7 +357,7 @@ public class PlayerAnimationManager : MonoBehaviour
                     if (playerController.playerTimers.standUpTimer <= 0)
                     {
                         playerController.ChangeAnimationState(PLAYER_IDLE_L);
-                        playerController.playerTimers.crawlTimer = playerController.playerTimers.crawlTimerSet;
+                        playerController.playerTimers.crawlTimer = 0;
                     }
                 }
 

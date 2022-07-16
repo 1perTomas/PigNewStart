@@ -11,7 +11,7 @@ public class PlayerTimers : MonoBehaviour
     internal float turnTimer = 0;
     internal float turnTimerSet = 0.1f;
 
-    internal float crawlTimer = 0.15f;  //used in animation manager
+    internal float crawlTimer = 0;  //used in animation manager
     internal float crawlTimerSet = 0.15f;
 
     internal float standUpTimer = 0;
