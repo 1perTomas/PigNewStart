@@ -32,6 +32,141 @@ public class SpeedList : MonoBehaviour
         lightObjectSpeed *= -1;
     }
 
+
+    internal void SpeedAdjust()
+    {
+        // if (playerController.playerSurroundings.isTouchingWall
+        // || (playerController.playerSurroundings.isTouchingLedge && playerController.playerMovement.isStanding))
+        // {
+        //     ChangeSpeed(0);
+        // }
+
+        switch (playerController.playerState.currentState)
+        {
+            case PlayerState.CharacterMovement.Idle:
+                if (playerController.playerSurroundings.isTouchingWall
+       || playerController.playerSurroundings.isTouchingLedge)
+                {
+                    ChangeSpeed(0);
+                }
+                else
+                {
+                    ChangeSpeedNew(0);
+                }
+                break;
+
+            case PlayerState.CharacterMovement.Walking:
+                ChangeSpeedNew(walkSpeed);
+                break;
+
+            case PlayerState.CharacterMovement.Sprinting:
+                ChangeSpeedNew(runningSpeed);
+                break;
+
+            case PlayerState.CharacterMovement.Prone:
+                ChangeSpeedNew(0);
+                break;
+
+            case PlayerState.CharacterMovement.Crawling:
+                ChangeSpeedNew(crawlingSpeed);
+                break;
+
+            case PlayerState.CharacterMovement.Sliding:
+                ChangeSpeedNew(slidingSpeed);
+                break;
+
+            case PlayerState.CharacterMovement.Jumping:
+
+                if (playerController.playerSurroundings.isTouchingWallBehind
+                && ((playerController.playerState.isFacingRight && currentSpeed < 0) || (!playerController.playerState.isFacingRight && currentSpeed > 0)))
+                {
+                    //add a Timer for wallJumps so it doesnt change speed to 0
+                    Debug.Log("I'm retarded");
+                    ChangeSpeed(0);
+                }
+                else
+                {
+
+                    if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
+                    {
+                        turningRateAir = 0.04f;
+                        ChangeSpeedNew(0);
+                    }
+                    else
+                    {
+                        if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
+                        {
+                            turningRateAir = 0.08f;
+                            ChangeSpeedNew(walkSpeed);
+                        }
+                    }
+                }
+                break;
+
+            case PlayerState.CharacterMovement.Falling:
+
+               // if (playerController.playerSurroundings.isTouchingWallBehind && currentSpeed < 0)
+               // {
+               //     ChangeSpeed(0);
+               // }
+
+                if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
+                {
+                    turningRateAir = 0.04f;
+                    ChangeSpeedNew(0);
+                }
+                else
+                {
+                    if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
+                    {
+                        turningRateAir = 0.08f;
+                        ChangeSpeedNew(walkSpeed);
+                    }
+                }
+                break;
+
+            case PlayerState.CharacterMovement.Wallsliding:
+                ChangeSpeed(0);
+
+                if (playerController.rb.velocity.y < -playerController.speedList.wallSlideSpeed)
+                {
+                    playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+                }
+
+                if (playerController.rb.velocity.y > playerController.speedList.wallSlideSpeed)
+                {
+                    playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+                }
+
+                break;
+
+            case PlayerState.CharacterMovement.HangingLedge:
+                ChangeSpeed(0); //if is !=0, then climbing spot is moving
+                break;
+
+            case PlayerState.CharacterMovement.WallJump:
+                if (!playerController.playerSurroundings.isTouchingWall)
+                {
+                    ChangeSpeed(0); 
+                }
+                else
+                {
+                    ChangeSpeed(walkSpeed); // doesn't have to build up speed when wall jumping
+                }
+                playerController.rb.velocity = new Vector2(0, -0.25f); //slow slide down
+                
+                break;
+
+            default:
+                break;
+
+        }
+
+
+
+    }
+
+
     internal void SpeedSet()
     {
         if (playerController.playerSurroundings.isGrounded) // on ground
@@ -84,15 +219,15 @@ public class SpeedList : MonoBehaviour
                     ChangeSpeedNew(0);
                 }
 
-                if (playerController.playerMovement.isWalking)
-                {
-                    ChangeSpeedNew(walkSpeed);
-                }
+                //  if (playerController.playerMovement.isWalking)
+                //  {
+                //      ChangeSpeedNew(walkSpeed);
+                //  }
 
-                if (playerController.playerMovement.isSprinting)
-                {
-                    ChangeSpeedNew(runningSpeed);
-                }
+                // if (playerController.playerMovement.isSprinting)
+                // {
+                //     ChangeSpeedNew(runningSpeed);
+                // }
             }
 
             else // prone
@@ -107,66 +242,66 @@ public class SpeedList : MonoBehaviour
                     ChangeSpeedNew(0);
                 }
 
-                if (playerController.playerMovement.isCrawling) // crawl speed
-                {
-                    ChangeSpeedNew(crawlingSpeed);
-                }
-
-                if (playerController.playerMovement.isSliding) // slide speed
-                {
-                    ChangeSpeedNew(slidingSpeed);
-                }
+                // if (playerController.playerMovement.isCrawling) // crawl speed
+                // {
+                //     ChangeSpeedNew(crawlingSpeed);
+                // }
+                //
+                // if (playerController.playerMovement.isSliding) // slide speed
+                // {
+                //     ChangeSpeedNew(slidingSpeed);
+                // }
             }
         }
 
-        else if (playerController.playerMovement.isWallSliding)
-        {
-            ChangeSpeed(0);
-
-            if (playerController.playerMovement.wallJumpReady)
-            {
-                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -0.25f);
-            }
-
-            if (playerController.rb.velocity.y < -playerController.speedList.wallSlideSpeed)
-            {
-                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
-            }
-
-            if (playerController.rb.velocity.y > playerController.speedList.wallSlideSpeed)
-            {
-                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
-            }
-
-        }
+        // else if (playerController.playerMovement.isWallSliding)
+        // {
+        //     ChangeSpeed(0);
+        //
+        //     if (playerController.playerMovement.wallJumpReady)
+        //     {
+        //         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -0.25f);
+        //     }
+        //
+        //     if (playerController.rb.velocity.y < -playerController.speedList.wallSlideSpeed)
+        //     {
+        //         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+        //     }
+        //
+        //     if (playerController.rb.velocity.y > playerController.speedList.wallSlideSpeed)
+        //     {
+        //         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+        //     }
+        //
+        // }
 
         else // in air
         {
-            if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
-            {
-                turningRateAir = 0.04f;
-                ChangeSpeedNew(0);
-            }
-
-            else
-            {
-                turningRateAir = 0.08f;
-            }
-
-            if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
-            {
-                ChangeSpeedNew(walkSpeed);
-            }
-
-            if (playerController.playerMovement.wallJumpReady)
-            {
-                ChangeSpeed(walkSpeed);
-            }
-
-            else if (playerController.playerMovement.isWallSliding || playerController.playerMovement.isHangingLedge)
-            {
-                ChangeSpeed(0);
-            }
+            //  if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
+            //  {
+            //      turningRateAir = 0.04f;
+            //      ChangeSpeedNew(0);
+            //  }
+            //
+            //  else
+            //  {
+            //      turningRateAir = 0.08f;
+            //  }
+            //
+            //  if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
+            //  {
+            //      ChangeSpeedNew(walkSpeed);
+            //  }
+            //
+            //  if (playerController.playerMovement.wallJumpReady)
+            //  {
+            //      ChangeSpeed(walkSpeed);
+            //  }
+            //
+            //  else if (playerController.playerMovement.isWallSliding || playerController.playerMovement.isHangingLedge)
+            //  {
+            //      ChangeSpeed(0);
+            //  }
         }
     }
 

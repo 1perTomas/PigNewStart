@@ -9,12 +9,13 @@ public class PixelPerfectCam : MonoBehaviour
     MovingPlatform platform;
 
     [SerializeField]
-   PlayerController playerController;
+    PlayerController playerController;
+
     private float horizontalOffset = 0.9f;
     private float verticalOffset = 0.8f;
     public bool isHangingLedge;
     public bool isClimbingLedge;
-   // public bool isInZone;
+    // public bool isInZone;
 
 
     public float smoothSpeed = 1.25f;
@@ -103,13 +104,13 @@ public class PixelPerfectCam : MonoBehaviour
     public void Update()
     {
         GetComponent<PlayerController>();
-        isClimbingLedge = playerController.playerMovement.isClimbingLedge;
+        isClimbingLedge = (playerController.playerState.currentState == PlayerState.CharacterMovement.Climbing);
 
         Vector2 newPosition = new Vector2(target.position.x, target.position.y);
         float nextX = /*Mathf.Round*/(_pixelLockedPPU * newPosition.x);
         float nextY = /*Mathf.Round*/(_pixelLockedPPU * (newPosition.y));
 
-       // CameraFollow(nextX, nextY);
+        // CameraFollow(nextX, nextY);
     }
 
     public void LateUpdate()
@@ -130,6 +131,7 @@ public class PixelPerfectCam : MonoBehaviour
             if (!isClimbingLedge)
 
             {
+
                 float xPos = (nextX / _pixelLockedPPU);
                 float yPos = (nextY / _pixelLockedPPU) + 1;
 
@@ -210,28 +212,28 @@ public class PixelPerfectCam : MonoBehaviour
                     if (playerController.playerState.isFacingRight)
                     {
                         CameraAdjustmentLedge(nextX, nextY, 0.5f);
-                      //  Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU + (0.5f), nextY / _pixelLockedPPU + 1.1f, -20);
-                      //  climbDif = desiredPosition - cameraLocation;
-                      //  _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
-                      //  cameraLocation = _camera.transform.position;
+                        //  Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU + (0.5f), nextY / _pixelLockedPPU + 1.1f, -20);
+                        //  climbDif = desiredPosition - cameraLocation;
+                        //  _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
+                        //  cameraLocation = _camera.transform.position;
                     }
                     else
                     {
                         CameraAdjustmentLedge(nextX, nextY, -0.5f);
-                       // Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU - (0.5f), nextY / _pixelLockedPPU + 1.1f, -20);
-                       // climbDif = desiredPosition - cameraLocation;
-                       // _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
-                       // cameraLocation = _camera.transform.position;
+                        // Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU - (0.5f), nextY / _pixelLockedPPU + 1.1f, -20);
+                        // climbDif = desiredPosition - cameraLocation;
+                        // _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
+                        // cameraLocation = _camera.transform.position;
                     }
                 }
 
                 else
                 {
                     CameraAdjustmentLedge(nextX, nextY, 0);
-                   // Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU, nextY / _pixelLockedPPU + 1.1f, -20);
-                   // climbDif = desiredPosition - cameraLocation;
-                   // _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
-                   // cameraLocation = _camera.transform.position;
+                    // Vector3 desiredPosition = new Vector3(nextX / _pixelLockedPPU, nextY / _pixelLockedPPU + 1.1f, -20);
+                    // climbDif = desiredPosition - cameraLocation;
+                    // _camera.transform.position = Vector3.Lerp(cameraLocation, desiredPosition, smoothSpeed * Time.deltaTime);
+                    // cameraLocation = _camera.transform.position;
                 }
         }
         else

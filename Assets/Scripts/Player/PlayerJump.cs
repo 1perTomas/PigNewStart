@@ -18,11 +18,11 @@ public class PlayerJump : MonoBehaviour
 
     void Update()
     {
-        if (playerController.playerSurroundings.isGrounded || playerController.playerMovement.isHangingLedge || playerController.playerMovement.isWallSliding)
+        if (playerController.playerSurroundings.isGrounded)
         {
             jumpAntiSpam = 0;
         }
-
+      
         else
         {
             jumpAntiSpam += Time.deltaTime;
@@ -33,9 +33,9 @@ public class PlayerJump : MonoBehaviour
     {
         if (jumpAntiSpam == 0)
         {
-            if (playerController.playerMovement.wallJumpReady)
+            if (playerController.playerState.currentState == PlayerState.CharacterMovement.WallJump)
             {
-                WallJump(jumpForce);
+                //WallJump(jumpForce);
             }
 
             else
@@ -47,7 +47,9 @@ public class PlayerJump : MonoBehaviour
 
     internal void DropDown()
     {
-        WallJump(0);
+        playerController.rb.velocity = new Vector2(playerController.speedList.wallSlideSpeed, 0);
+        playerController.playerTimers.hangTimeTimer = 0;
+        jumpBufferCount = 0;
     }
 
     internal void JumpNew(float jumpPower)
@@ -57,15 +59,24 @@ public class PlayerJump : MonoBehaviour
         jumpBufferCount = 0;
     }
 
-    internal void WallJump(float jumpPower) /////////CHECK THIS
+    internal void JumpTest()
     {
-        playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, jumpPower);
+        Debug.Log("bababooey");
+        playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
+    }
 
-        playerController.playerMovement.isWallSliding = false;
-        playerController.playerMovement.isHangingLedge = false;
+
+    internal void WallJump() /////////CHECK THIS
+    {
+        playerController.rb.velocity = new Vector2(playerController.speedList.walkSpeed, jumpForce);
+
+        //playerController.playerMovement.isWallSliding = false;
+       // playerController.playerMovement.isHangingLedge = false;
         playerController.playerTimers.hangTimeTimer = 0;
         jumpBufferCount = 0;
     }
+
+
 
     internal void FallGravity()
     {

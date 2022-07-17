@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
 
 
     internal Rigidbody2D rb;
+    internal BoxCollider2D bc;
     private Animator anim;
     internal float startingGravity;
 
@@ -59,6 +60,8 @@ public class PlayerController : MonoBehaviour
         QualitySettings.vSyncCount = 1;
         //Application.targetFrameRate = 144;
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent <BoxCollider2D>();
+
         anim = GetComponent<Animator>();
         startingGravity = rb.gravityScale;
 
@@ -68,7 +71,8 @@ public class PlayerController : MonoBehaviour
     void Update() //for inputs (keeps running)
     {
         playerStuckInGround.AirTime();
-        speedList.SpeedSet();
+       // speedList.SpeedSet();
+        speedList.SpeedAdjust();
 
         
 

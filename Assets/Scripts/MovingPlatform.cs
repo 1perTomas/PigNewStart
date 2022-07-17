@@ -26,7 +26,7 @@ public class MovingPlatform : MonoBehaviour
     {
     
 
-      if (playerController.playerMovement.isClimbingLedge && onPlatform)
+      if (playerController.playerState.currentState == PlayerState.CharacterMovement.Climbing && onPlatform)
       {
           if (playerController.transform.localPosition.x > 0)
           {

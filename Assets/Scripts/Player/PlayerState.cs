@@ -17,8 +17,7 @@ public class PlayerState : MonoBehaviour
         Crawling,
         HangingLedge,
         Wallsliding,
-        WallJumpHanging,
-        WallJumpSliding,
+        WallJump,
         Climbing,
         Jumping,
         Falling

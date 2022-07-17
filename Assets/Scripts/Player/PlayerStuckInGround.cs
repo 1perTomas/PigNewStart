@@ -18,21 +18,21 @@ public class PlayerStuckInGround : MonoBehaviour
 
     internal void AirTime()
     {
-        if ((playerController.playerSurroundings.isGrounded && fallTimer < stuckTimer)
-     || playerController.playerMovement.isWallSliding || playerController.playerMovement.isHangingLedge)
-        {
-            fallTimer = 0;
-        }
-
-        else if (playerController.rb.velocity.y < 0)
-        {
-            fallTimer += Time.deltaTime;
-        }
-
-        if (fallTimer > stuckTimer && playerController.playerSurroundings.isGrounded)
-        {
-            SlamIntoGround();
-        }
+     //   if ((playerController.playerSurroundings.isGrounded && fallTimer < stuckTimer)
+     //|| playerController.playerMovement.isWallSliding || playerController.playerMovement.isHangingLedge)
+     //   {
+     //       fallTimer = 0;
+     //   }
+     //
+     //   else if (playerController.rb.velocity.y < 0)
+     //   {
+     //       fallTimer += Time.deltaTime;
+     //   }
+     //
+     //   if (fallTimer > stuckTimer && playerController.playerSurroundings.isGrounded)
+     //   {
+     //       //SlamIntoGround();
+     //   }
 
 
     }

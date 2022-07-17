@@ -26,8 +26,8 @@ public class PlayerMove : MonoBehaviour
 
             else
             {
-                //playerController.playerState.isMoving = false;
-                playerController.playerMovement.IdleStop();
+                playerController.playerState.isMoving = false;
+                //playerController.playerMovement.IdleStop();
             }
         }
     }
@@ -41,7 +41,7 @@ public class PlayerMove : MonoBehaviour
             {
                 playerController.playerState.isMoving = true;
                 playerController.playerState.isFacingRight = true;
-                            }
+            }
 
             //---------------------------------------------------------------------------------Input Right
             else if (playerController.playerInput.isLeftPressed)
@@ -52,14 +52,17 @@ public class PlayerMove : MonoBehaviour
 
             else
             {
-                //playerController.playerState.isMoving = false;
-                playerController.playerMovement.IdleStop();
+                playerController.playerState.isMoving = false;
+                //playerController.playerMovement.IdleStop();
             }
         }
     }
 
     internal void Move()
     {
-        playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, playerController.rb.velocity.y);
+        if (playerController.playerMovement.canMove)
+        {
+            playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, playerController.rb.velocity.y);
+        }
     }
 }
