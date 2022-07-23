@@ -8,8 +8,21 @@ public class PlayerInteraction : MonoBehaviour
     PlayerController playerController;
     //facing direction
 
+    public enum InteractionMoves
+    {
+        Push,
+        Pull,
+        LiftUp,
+        Carry,
+        PutDown
+
+
+    }
+
     internal string objectType;
     internal RaycastHit2D canInteract; //brings back an object
+
+    internal InteractionMoves interactionMoves;
 
     internal bool isHolding;
     internal bool canGrab;
@@ -24,7 +37,7 @@ public class PlayerInteraction : MonoBehaviour
 
     internal bool pushingObjectRight;
     internal GameObject interactableObject;
-    internal Vector2 originalObjectPosition;
+    internal Vector3 originalObjectPosition;
 
 
 
@@ -41,7 +54,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Disengage();
+       // Disengage();
         //PutDown();
 
     }
@@ -53,60 +66,85 @@ public class PlayerInteraction : MonoBehaviour
             //interactableObject = playerController.playerDetectObject.objectItself.collider.gameObject;
         }
 
-       // if (playerController.playerDetectObject.objectType == "Movable")
-       // {
-       //     //interactableObject = playerController.playerDetectObject.touchingObject;
-       //     PushPull();
-       // }
+        // if (playerController.playerDetectObject.objectType == "Movable")
+        // {
+        //     //interactableObject = playerController.playerDetectObject.touchingObject;
+        //     PushPull();
+        // }
 
         switch (playerController.playerDetectObject.objectTypeTest)
         {
             case PlayerDetectObject.ObjectTypes.Movable:
+
                 PushPull();
 
                 break;
 
             case PlayerDetectObject.ObjectTypes.Carriable:
 
-                if (playerController.playerInput.isUpTapped && !isCarrying)
+                if (!isCarrying)
                 {
-                    LiftUp();
+                    if (playerController.playerInput.isUpTapped)
+                    {
+                        LiftUp();
+                    }
+
+                    else
+                    {
+                        PushPull();
+                    }
+                }
+
+                else
+                {
+                    if (playerController.playerInput.isDownTapped)
+                    {
+                        PutDown();
+                    }
+
+                    if (playerController.playerInput.isInteractTapped)
+                    {
+                        isDisengaging = true;
+                        StartCoroutine(PutDownLetGo());
+                    }    
+
+
                 }
 
                 break;
         }
 
-       // if (playerController.playerDetectObject.objectType == "Carriable")
+        // if (playerController.playerDetectObject.objectType == "Carriable")
+        // {
+        //     //interactableObject = playerController.playerDetectObject.touchingObject;
+        //     PushPull();
+        //
+        //     if (playerController.playerInput.isUpTapped && !isCarrying)
+        //     {
+        //         LiftUp();
+        //     }
+        //
+        //     else if (playerController.playerInput.isDownTapped && isCarrying)
+        //     {
+        //         isDisengaging = true;
+        //         continueHolding = 1;
+        //     }
+        // }
+
+       // if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) /*|| !playerController.playerSurroundings.isGrounded*/)
        // {
-       //     //interactableObject = playerController.playerDetectObject.touchingObject;
-       //     PushPull();
-       //
-       //     if (playerController.playerInput.isUpTapped && !isCarrying)
-       //     {
-       //         LiftUp();
-       //     }
-       //
-       //     else if (playerController.playerInput.isDownTapped && isCarrying)
+       //     if (isCarrying)
        //     {
        //         isDisengaging = true;
-       //         continueHolding = 1;
+       //         continueHolding = 0;
        //     }
+       //     else
+       //     {
+       //         isHolding = false;
+       //     }
+       //
+       //
        // }
-
-        if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) /*|| !playerController.playerSurroundings.isGrounded*/)
-        {
-            if (isCarrying)
-            {
-                isDisengaging = true;
-                continueHolding = 0;
-            }
-            else
-            {
-                isHolding = false;
-            }
-
-
-        }
     }
 
     //IEnumerator LetGoRaisedObject()
@@ -114,6 +152,8 @@ public class PlayerInteraction : MonoBehaviour
     //
     //    yield null;
     //}
+
+
 
     internal void PushPull()
     {
@@ -125,10 +165,10 @@ public class PlayerInteraction : MonoBehaviour
                 playerController.speedList.FlipSpeedValues();
             }
 
-            else
-            {
-                playerController.playerState.isMoving = true;
-            }
+            // else
+            // {
+            //     playerController.playerState.isMoving = true;
+            // }
         }
 
 
@@ -139,10 +179,10 @@ public class PlayerInteraction : MonoBehaviour
                 playerController.speedList.FlipSpeedValues();
             }
 
-            else
-            {
-                playerController.playerState.isMoving = true;
-            }
+            // else
+            // {
+            //     playerController.playerState.isMoving = true;
+            // }
         }
 
         else
@@ -153,12 +193,32 @@ public class PlayerInteraction : MonoBehaviour
 
     }
 
+    IEnumerator PutDownLetGo()
+    {
+
+        while (isDisengaging)
+        {
+            Disengage();
+            yield return new WaitForFixedUpdate();
+        }
+
+        
+        //yield return null;
+       
+       // yield return new WaitForSeconds(0.35f);
+       //PutDown();
+       //yield return null;
+       //isHolding = false;
+        //playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
+
+    }
+
     internal void PutDown() // tidy up
     {
         if (isCarrying)
         {
-            if (disengageTimer >= 0.1f)
-            {
+           // if (disengageTimer >= 0.1f)
+           // {
                 isCarrying = false;
                 isDisengaging = false;
                 //putting down the object
@@ -174,7 +234,7 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     isHolding = true;
                 }
-            }
+            //}
         }
     }
 
@@ -185,7 +245,7 @@ public class PlayerInteraction : MonoBehaviour
             angleDegrees = 89f;
             continueHolding = 2;
             disengageTimer = 0;
-            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
+            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(0, 0.8f, 0);
             isCarrying = true;
         }
     }
@@ -221,8 +281,8 @@ public class PlayerInteraction : MonoBehaviour
     internal void Disengage()
     {
 
-        if (isDisengaging)
-        {
+       // if (isDisengaging)
+       // {
             //float angleDegrees = 89;
             if (playerController.playerState.isFacingRight)
             {
@@ -269,7 +329,7 @@ public class PlayerInteraction : MonoBehaviour
             }
 
             disengageTimer += Time.deltaTime;
-        }
+       // }
 
 
 

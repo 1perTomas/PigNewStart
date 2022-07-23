@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     internal bool isClimbingLedge;
     // internal bool isWallSliding;
 
-    internal bool leftPriority;
+    
 
 
     internal bool canTurn = true;
@@ -568,39 +568,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    internal void MoveDetection() // checks the direction that is pressed
-    {
-        if ((playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0)
-          || (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed > 0))
-        {
-            playerController.speedList.FlipSpeedValues();
-        }
 
-        if (playerController.playerInput.isLeftTapped)
-        {
-            leftPriority = true;
-        }
-
-        else if (playerController.playerInput.isRightTapped)
-        {
-            leftPriority = false;
-        }
-
-        if (leftPriority)
-        {
-            playerController.playerMove.PriorityDirectionLeft();
-        }
-
-        else
-        {
-            playerController.playerMove.PriorityDirectionRight();
-        }
-    }
 
     //---------------------------------------------M O V E M E N T   L O G I C-------------------------------------------------------------------------
     internal void NewMovements()
     {
-        MoveDetection();
+        playerController.playerMove.MoveDetection();
         Movement();
 
         {

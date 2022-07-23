@@ -7,6 +7,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     PlayerController playerController;
 
+    internal bool leftPriority;
+
     internal void PriorityDirectionLeft()
     {
         if (playerController.playerMovement.canTurn)
@@ -63,6 +65,35 @@ public class PlayerMove : MonoBehaviour
         if (playerController.playerMovement.canMove)
         {
             playerController.rb.velocity = new Vector2(playerController.speedList.currentSpeed, playerController.rb.velocity.y);
+        }
+    }
+
+    internal void MoveDetection() // checks the direction that is pressed
+    {
+        if ((playerController.playerState.isFacingRight && playerController.speedList.walkSpeed < 0)
+          || (!playerController.playerState.isFacingRight && playerController.speedList.walkSpeed > 0))
+        {
+            playerController.speedList.FlipSpeedValues();
+        }
+
+        if (playerController.playerInput.isLeftTapped)
+        {
+            leftPriority = true;
+        }
+
+        else if (playerController.playerInput.isRightTapped)
+        {
+            leftPriority = false;
+        }
+
+        if (leftPriority)
+        {
+            playerController.playerMove.PriorityDirectionLeft();
+        }
+
+        else
+        {
+            playerController.playerMove.PriorityDirectionRight();
         }
     }
 }
