@@ -41,127 +41,169 @@ public class SpeedList : MonoBehaviour
         //     ChangeSpeed(0);
         // }
 
-        switch (playerController.playerState.currentState)
+        switch (playerController.playerState.controlMode)
         {
-            case PlayerState.CharacterMovement.Idle:
-                if (playerController.playerSurroundings.isTouchingWall
-       || playerController.playerSurroundings.isTouchingLedge)
+            case PlayerState.ControlMode.FreeMovement:
+
+                switch (playerController.playerState.currentState)
                 {
-                    ChangeSpeed(0);
-                }
-                else
-                {
-                    ChangeSpeedNew(0);
-                }
-                break;
-
-            case PlayerState.CharacterMovement.Walking:
-                ChangeSpeedNew(walkSpeed);
-                break;
-
-            case PlayerState.CharacterMovement.Sprinting:
-                ChangeSpeedNew(runningSpeed);
-                break;
-
-            case PlayerState.CharacterMovement.Prone:
-                ChangeSpeedNew(0);
-                break;
-
-            case PlayerState.CharacterMovement.Crawling:
-                ChangeSpeedNew(crawlingSpeed);
-                break;
-
-            case PlayerState.CharacterMovement.Sliding:
-                ChangeSpeedNew(slidingSpeed);
-                break;
-
-            case PlayerState.CharacterMovement.Jumping:
-
-                if (playerController.playerSurroundings.isTouchingWallBehind
-                && ((playerController.playerState.isFacingRight && currentSpeed < 0) || (!playerController.playerState.isFacingRight && currentSpeed > 0)))
-                {
-                    //add a Timer for wallJumps so it doesnt change speed to 0
-                    Debug.Log("I'm retarded");
-                    ChangeSpeed(0);
-                }
-                else
-                {
-
-                    if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
-                    {
-                        turningRateAir = 0.04f;
-                        ChangeSpeedNew(0);
-                    }
-                    else
-                    {
-                        if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
+                    case PlayerState.CharacterMovement.Idle:
+                        if (playerController.playerSurroundings.isTouchingWall
+               || playerController.playerSurroundings.isTouchingLedge)
                         {
-                            turningRateAir = 0.08f;
-                            ChangeSpeedNew(walkSpeed);
+                            ChangeSpeed(0);
+                        }
+                        else
+                        {
+                            ChangeSpeedNew(0);
+                        }
+                        break;
+
+                    case PlayerState.CharacterMovement.Walking:
+                        ChangeSpeedNew(walkSpeed);
+                        break;
+
+                    case PlayerState.CharacterMovement.Sprinting:
+                        ChangeSpeedNew(runningSpeed);
+                        break;
+
+                    case PlayerState.CharacterMovement.Prone:
+                        ChangeSpeedNew(0);
+                        break;
+
+                    case PlayerState.CharacterMovement.Crawling:
+                        ChangeSpeedNew(crawlingSpeed);
+                        break;
+
+                    case PlayerState.CharacterMovement.Sliding:
+                        ChangeSpeedNew(slidingSpeed);
+                        break;
+
+                    case PlayerState.CharacterMovement.Jumping:
+
+                        if (playerController.playerSurroundings.isTouchingWallBehind
+                        && ((playerController.playerState.isFacingRight && currentSpeed < 0) || (!playerController.playerState.isFacingRight && currentSpeed > 0))
+                        && playerController.playerTimers.wallJumpTimer == 0)
+                        {
+                            ChangeSpeed(0);
+                        }
+                        else
+                        {
+
+                            if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
+                            {
+                                turningRateAir = 0.04f;
+                                ChangeSpeedNew(0);
+                            }
+                            else
+                            {
+                                if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
+                                {
+                                    turningRateAir = 0.08f;
+                                    ChangeSpeedNew(walkSpeed);
+                                }
+                            }
+                        }
+                        break;
+
+                    case PlayerState.CharacterMovement.Falling:
+
+                        // if (playerController.playerSurroundings.isTouchingWallBehind && currentSpeed < 0)
+                        // {
+                        //     ChangeSpeed(0);
+                        // }
+
+                        if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
+                        {
+                            turningRateAir = 0.04f;
+                            ChangeSpeedNew(0);
+                        }
+                        else
+                        {
+                            if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
+                            {
+                                turningRateAir = 0.08f;
+                                ChangeSpeedNew(walkSpeed);
+                            }
+                        }
+                        break;
+
+                    case PlayerState.CharacterMovement.Wallsliding:
+                        ChangeSpeed(0);
+
+                        if (playerController.rb.velocity.y < -playerController.speedList.wallSlideSpeed)
+                        {
+                            playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+                        }
+
+                        if (playerController.rb.velocity.y > playerController.speedList.wallSlideSpeed)
+                        {
+                            playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
+                        }
+
+                        break;
+
+                    case PlayerState.CharacterMovement.HangingLedge:
+                        ChangeSpeed(0); //if is !=0, then climbing spot is moving
+                        break;
+
+                    case PlayerState.CharacterMovement.WallJump:
+                        if (!playerController.playerSurroundings.isTouchingWall)
+                        {
+                            ChangeSpeed(0);
+                        }
+                        else
+                        {
+                            ChangeSpeed(walkSpeed); // doesn't have to build up speed when wall jumping
+                        }
+                        playerController.rb.velocity = new Vector2(0, -0.25f); //slow slide down
+
+                        break;
+
+                    default:
+                        break;
+
+                }
+
+                break;
+
+            case PlayerState.ControlMode.Interaction:
+
+                if (playerController.playerState.isMoving)
+                {
+                    if (playerController.playerDetectObject.objectType == "Carriable")
+                    {
+                        if (playerController.playerInteraction.isCarrying)
+                        {
+                            ChangeSpeed(walkSpeed);
+                        }
+                        else
+                        {
+
+                            if ((playerController.playerState.isFacingRight && walkSpeed > 0) || (!playerController.playerState.isFacingRight && walkSpeed < 0))
+                            {
+                                ChangeSpeed(lightObjectSpeed);
+                            }
+
+                            else
+                            {
+                                ChangeSpeed(heavyObjectSpeed);
+                            }
                         }
                     }
-                }
-                break;
 
-            case PlayerState.CharacterMovement.Falling:
-
-               // if (playerController.playerSurroundings.isTouchingWallBehind && currentSpeed < 0)
-               // {
-               //     ChangeSpeed(0);
-               // }
-
-                if (!playerController.playerState.isMoving) // slows to stop when nothing is pressed
-                {
-                    turningRateAir = 0.04f;
-                    ChangeSpeedNew(0);
-                }
-                else
-                {
-                    if (playerController.playerState.isMoving && currentSpeed != runningSpeed && currentSpeed != slidingSpeed) // speed in air 
+                    else
                     {
-                        turningRateAir = 0.08f;
-                        ChangeSpeedNew(walkSpeed);
+                        ChangeSpeed(heavyObjectSpeed);
                     }
                 }
-                break;
-
-            case PlayerState.CharacterMovement.Wallsliding:
-                ChangeSpeed(0);
-
-                if (playerController.rb.velocity.y < -playerController.speedList.wallSlideSpeed)
-                {
-                    playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
-                }
-
-                if (playerController.rb.velocity.y > playerController.speedList.wallSlideSpeed)
-                {
-                    playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, -playerController.speedList.wallSlideSpeed);
-                }
-
-                break;
-
-            case PlayerState.CharacterMovement.HangingLedge:
-                ChangeSpeed(0); //if is !=0, then climbing spot is moving
-                break;
-
-            case PlayerState.CharacterMovement.WallJump:
-                if (!playerController.playerSurroundings.isTouchingWall)
-                {
-                    ChangeSpeed(0); 
-                }
                 else
                 {
-                    ChangeSpeed(walkSpeed); // doesn't have to build up speed when wall jumping
+                    ChangeSpeed(0);
                 }
-                playerController.rb.velocity = new Vector2(0, -0.25f); //slow slide down
-                
-                break;
 
-            default:
                 break;
-
         }
-
 
 
     }
@@ -207,7 +249,7 @@ public class SpeedList : MonoBehaviour
                 }
             }
 
-            else if (playerController.playerMovement.isStanding) //standing
+            else if (playerController.playerState.isStanding) //standing
             {
                 if ((playerController.playerSurroundings.isTouchingWall || playerController.playerSurroundings.isTouchingLedge) && playerController.speedList.currentSpeed != 0) // stops when hitting wall
                 {

@@ -20,26 +20,31 @@ public class PlayerState : MonoBehaviour
         WallJump,
         Climbing,
         Jumping,
-        Falling
+        Falling,
+        KnockBack,
+        Interacting
     };
 
-    public enum CharacterState
+    public enum ControlMode
     {
         FreeMovement,
         Interaction,
-        DamageRecoil,
+        Damaged,
         Dialogue
     };
 
     internal CharacterMovement currentState;
+    internal ControlMode controlMode;
 
     internal bool isFacingRight = true;
+    internal bool isStanding; //collider size
     internal bool isMoving;
     internal bool isInteracting = false;
     internal bool isStuckInGround = false;
     internal bool isDamaged = false;
+    public bool invulnerability;
 
-      internal float damagedFall;
+    internal float damagedFall;
 
     internal bool canJump;
     internal int state;
@@ -47,42 +52,14 @@ public class PlayerState : MonoBehaviour
 
     internal int health = 3;
 
-    internal void TakeDamage()
+
+    internal void Invincibility()
     {
-        
-        if (health > 0)
+        if (invulnerability)
         {
-            health -= 1;
-            Debug.Log($"you took damage, your health is {health}");
-        }
-    }
-
-    internal void GetHit()
-    {
-        if (playerController.playerSurroundings.isTouchingWall)
-        {
-            isDamaged = true;
-            playerController.rb.velocity = new Vector2(-20f, 3f);
-            TakeDamage();
-        }
-    }
-
-    internal void SetState()
-    {
-        if (isInteracting)
-        {
-            state = 1;
-        }
-
-        else if (isStuckInGround)
-        {
-            state = 2;
-        }
-
-        else
-        {
-            state = 3;
+            playerController.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
         }
 
     }
+
 }

@@ -9,6 +9,7 @@ TagManager:
   - DialogueTest
   - Ground
   - CarriableObject
+  - DangerousObject
   layers:
   - Default
   - TransparentFX

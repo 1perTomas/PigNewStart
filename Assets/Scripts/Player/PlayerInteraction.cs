@@ -26,6 +26,8 @@ public class PlayerInteraction : MonoBehaviour
     internal GameObject interactableObject;
     internal Vector2 originalObjectPosition;
 
+
+
     private void Start()
     {
         angleDegrees = 89f;
@@ -51,28 +53,45 @@ public class PlayerInteraction : MonoBehaviour
             //interactableObject = playerController.playerDetectObject.objectItself.collider.gameObject;
         }
 
-        if (playerController.playerDetectObject.objectType == "Movable")
+       // if (playerController.playerDetectObject.objectType == "Movable")
+       // {
+       //     //interactableObject = playerController.playerDetectObject.touchingObject;
+       //     PushPull();
+       // }
+
+        switch (playerController.playerDetectObject.objectTypeTest)
         {
-            //interactableObject = playerController.playerDetectObject.touchingObject;
-            PushPull();
+            case PlayerDetectObject.ObjectTypes.Movable:
+                PushPull();
+
+                break;
+
+            case PlayerDetectObject.ObjectTypes.Carriable:
+
+                if (playerController.playerInput.isUpTapped && !isCarrying)
+                {
+                    LiftUp();
+                }
+
+                break;
         }
 
-        if (playerController.playerDetectObject.objectType == "Carriable")
-        {
-            //interactableObject = playerController.playerDetectObject.touchingObject;
-            PushPull();
-
-            if (playerController.playerInput.isUpTapped && !isCarrying)
-            {
-                LiftUp();
-            }
-
-            else if (playerController.playerInput.isDownTapped && isCarrying)
-            {
-                isDisengaging = true;
-                continueHolding = 1;
-            }
-        }
+       // if (playerController.playerDetectObject.objectType == "Carriable")
+       // {
+       //     //interactableObject = playerController.playerDetectObject.touchingObject;
+       //     PushPull();
+       //
+       //     if (playerController.playerInput.isUpTapped && !isCarrying)
+       //     {
+       //         LiftUp();
+       //     }
+       //
+       //     else if (playerController.playerInput.isDownTapped && isCarrying)
+       //     {
+       //         isDisengaging = true;
+       //         continueHolding = 1;
+       //     }
+       // }
 
         if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) /*|| !playerController.playerSurroundings.isGrounded*/)
         {
@@ -85,8 +104,16 @@ public class PlayerInteraction : MonoBehaviour
             {
                 isHolding = false;
             }
+
+
         }
     }
+
+    //IEnumerator LetGoRaisedObject()
+    //{
+    //
+    //    yield null;
+    //}
 
     internal void PushPull()
     {
@@ -123,6 +150,7 @@ public class PlayerInteraction : MonoBehaviour
             playerController.playerMovement.IdleStop();
             playerController.playerState.isMoving = false;
         }
+
     }
 
     internal void PutDown() // tidy up
@@ -243,7 +271,7 @@ public class PlayerInteraction : MonoBehaviour
             disengageTimer += Time.deltaTime;
         }
 
-     
+
 
 
         //basically LetGo() with a timegate for animations (4frames?)

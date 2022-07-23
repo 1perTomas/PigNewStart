@@ -13,6 +13,15 @@ public class PlayerDetectObject : MonoBehaviour
 
     internal string objectType;
     internal bool canInteract;
+    internal ObjectTypes objectTypeTest;
+
+    public enum ObjectTypes
+    {
+        Movable,
+        Carriable
+
+
+    }
 
     internal void FindObject()
     {
@@ -34,13 +43,22 @@ public class PlayerDetectObject : MonoBehaviour
 
             if (objectItself.collider.CompareTag("MovableObject"))
             {
+                objectTypeTest = ObjectTypes.Movable;
                 IdentifyObjectType();
             }
 
             else if (objectItself.collider.CompareTag("CarriableObject"))
             {
+                objectTypeTest = ObjectTypes.Carriable;
                 IdentifyObjectType();
             }
+
+            else if (objectItself.collider.CompareTag("DangerousObject"))
+            {
+                IdentifyObjectType();
+            }
+
+
         }
 
         else if (!playerController.playerState.isInteracting) //wipes info if not interacting or touching

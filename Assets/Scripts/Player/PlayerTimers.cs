@@ -11,14 +11,14 @@ public class PlayerTimers : MonoBehaviour
     internal float turnTimer = 0;
     internal float turnTimerSet = 0.1f;
 
-    internal float crawlTimer = 0;  //used in animation manager
+    internal float crawlTimer;  //used in animation manager
     internal float crawlTimerSet = 0.15f;
 
     internal float standUpTimer = 0;
     internal float standUpTimerSet = 0.15f;
 
-    internal float slidingTimer;
-    internal float slidingTimerSet = 0.8f;
+   // internal float slidingTimer;
+   // internal float slidingTimerSet = 0.8f;
 
     internal float slideTransitionTimer;
     internal float slideTransitionTimerSet = 0.5f;
@@ -32,13 +32,63 @@ public class PlayerTimers : MonoBehaviour
     internal float jumpBufferLength = .05f;
     internal float jumpBufferCount;
 
-    internal void RunTimer (float timer)
+    internal float wallJumpTimer;
+    internal float wallJumpTimerSet = 0.05f;
+
+    internal void WallJumpBugFix()
     {
-        timer += Time.deltaTime;
+        if (playerController.playerState.currentState == PlayerState.CharacterMovement.WallJump)
+        {
+            wallJumpTimer = wallJumpTimerSet;
+        }
+
+        else
+        {
+            if (wallJumpTimer > 0)
+            {
+                wallJumpTimer -= Time.deltaTime;
+            }
+            else if (wallJumpTimer < 0)
+            {
+                wallJumpTimer = 0;
+            }
+        }
+
     }
 
-    internal void ResetTimer(float timer)
+    internal void PositionTransition()
     {
-        timer = 0;
+        if (playerController.playerState.isStanding || playerController.playerState.currentState == PlayerState.CharacterMovement.Sliding)
+        {
+            crawlTimer = crawlTimerSet;
+
+            if (standUpTimer > 0)
+            {
+                standUpTimer -= Time.deltaTime;
+            }
+
+            else if (standUpTimer < 0)
+            {
+                standUpTimer = 0;
+            }
+        }
+
+        else
+        {
+            standUpTimer = standUpTimerSet;
+
+            if (crawlTimer > 0)
+            {
+                crawlTimer -= Time.deltaTime;
+            }
+
+            else if (crawlTimer < 0)
+            {
+                crawlTimer = 0;
+            }
+        }
     }
 }
+
+
+

@@ -94,12 +94,14 @@ public class PlayerColliders : MonoBehaviour
 
         else
         {
-            if (playerController.playerMovement.isStanding)
+            if (playerController.playerState.isStanding)
             {
+                playerController.playerTimers.PositionTransition();
                 BoxColliderFull();
             }
-            else if (!playerController.playerMovement.isStanding)
+            else if (!playerController.playerState.isStanding)
             {
+                playerController.playerTimers.PositionTransition();
                 BoxColliderProne();
             }
         }

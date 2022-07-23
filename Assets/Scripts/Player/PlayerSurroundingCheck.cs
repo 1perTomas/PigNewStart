@@ -159,7 +159,7 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
     private void CheckLayerSurroundings(LayerMask layer)
     {
-        if (!playerController.playerMovement.isStanding)
+        if (!playerController.playerState.isStanding)
         {
             isTouchingCeilingProne = Physics2D.OverlapCircle(CeilingCheckCrawling.position, CeilingCheckRadius, layer);
         }

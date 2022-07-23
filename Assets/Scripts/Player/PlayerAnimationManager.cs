@@ -63,13 +63,30 @@ public class PlayerAnimationManager : MonoBehaviour
             //-----------------------------------------------------------------I D L E-------------------------------------------
             case PlayerState.CharacterMovement.Idle:
 
-                if (playerController.playerState.isFacingRight)
+                if (playerController.playerTimers.standUpTimer > 0)
                 {
-                    playerController.ChangeAnimationState(PLAYER_IDLE);
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_STANDUP_R);
+
+                    }
+
+                    else if (!playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_STANDUP_L);
+                    }
                 }
+
                 else
                 {
-                    playerController.ChangeAnimationState(PLAYER_IDLE_L);
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_IDLE);
+                    }
+                    else
+                    {
+                        playerController.ChangeAnimationState(PLAYER_IDLE_L);
+                    }
                 }
 
                 break;
@@ -77,13 +94,30 @@ public class PlayerAnimationManager : MonoBehaviour
             //-----------------------------------------------------------------W A L K I N G-------------------------------------------
             case PlayerState.CharacterMovement.Walking:
 
-                if (playerController.playerState.isFacingRight)
+                if (playerController.playerTimers.standUpTimer > 0)
                 {
-                    playerController.ChangeAnimationState(PLAYER_WALK_R);
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_STANDUP_R);
+
+                    }
+
+                    else if (!playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_STANDUP_L);
+                    }
                 }
+
                 else
                 {
-                    playerController.ChangeAnimationState(PLAYER_WALK_L);
+                    if (playerController.playerState.isFacingRight)
+                    {
+                        playerController.ChangeAnimationState(PLAYER_WALK_R);
+                    }
+                    else
+                    {
+                        playerController.ChangeAnimationState(PLAYER_WALK_L);
+                    }
                 }
 
                 break;
@@ -105,10 +139,10 @@ public class PlayerAnimationManager : MonoBehaviour
             //-----------------------------------------------------------------P R O N E-------------------------------------------
             case PlayerState.CharacterMovement.Prone:
 
-                if (playerController.playerTimers.crawlTimer < playerController.playerTimers.crawlTimerSet)
+                if (playerController.playerTimers.crawlTimer > 0)
                 {
-                    playerController.playerTimers.crawlTimer += Time.deltaTime;
-                    playerController.playerTimers.standUpTimer = playerController.playerTimers.standUpTimerSet;
+                    // playerController.playerTimers.crawlTimer += Time.deltaTime;
+                    // playerController.playerTimers.standUpTimer = playerController.playerTimers.standUpTimerSet;
 
                     if (playerController.playerState.isFacingRight)
                     {
@@ -140,15 +174,12 @@ public class PlayerAnimationManager : MonoBehaviour
             //-----------------------------------------------------------------C R A W L I N G-------------------------------------------
             case PlayerState.CharacterMovement.Crawling:
 
-                if (playerController.playerTimers.crawlTimer < playerController.playerTimers.crawlTimerSet)
+                if (playerController.playerTimers.crawlTimer > 0)
                 {
-                    playerController.playerTimers.crawlTimer += Time.deltaTime;
-                    playerController.playerTimers.standUpTimer = playerController.playerTimers.standUpTimerSet;
 
                     if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_GOPRONE_R);
-
                     }
 
                     else if (!playerController.playerState.isFacingRight)
@@ -231,14 +262,30 @@ public class PlayerAnimationManager : MonoBehaviour
             //-----------------------------------------------------------------W A L L S L I D I N G-------------------------------------------
             case PlayerState.CharacterMovement.Wallsliding:
 
-                if (playerController.playerState.isFacingRight)
+                if (!playerController.playerSurroundings.isTouchingLedge)
                 {
+                    if (playerController.playerState.isFacingRight)
+                    {
 
-                    playerController.ChangeAnimationState(PLAYER_WALLSLIDE_R);
+                        playerController.ChangeAnimationState(PLAYER_HANGINGLEDGE_R);
+                    }
+                    else
+                    {
+                        playerController.ChangeAnimationState(PLAYER_HANGINGLEDGE_L);
+                    }
                 }
+
                 else
                 {
-                    playerController.ChangeAnimationState(PLAYER_WALLSLIDE_L);
+                    if (playerController.playerState.isFacingRight)
+                    {
+
+                        playerController.ChangeAnimationState(PLAYER_WALLSLIDE_R);
+                    }
+                    else
+                    {
+                        playerController.ChangeAnimationState(PLAYER_WALLSLIDE_L);
+                    }
                 }
 
                 break;
@@ -277,14 +324,30 @@ public class PlayerAnimationManager : MonoBehaviour
 
                 if (playerController.playerState.isFacingRight
                 && playerController.currentState != PLAYER_CLIMBLEDGE_L) //so it wouldn't flip while climbing and pressing a/d
-               {
+                {
                     playerController.ChangeAnimationState(PLAYER_CLIMBLEDGE_R);
                 }
-               else if (playerController.currentState != PLAYER_CLIMBLEDGE_R)
+                else if (playerController.currentState != PLAYER_CLIMBLEDGE_R)
                 {
                     playerController.ChangeAnimationState(PLAYER_CLIMBLEDGE_L);
                 }
                 break;
+        }
+    }
+
+    internal IEnumerator StandToProneTransition()
+    {
+        while (playerController.playerState.isStanding)
+        {
+            if (playerController.playerState.isFacingRight)
+            {
+                playerController.ChangeAnimationState(PLAYER_GOPRONE_R);
+            }
+            else
+            {
+                playerController.ChangeAnimationState(PLAYER_GOPRONE_L);
+            }
+            yield return null;
         }
     }
 

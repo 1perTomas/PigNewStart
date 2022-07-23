@@ -43,9 +43,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     internal PlayerColliders playerColliders;
 
+    [SerializeField]
+    internal TakeDamage takeDamage;
+
 
     internal Rigidbody2D rb;
     internal BoxCollider2D bc;
+    internal SpriteRenderer spriteRenderer;
     private Animator anim;
     internal float startingGravity;
 
@@ -60,62 +64,110 @@ public class PlayerController : MonoBehaviour
         QualitySettings.vSyncCount = 1;
         //Application.targetFrameRate = 144;
         rb = GetComponent<Rigidbody2D>();
-        bc = GetComponent <BoxCollider2D>();
+        bc = GetComponent<BoxCollider2D>();
 
         anim = GetComponent<Animator>();
         startingGravity = rb.gravityScale;
 
     }
 
+    internal IEnumerator Knockback()
+    {
+        yield return new WaitForSeconds(0.4f);
+
+        if (playerSurroundings.isGrounded)
+        {
+            playerState.controlMode = PlayerState.ControlMode.FreeMovement;
+        }
+    }
+
     // Update is called once per frame
     void Update() //for inputs (keeps running)
     {
         playerStuckInGround.AirTime();
-       // speedList.SpeedSet();
+        // speedList.SpeedSet();
         speedList.SpeedAdjust();
 
-        
 
-        
-        if (playerState.isInteracting)
+
+        switch (playerState.controlMode)
         {
-            playerInteraction.Interactions();
+            case PlayerState.ControlMode.FreeMovement:
+                playerMovement.NewMovements();
+
+                break;
+
+            case PlayerState.ControlMode.Damaged:
+
+                StartCoroutine(Knockback());
+
+                //playerTimers.knockBackTimer -= Time.deltaTime;
+                //
+                //if (playerSurroundings.isGrounded && playerTimers.knockBackTimer <0)
+                //{
+                //    playerTimers.knockBackTimer = playerTimers.knockBackTimerSet;
+                //    playerState.controlMode = PlayerState.ControlMode.FreeMovement; // finesse
+                //}
+
+
+                break;
+
+            case PlayerState.ControlMode.Interaction:
+
+                playerInteraction.Interactions();
+
+                break;
+
+            default:
+                playerState.controlMode = PlayerState.ControlMode.FreeMovement;
+                break;
+
         }
 
-        else if (playerState.isStuckInGround)
-        {
-            playerStuckInGround.WiggleWiggle();
-        }
-
-        else
-        {
-            playerMovement.NewMovements();
-        }
 
 
+
+        //  if (playerState.isInteracting)
+        //  {
+        //      playerInteraction.Interactions();
+        //  }
+        //
+        //  else if (playerState.isStuckInGround)
+        //  {
+        //      playerStuckInGround.WiggleWiggle();
+        //  }
+        //
+        //  else
+        //  {
+        //      playerMovement.NewMovements();
+        //  }
+        //
+        //
+
+        //
+        //
+        //
+        //  // playerState.ColliderAdjust();
         playerInput.CheckButtonInput();
-
-
-
-        // playerState.ColliderAdjust();
-
 
     }
 
+
+
     private void FixedUpdate() //for physics (after button inputs)?
     {
-        playerState.SetState(); // check
+        playerState.Invincibility();
 
-        
+
         playerJump.FallGravity();
         playerMove.Move();
         playerSurroundings.CheckSurroundings();
-       playerInteraction.LetGo();
+        playerInteraction.LetGo();
 
         playerDetectObject.CheckForObjects();
-        
-        playerMovement.SpecialMovement();
-        playerMovement.WallInteraction();
+
+        // playerMovement.SpecialMovement();
+        // playerMovement.WallInteraction();
         playerColliders.ColliderAdjust();
 
 
@@ -123,6 +175,14 @@ public class PlayerController : MonoBehaviour
         //PlayerAnimationManager.AnimationManager();
 
         //playerState.GetHit();
+        switch (playerState.controlMode)
+        {
+            case PlayerState.ControlMode.FreeMovement:
+
+                playerMovement.WallInteraction();
+                break;
+        }
+
     }
 
 
