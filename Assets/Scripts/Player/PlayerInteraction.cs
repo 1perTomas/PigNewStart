@@ -27,12 +27,15 @@ public class PlayerInteraction : MonoBehaviour
     internal bool isHolding;
     internal bool canGrab;
     internal bool isCarrying;
+
     internal bool isDisengaging;
+    internal bool isEngaging;
 
     internal int continueHolding;
 
     internal float disengageTimer;
-    float angleDegrees;
+    internal float engageTimer;
+    internal float angleDegrees;
     float radiusLength;
 
     internal bool pushingObjectRight;
@@ -43,7 +46,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Start()
     {
-        angleDegrees = 89f;
+        //angleDegrees = 89f;
+        //angleDegrees = 0f;
         radiusLength = 0.8f;
     }
 
@@ -54,7 +58,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void FixedUpdate()
     {
-       // Disengage();
+        // Disengage();
         //PutDown();
 
     }
@@ -72,11 +76,30 @@ public class PlayerInteraction : MonoBehaviour
         //     PushPull();
         // }
 
+        // if (playerController.playerState.isFacingRight)
+        // {
+        //     angleDegrees = 0;
+        // }
+        //
+        // else
+        // {
+        //     angleDegrees = 180;
+        // }
+
         switch (playerController.playerDetectObject.objectTypeTest)
         {
             case PlayerDetectObject.ObjectTypes.Movable:
 
-                PushPull();
+                if (playerController.playerInput.isInteractTapped)
+                {
+                    isHolding = false;
+                    LetGo();
+                }
+                else
+                {
+
+                    PushPull();
+                }
 
                 break;
 
@@ -86,27 +109,49 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     if (playerController.playerInput.isUpTapped)
                     {
-                        LiftUp();
+                        disengageTimer = 0;
+                        isEngaging = true;
+                        StartCoroutine("RaiseUp");
+                        // LiftUp();
+                    }
+
+                    else if (playerController.playerInput.isInteractTapped)
+                    {
+                        isHolding = false;
+                        LetGo();
                     }
 
                     else
                     {
+                        StopCoroutine("PutDownLetGo");
                         PushPull();
                     }
                 }
 
                 else
                 {
-                    if (playerController.playerInput.isDownTapped)
-                    {
-                        PutDown();
-                    }
 
                     if (playerController.playerInput.isInteractTapped)
                     {
                         isDisengaging = true;
-                        StartCoroutine(PutDownLetGo());
-                    }    
+                        continueHolding = 0;
+                        StartCoroutine("PutDownLetGo");
+                    }
+
+                    else if (playerController.playerInput.isDownTapped)
+                    {
+                        isDisengaging = true;
+                        continueHolding = 1;
+                        StartCoroutine("PutDownLetGo");
+                        //PutDown();
+                    }
+
+                    else
+                    {
+                        StopCoroutine("RaiseUp");
+                        playerController.playerMove.MoveDetection(); // moves too fast
+
+                    }
 
 
                 }
@@ -131,20 +176,20 @@ public class PlayerInteraction : MonoBehaviour
         //     }
         // }
 
-       // if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) /*|| !playerController.playerSurroundings.isGrounded*/)
-       // {
-       //     if (isCarrying)
-       //     {
-       //         isDisengaging = true;
-       //         continueHolding = 0;
-       //     }
-       //     else
-       //     {
-       //         isHolding = false;
-       //     }
-       //
-       //
-       // }
+        // if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) /*|| !playerController.playerSurroundings.isGrounded*/)
+        // {
+        //     if (isCarrying)
+        //     {
+        //         isDisengaging = true;
+        //         continueHolding = 0;
+        //     }
+        //     else
+        //     {
+        //         isHolding = false;
+        //     }
+        //
+        //
+        // }
     }
 
     //IEnumerator LetGoRaisedObject()
@@ -164,7 +209,10 @@ public class PlayerInteraction : MonoBehaviour
             {
                 playerController.speedList.FlipSpeedValues();
             }
-
+            else
+            {
+                playerController.playerState.isMoving = true;
+            }
             // else
             // {
             //     playerController.playerState.isMoving = true;
@@ -178,7 +226,10 @@ public class PlayerInteraction : MonoBehaviour
             {
                 playerController.speedList.FlipSpeedValues();
             }
-
+            else
+            {
+                playerController.playerState.isMoving = true;
+            }
             // else
             // {
             //     playerController.playerState.isMoving = true;
@@ -200,43 +251,61 @@ public class PlayerInteraction : MonoBehaviour
         {
             Disengage();
             yield return new WaitForFixedUpdate();
+
         }
 
-        
-        //yield return null;
-       
-       // yield return new WaitForSeconds(0.35f);
-       //PutDown();
-       //yield return null;
-       //isHolding = false;
-        //playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
+        if (!isHolding)
+        {
+            LetGo();
+        }
+        yield return null;
 
+        //yield return null;
+
+        // yield return new WaitForSeconds(0.35f);
+        //PutDown();
+        //yield return null;
+        //isHolding = false;
+        //playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
+    }
+
+    IEnumerator RaiseUp()
+    {
+        while (isEngaging)
+        {
+            Engage();
+            Debug.Log("bogos)");
+            yield return new WaitForFixedUpdate();
+            //yield return new WaitForSeconds(0.2f);
+        }
     }
 
     internal void PutDown() // tidy up
     {
         if (isCarrying)
         {
-           // if (disengageTimer >= 0.1f)
-           // {
-                isCarrying = false;
-                isDisengaging = false;
-                //putting down the object
-                playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
-                angleDegrees = 89f;
+            // if (disengageTimer >= 0.1f)
+            // {
+            isCarrying = false;
+            isDisengaging = false;
+            //putting down the object
+            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
+            angleDegrees = 89f;
 
-                if (continueHolding == 0)
-                {
-                    isHolding = false;
-                }
+            if (continueHolding == 0)
+            {
+                isHolding = false;
+            }
 
-                else if (continueHolding == 1)
-                {
-                    isHolding = true;
-                }
+            else if (continueHolding == 1)
+            {
+                isHolding = true;
+            }
             //}
         }
     }
+
+
 
     internal void LiftUp()
     {
@@ -270,6 +339,7 @@ public class PlayerInteraction : MonoBehaviour
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.SetParent(null);
             playerController.playerState.isInteracting = false;
+            playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
         }
     }
 
@@ -278,58 +348,117 @@ public class PlayerInteraction : MonoBehaviour
         interactableObject = playerController.playerDetectObject.touchingObject;
     }
 
+    internal void Engage()
+    {
+        if (playerController.playerState.isFacingRight)
+        {
+            angleDegrees += Time.deltaTime * 800;
+        }
+
+        else if (!playerController.playerState.isFacingRight)
+        {
+            angleDegrees -= Time.deltaTime * 800;
+        }
+
+        if (radiusLength < 0.8f)
+        {
+            radiusLength += Time.deltaTime * 3;
+        }
+
+        if (engageTimer < 0.1f)
+        {
+            playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
+                 new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
+        }
+
+        else
+        {
+            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition
+                = playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(0, 0.8f, 0); ;
+            isEngaging = false;
+            angleDegrees = 90;
+            // isDisengaging = false;
+            isCarrying = true;
+            engageTimer = 0;
+
+            // if (continueHolding == 0)
+            // {
+            //     isHolding = false;
+            // }
+            //
+            // else if (continueHolding == 1)
+            // {
+            //     isHolding = true;
+            // }
+        }
+        engageTimer += Time.deltaTime;
+
+    }
+
     internal void Disengage()
     {
 
-       // if (isDisengaging)
-       // {
-            //float angleDegrees = 89;
-            if (playerController.playerState.isFacingRight)
-            {
-                angleDegrees -= Time.deltaTime * 800;
-            }
+        // if (isDisengaging)
+        // {
+        //float angleDegrees = 89;
+        if (playerController.playerState.isFacingRight)
+        {
+            angleDegrees -= Time.deltaTime * 800;
+        }
 
+        else
+        {
+            angleDegrees += Time.deltaTime * 800;
+        }
+
+        if (radiusLength > 0.57f)
+        {
+            radiusLength -= Time.deltaTime * 3;
+        }
+
+        if (disengageTimer < 0.1f)
+        {
+            playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
+                 new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
+        }
+
+        else
+        {
+            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
+
+            isDisengaging = false;
+            isCarrying = false;
+            disengageTimer = 0;
+
+            if (
+                playerController.playerState.isFacingRight)
+            {
+                angleDegrees = 0;
+            }
             else
             {
-                angleDegrees += Time.deltaTime * 800;
+                angleDegrees = 180;
             }
 
-            if (radiusLength > 0.57f)
+            if (continueHolding == 0)
             {
-                radiusLength -= Time.deltaTime * 3;
+                isHolding = false;
             }
 
-            if (disengageTimer < 0.1f)
+            else if (continueHolding == 1)
             {
-                playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
-                     new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
+                isHolding = true;
             }
+        }
 
-            else
-            {
-                playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
-                isDisengaging = false;
-                isCarrying = false;
+        if (angleDegrees > -1f && angleDegrees < 1f)
+        {
+            Debug.Log(disengageTimer);
+            //takes 0.35 time to go from 90 to 0 degrees
+        }
 
-                if (continueHolding == 0)
-                {
-                    isHolding = false;
-                }
-
-                else if (continueHolding == 1)
-                {
-                    isHolding = true;
-                }
-            }
-
-            if (angleDegrees > -1f && angleDegrees < 1f)
-            {
-                Debug.Log(disengageTimer);
-                //takes 0.35 time to go from 90 to 0 degrees
-            }
-
-            disengageTimer += Time.deltaTime;
-       // }
+        disengageTimer += Time.deltaTime;
+        // }
 
 
 

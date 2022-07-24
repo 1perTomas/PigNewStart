@@ -114,8 +114,17 @@ public class PlayerMovement : MonoBehaviour
                         playerController.playerState.currentState = PlayerState.CharacterMovement.Prone;
                     }
 
-                    if (playerController.playerInput.isInteractTapped)
+                    if (playerController.playerDetectObject.isTouchingObject && playerController.playerInput.isInteractTapped)
                     {
+                        if (playerController.playerState.isFacingRight)
+                        {
+                            playerController.playerInteraction.angleDegrees = 0;
+                        }
+
+                        else
+                        {
+                            playerController.playerInteraction.angleDegrees = 180;
+                        }
                         playerController.playerState.controlMode = PlayerState.ControlMode.Interaction;
                         playerController.playerState.currentState = PlayerState.CharacterMovement.Interacting;
                     }

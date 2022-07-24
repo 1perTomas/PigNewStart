@@ -58,59 +58,60 @@ public class PlayerSurroundingCheck : MonoBehaviour
     internal bool isOnPlatform;
 
     public LayerMask whatIsGround;
+    public LayerMask interactables;
 
 
     internal void CheckSurroundings()
     {
         CheckLayerSurroundings(whatIsGround);
         CheckIfCanHangLedge();
-       // CheckIfCanJump();
+        // CheckIfCanJump();
         // AirGlitch();
     }
-   // internal void CheckIfCanJump()
-   // {
-   //
-   //     if (playerController.playerState.isInteracting)
-   //     {
-   //         playerController.playerState.canJump = false;
-   //     }
-   //
-   //     else if
-   //
-   //      (!playerController.playerMovement.isCrawling
-   //      && !playerController.playerMovement.isProneIdle
-   //      && !playerController.playerMovement.isWallSliding)
-   //     {
-   //         if (isGrounded && /*playerController.rb.velocity.y < 0 &&*/ playerController.playerTimers.hangTimeTimer != playerController.playerTimers.hangTime)
-   //         {
-   //             playerController.playerTimers.hangTimeTimer = playerController.playerTimers.hangTime; // can jump if presses jump a bit over the ledge
-   //             playerController.playerState.canJump = true;
-   //             if (playerController.playerTimers.hangTimeTimer <= 0f)
-   //             {
-   //
-   //             }
-   //         }
-   //
-   //         else
-   //         {
-   //             playerController.playerTimers.hangTimeTimer -= Time.deltaTime;
-   //
-   //             if (playerController.playerTimers.hangTimeTimer > 0f)
-   //             {
-   //                 playerController.playerState.canJump = true;
-   //             }
-   //             else
-   //             {
-   //                 playerController.playerTimers.hangTimeTimer = 0f;
-   //                 playerController.playerState.canJump = false;
-   //             }
-   //         }
-   //     }
-   //     else
-   //     {
-   //         playerController.playerState.canJump = false;
-   //     }
-   // }
+    // internal void CheckIfCanJump()
+    // {
+    //
+    //     if (playerController.playerState.isInteracting)
+    //     {
+    //         playerController.playerState.canJump = false;
+    //     }
+    //
+    //     else if
+    //
+    //      (!playerController.playerMovement.isCrawling
+    //      && !playerController.playerMovement.isProneIdle
+    //      && !playerController.playerMovement.isWallSliding)
+    //     {
+    //         if (isGrounded && /*playerController.rb.velocity.y < 0 &&*/ playerController.playerTimers.hangTimeTimer != playerController.playerTimers.hangTime)
+    //         {
+    //             playerController.playerTimers.hangTimeTimer = playerController.playerTimers.hangTime; // can jump if presses jump a bit over the ledge
+    //             playerController.playerState.canJump = true;
+    //             if (playerController.playerTimers.hangTimeTimer <= 0f)
+    //             {
+    //
+    //             }
+    //         }
+    //
+    //         else
+    //         {
+    //             playerController.playerTimers.hangTimeTimer -= Time.deltaTime;
+    //
+    //             if (playerController.playerTimers.hangTimeTimer > 0f)
+    //             {
+    //                 playerController.playerState.canJump = true;
+    //             }
+    //             else
+    //             {
+    //                 playerController.playerTimers.hangTimeTimer = 0f;
+    //                 playerController.playerState.canJump = false;
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         playerController.playerState.canJump = false;
+    //     }
+    // }
 
     internal void CheckIfCanHangLedge()
     {
@@ -154,7 +155,7 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
     internal void CanGrabObject(LayerMask layer)
     {
-        isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, layer);
+        isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, interactables);
     }
 
     private void CheckLayerSurroundings(LayerMask layer)
@@ -185,11 +186,13 @@ public class PlayerSurroundingCheck : MonoBehaviour
         {
             if (playerController.playerState.isFacingRight)
             {
+                CheckForInteractables(1, interactables);
                 DetectSurroundings(1, layer);
             }
 
             else
             {
+                CheckForInteractables(-1, interactables);
                 DetectSurroundings(-1, layer);
             }
         }
@@ -219,42 +222,47 @@ public class PlayerSurroundingCheck : MonoBehaviour
 
     private void DetectSurroundings(int direction, LayerMask layer)
     {
-       //
-       // Debug.Log( "Wallcheck start " + wallCheck.position.x);
-       // Debug.Log("Wallcheck end " + (wallCheck.position.x + 0.19f));
-       // Debug.Log("Box Collider location " + playerController.bc.transform.position.x);
+        //
+        // Debug.Log( "Wallcheck start " + wallCheck.position.x);
+        // Debug.Log("Wallcheck end " + (wallCheck.position.x + 0.19f));
+        // Debug.Log("Box Collider location " + playerController.bc.transform.position.x);
 
-            isAbleToClimb = Physics2D.Raycast(ClimbCheck.position, transform.right, wallCheckDistance * direction, layer);
-            isGrounded = Physics2D.OverlapArea(new Vector2(GroundCheck.position.x - 0.1f, GroundCheck.position.y), new Vector2(GroundCheck.position.x + 0.1f, GroundCheck.position.y + 0.1f), layer);
-            isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance * direction, layer);
-            isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, 0.19f * -direction, layer);
-            isTouchingWallHigh = Physics2D.Raycast(wallSlideCheck.position, transform.right, wallCheckDistance * direction, layer);
-            isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * direction, layer);
-            isTouchingLedgeJump = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * direction, layer);
-            isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
-            isTouchingInteractableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * direction, layer);
+        isAbleToClimb = Physics2D.Raycast(ClimbCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isGrounded = Physics2D.OverlapArea(new Vector2(GroundCheck.position.x - 0.1f, GroundCheck.position.y), new Vector2(GroundCheck.position.x + 0.1f, GroundCheck.position.y + 0.1f), layer);
+        isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, 0.19f * -direction, layer);
+        isTouchingWallHigh = Physics2D.Raycast(wallSlideCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isTouchingLedge = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isTouchingLedgeJump = Physics2D.Raycast(LedgeCheck.position, transform.right, wallCheckDistance * direction, layer);
+        isTouchingCeiling = Physics2D.OverlapCircle(CeilingCheck.position, CeilingCheckRadius, layer);
+        //isTouchingInteractableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * direction, layer);
 
-       // if (playerController.playerState.isFacingRight)
-       // {
-       //     isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, -0.19f , layer);
-       // }
-       // else
-       // {
-       //     isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, 0.19f, layer);
-       // }
+        // if (playerController.playerState.isFacingRight)
+        // {
+        //     isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, -0.19f , layer);
+        // }
+        // else
+        // {
+        //     isTouchingWallBehind = Physics2D.Raycast(wallCheck.position, transform.right, 0.19f, layer);
+        // }
 
+    }
+
+    private void CheckForInteractables(int direction, LayerMask layer)
+    {
+        isTouchingInteractableObject = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * direction, layer);
     }
 
 
     private void AirGlitch()
     {
-       // if (isColliding
-       //     && !isGrounded
-       //     && !playerController.playerMovement.isWallSliding
-       //     && !playerController.playerMovement.isHangingLedge
-       //     && playerController.playerState.canJump)
-       // {
-       //     playerController.transform.localPosition = new Vector2(transform.localPosition.x, transform.localPosition.y - 0.01f);
-       // }
+        // if (isColliding
+        //     && !isGrounded
+        //     && !playerController.playerMovement.isWallSliding
+        //     && !playerController.playerMovement.isHangingLedge
+        //     && playerController.playerState.canJump)
+        // {
+        //     playerController.transform.localPosition = new Vector2(transform.localPosition.x, transform.localPosition.y - 0.01f);
+        // }
     }
 }
