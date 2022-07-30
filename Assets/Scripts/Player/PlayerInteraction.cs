@@ -38,6 +38,9 @@ public class PlayerInteraction : MonoBehaviour
     internal float angleDegrees;
     float radiusLength;
 
+    internal float startRadius;
+
+
     internal bool pushingObjectRight;
     internal GameObject interactableObject;
     internal Vector3 originalObjectPosition;
@@ -149,11 +152,30 @@ public class PlayerInteraction : MonoBehaviour
                     else
                     {
                         StopCoroutine("RaiseUp");
+
                         playerController.playerMove.MoveDetection(); // moves too fast
 
                     }
+                }
 
+                break;
 
+            case PlayerDetectObject.ObjectTypes.Lever:
+
+                if (playerController.playerInput.isLeftTapped)
+                {
+                    
+                    //trigger effect left
+                }
+
+                else if (playerController.playerInput.isRightTapped)
+                {
+                    //trigger effect right
+                }
+
+                else if(playerController.playerInput.isInteractTapped)
+                {
+                    playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
                 }
 
                 break;
@@ -203,7 +225,9 @@ public class PlayerInteraction : MonoBehaviour
     internal void PushPull()
     {
         Debug.Log("Pickup");
-        if (playerController.playerInput.isLeftPressed)
+        if (playerController.playerInput.isLeftPressed
+            && ((playerController.playerState.isFacingRight && !playerController.playerSurroundings.isTouchingWallBehind)
+            || (!playerController.playerState.isFacingRight && !playerController.playerSurroundings.isTouchingWall)))
         {
             if (playerController.speedList.walkSpeed > 0)
             {
@@ -213,10 +237,6 @@ public class PlayerInteraction : MonoBehaviour
             {
                 playerController.playerState.isMoving = true;
             }
-            // else
-            // {
-            //     playerController.playerState.isMoving = true;
-            // }
         }
 
 
@@ -230,10 +250,6 @@ public class PlayerInteraction : MonoBehaviour
             {
                 playerController.playerState.isMoving = true;
             }
-            // else
-            // {
-            //     playerController.playerState.isMoving = true;
-            // }
         }
 
         else
@@ -257,8 +273,10 @@ public class PlayerInteraction : MonoBehaviour
         if (!isHolding)
         {
             LetGo();
+            yield break;
         }
-        yield return null;
+        //yield return null;
+
 
         //yield return null;
 
@@ -275,8 +293,8 @@ public class PlayerInteraction : MonoBehaviour
         {
             Engage();
             Debug.Log("bogos)");
-            yield return new WaitForFixedUpdate();
-            //yield return new WaitForSeconds(0.2f);
+            // yield return new WaitForFixedUpdate();
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -305,7 +323,19 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-
+    internal void FindRadius()
+    {
+        if (playerController.playerState.isFacingRight)
+        {
+            startRadius = playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition.x - playerController.rb.transform.position.x;
+            Debug.Log(startRadius);
+        }
+        else
+        {
+            startRadius = playerController.rb.transform.position.x - playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition.x;
+            Debug.Log(startRadius);
+        }
+    }
 
     internal void LiftUp()
     {
@@ -352,7 +382,9 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (playerController.playerState.isFacingRight)
         {
-            angleDegrees += Time.deltaTime * 800;
+            //angleDegrees += Time.deltaTime * 800;
+            angleDegrees += 90 / 4;
+
         }
 
         else if (!playerController.playerState.isFacingRight)
@@ -365,7 +397,7 @@ public class PlayerInteraction : MonoBehaviour
             radiusLength += Time.deltaTime * 3;
         }
 
-        if (engageTimer < 0.1f)
+        if (/*engageTimer < 0.1f*/ angleDegrees < 90)
         {
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
                  new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
@@ -373,23 +405,13 @@ public class PlayerInteraction : MonoBehaviour
 
         else
         {
-            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition
-                = playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(0, 0.8f, 0); ;
+            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(0, 0.8f, 0); ;
             isEngaging = false;
             angleDegrees = 90;
             // isDisengaging = false;
             isCarrying = true;
             engageTimer = 0;
 
-            // if (continueHolding == 0)
-            // {
-            //     isHolding = false;
-            // }
-            //
-            // else if (continueHolding == 1)
-            // {
-            //     isHolding = true;
-            // }
         }
         engageTimer += Time.deltaTime;
 
@@ -424,7 +446,8 @@ public class PlayerInteraction : MonoBehaviour
 
         else
         {
-            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
+
+            //playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
 
             isDisengaging = false;
             isCarrying = false;
@@ -433,10 +456,12 @@ public class PlayerInteraction : MonoBehaviour
             if (
                 playerController.playerState.isFacingRight)
             {
+                playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(startRadius, -0.109f, 0);
                 angleDegrees = 0;
             }
             else
             {
+                playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(-startRadius, -0.109f, 0);
                 angleDegrees = 180;
             }
 

@@ -17,11 +17,15 @@ public class PlayerDetectObject : MonoBehaviour
 
     public enum ObjectTypes
     {
+        None,
         Movable,
-        Carriable
+        Carriable,
+        Lever
 
 
     }
+
+
 
     internal void FindObject()
     {
@@ -41,6 +45,7 @@ public class PlayerDetectObject : MonoBehaviour
         {
             touchingObject = playerController.playerSurroundings.isTouchingInteractableObject.collider.gameObject;
 
+
             if (objectItself.collider.CompareTag("MovableObject"))
             {
                 objectTypeTest = ObjectTypes.Movable;
@@ -53,10 +58,23 @@ public class PlayerDetectObject : MonoBehaviour
                 IdentifyObjectType();
             }
 
-            else if (objectItself.collider.CompareTag("DangerousObject"))
+            else
+            {
+                objectTypeTest = ObjectTypes.None;
+            }
+
+          //  else if (objectItself.collider.CompareTag("LeverObject"))
+          //  {
+          //      objectTypeTest = ObjectTypes.Lever;
+          //      IdentifyObjectType();
+          //  }
+
+             if (objectItself.collider.CompareTag("DangerousObject"))
             {
                 IdentifyObjectType();
             }
+
+           
 
 
         }
@@ -79,4 +97,25 @@ public class PlayerDetectObject : MonoBehaviour
             objectType = objectTag.Remove(objectTag.Length - 6);
         }
     }
+
+    internal void OnTriggerStay2D (Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("LeverObject"))
+        {
+            isTouchingObject = true;
+            Debug.Log("LeverBoi");
+            objectTypeTest = ObjectTypes.Lever;
+        }
+    }
+
+    internal void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("LeverObject"))
+        {
+            isTouchingObject = false;
+            objectTypeTest = ObjectTypes.None;
+        }
+    }
+
+    //internal void OnTri
 }

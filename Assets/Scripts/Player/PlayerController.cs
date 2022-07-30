@@ -159,6 +159,7 @@ public class PlayerController : MonoBehaviour
         playerState.Invincibility();
 
 
+
         playerJump.FallGravity();
         playerMove.Move();
         playerSurroundings.CheckSurroundings();

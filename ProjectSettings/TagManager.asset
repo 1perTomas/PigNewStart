@@ -10,6 +10,7 @@ TagManager:
   - Ground
   - CarriableObject
   - DangerousObject
+  - LeverObject
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Interactables
   - Ground
   - MovingPlatform
   - 

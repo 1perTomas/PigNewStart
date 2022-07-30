@@ -18,6 +18,7 @@ public class SpeedList : MonoBehaviour
 
     internal float heavyObjectSpeed = 1.25f;
     internal float lightObjectSpeed = 1.75f;
+    internal float carryingLightObjectSpeed = 2.75f;
 
     public float turningRateAir = 0.08f;
     public float acceleration = 0.18f;
@@ -30,6 +31,7 @@ public class SpeedList : MonoBehaviour
         slidingSpeed *= -1;
         heavyObjectSpeed *= -1;
         lightObjectSpeed *= -1;
+        carryingLightObjectSpeed *= -1;
     }
 
 
@@ -175,7 +177,7 @@ public class SpeedList : MonoBehaviour
                     {
                         if (playerController.playerInteraction.isCarrying)
                         {
-                            ChangeSpeed(walkSpeed);
+                            ChangeSpeed(carryingLightObjectSpeed);
                         }
                         else
                         {
