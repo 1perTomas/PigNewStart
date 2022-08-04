@@ -8,30 +8,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     PlayerController playerController;
 
-
-
-
-
-    //internal bool isFacingRight = true;
-
-    //internal bool isStanding; //sets the hit box
-    //internal bool isProne;
-    //internal bool isIdle;
-    // internal bool isWalking;
-    //internal bool isSprinting;
     internal bool isSliding = true;
-    // internal bool isProneIdle;
-    // internal bool isCrawling;
-    // internal bool isTurning;
+
 
     internal bool isPushing;
 
-    // internal bool isHangingLedge;
     internal bool isClimbingLedge;
-    // internal bool isWallSliding;
-
-
-
 
     internal bool canTurn = true;
     internal bool canMove = true;
@@ -140,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
                             playerController.playerState.currentState = PlayerState.CharacterMovement.Interacting;
                         }
 
-                       
+
                     }
 
                     playerController.playerState.isStanding = true;
@@ -337,7 +319,7 @@ public class PlayerMovement : MonoBehaviour
 
                     //stuck
 
-                     //Debug.Log("Unassigned State on ground");
+                    //Debug.Log("Unassigned State on ground");
 
                     break;
             }
@@ -562,7 +544,7 @@ public class PlayerMovement : MonoBehaviour
 
                     }
 
-//                    hangingPosition = new Vector2(playerController.rb.position.x, playerController.rb.position.y);
+                    //                    hangingPosition = new Vector2(playerController.rb.position.x, playerController.rb.position.y);
                     HangingLedge();
                     DisableMovement();
                     playerController.playerState.isStanding = true;
@@ -973,13 +955,13 @@ public class PlayerMovement : MonoBehaviour
         playerController.rb.gravityScale = 0f;
     }
 
-    private void DisableMovement()
+    internal void DisableMovement()
     {
         canMove = false;
         canTurn = false;
     }
 
-    private void EnableMovement()
+    internal void EnableMovement()
     {
         //Debug.Log("Bogos");
         isClimbingLedge = false;

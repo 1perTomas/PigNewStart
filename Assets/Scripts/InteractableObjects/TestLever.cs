@@ -6,7 +6,10 @@ public class TestLever : MonoBehaviour
 {
     internal GameObject target;
 
+    [SerializeField]
+    internal GameObject player;
 
+    internal PlayerController playerController;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +20,13 @@ public class TestLever : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // Debug.Log(target.name);
+        playerController = player.GetComponent<PlayerController>();
+        if (playerController.playerState.currentState == PlayerState.CharacterMovement.Interacting && playerController.playerInput.isLeftTapped)
+        {
+            Debug.Log(target.name);
+            GoUp();
+        }
+        // Debug.Log(target.name);
     }
 
     internal void GoUp()

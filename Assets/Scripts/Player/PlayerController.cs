@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
         playerStuckInGround.AirTime();
         // speedList.SpeedSet();
         speedList.SpeedAdjust();
-
+        playerColliders.ColliderAdjust();
 
 
         switch (playerState.controlMode)
@@ -163,17 +163,17 @@ public class PlayerController : MonoBehaviour
         playerJump.FallGravity();
         playerMove.Move();
         playerSurroundings.CheckSurroundings();
-        playerInteraction.LetGo();
+
 
         playerDetectObject.CheckForObjects();
 
         // playerMovement.SpecialMovement();
         // playerMovement.WallInteraction();
-        playerColliders.ColliderAdjust();
+       
 
 
         PlayerAnimationManager.AnimationManagerStateTest();
-        //PlayerAnimationManager.AnimationManager();
+
 
         //playerState.GetHit();
         switch (playerState.controlMode)

@@ -22,7 +22,7 @@ public class PlayerJump : MonoBehaviour
         {
             jumpAntiSpam = 0;
         }
-      
+
         else
         {
             jumpAntiSpam += Time.deltaTime;
@@ -71,7 +71,7 @@ public class PlayerJump : MonoBehaviour
         playerController.rb.velocity = new Vector2(playerController.speedList.walkSpeed, jumpForce);
 
         //playerController.playerMovement.isWallSliding = false;
-       // playerController.playerMovement.isHangingLedge = false;
+        // playerController.playerMovement.isHangingLedge = false;
         playerController.playerTimers.hangTimeTimer = 0;
         jumpBufferCount = 0;
     }
@@ -80,6 +80,17 @@ public class PlayerJump : MonoBehaviour
 
     internal void FallGravity()
     {
+
+        if (playerController.playerState.currentState == PlayerState.CharacterMovement.Interacting)
+        {
+            jumpForce = 6;
+        }
+
+        else
+        {
+            jumpForce = 6.6f;
+        }
+
         if (playerController.rb.velocity.y < 0)
         {
             playerController.rb.velocity += Vector2.up * Physics2D.gravity.y * Time.deltaTime * fallMultiplier;
@@ -88,5 +99,6 @@ public class PlayerJump : MonoBehaviour
         {
             playerController.rb.velocity += Vector2.up * Physics2D.gravity.y * Time.deltaTime * riseMultiplier;
         }
+
     }
 }

@@ -37,12 +37,6 @@ public class SpeedList : MonoBehaviour
 
     internal void SpeedAdjust()
     {
-        // if (playerController.playerSurroundings.isTouchingWall
-        // || (playerController.playerSurroundings.isTouchingLedge && playerController.playerMovement.isStanding))
-        // {
-        //     ChangeSpeed(0);
-        // }
-
         switch (playerController.playerState.controlMode)
         {
             case PlayerState.ControlMode.FreeMovement:
@@ -164,7 +158,6 @@ public class SpeedList : MonoBehaviour
 
                     default:
                         break;
-
                 }
 
                 break;
@@ -194,7 +187,7 @@ public class SpeedList : MonoBehaviour
                         }
                     }
 
-                    else
+                    else if (playerController.playerDetectObject.objectType == "Movable")
                     {
                         ChangeSpeed(heavyObjectSpeed);
                     }
@@ -206,10 +199,7 @@ public class SpeedList : MonoBehaviour
 
                 break;
         }
-
-
     }
-
 
     internal void SpeedSet()
     {
@@ -227,7 +217,6 @@ public class SpeedList : MonoBehaviour
                         }
                         else
                         {
-
                             if ((playerController.playerState.isFacingRight && walkSpeed > 0) || (!playerController.playerState.isFacingRight && walkSpeed < 0))
                             {
                                 ChangeSpeed(lightObjectSpeed);
@@ -240,7 +229,7 @@ public class SpeedList : MonoBehaviour
                         }
                     }
 
-                    else
+                    else if (playerController.playerDetectObject.objectType == "Movable")
                     {
                         ChangeSpeed(heavyObjectSpeed);
                     }

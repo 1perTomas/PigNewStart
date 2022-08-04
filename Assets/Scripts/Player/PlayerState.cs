@@ -47,7 +47,7 @@ public class PlayerState : MonoBehaviour
     internal float damagedFall;
 
     internal bool canJump;
-    internal int state;
+    
 
 
     internal int health = 3;

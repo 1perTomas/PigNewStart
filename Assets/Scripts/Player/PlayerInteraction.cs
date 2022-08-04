@@ -8,21 +8,9 @@ public class PlayerInteraction : MonoBehaviour
     PlayerController playerController;
     //facing direction
 
-    public enum InteractionMoves
-    {
-        Push,
-        Pull,
-        LiftUp,
-        Carry,
-        PutDown
-
-
-    }
-
     internal string objectType;
     internal RaycastHit2D canInteract; //brings back an object
 
-    internal InteractionMoves interactionMoves;
 
     internal bool isHolding;
     internal bool canGrab;
@@ -49,46 +37,12 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Start()
     {
-        //angleDegrees = 89f;
-        //angleDegrees = 0f;
         radiusLength = 0.8f;
     }
 
-    void Update()
-    {
-        // Physics2D.queriesStartInColliders = false;
-    }
-
-    private void FixedUpdate()
-    {
-        // Disengage();
-        //PutDown();
-
-    }
 
     internal void Interactions() //
     {
-        if (/*playerController.playerSurroundings.isTouchingInteractableObject &&*/ !playerController.playerState.isInteracting)
-        {
-            //interactableObject = playerController.playerDetectObject.objectItself.collider.gameObject;
-        }
-
-        // if (playerController.playerDetectObject.objectType == "Movable")
-        // {
-        //     //interactableObject = playerController.playerDetectObject.touchingObject;
-        //     PushPull();
-        // }
-
-        // if (playerController.playerState.isFacingRight)
-        // {
-        //     angleDegrees = 0;
-        // }
-        //
-        // else
-        // {
-        //     angleDegrees = 180;
-        // }
-
         switch (playerController.playerDetectObject.objectTypeTest)
         {
             case PlayerDetectObject.ObjectTypes.Movable:
@@ -100,7 +54,7 @@ public class PlayerInteraction : MonoBehaviour
                 }
                 else
                 {
-
+                    playerController.playerColliders.AdjustColliderBoxMovable();
                     PushPull();
                 }
 
@@ -118,23 +72,26 @@ public class PlayerInteraction : MonoBehaviour
                         // LiftUp();
                     }
 
-                    else if (playerController.playerInput.isInteractTapped)
+                    else if (playerController.playerInput.isInteractTapped && !isEngaging)
                     {
+                        //playerController.playerColliders.BoxColliderFull();
                         isHolding = false;
                         LetGo();
                     }
 
                     else
                     {
-                        StopCoroutine("PutDownLetGo");
+                        playerController.playerColliders.AdjustColliderBoxMovable();
+                        //StopCoroutine("PutDownLetGo");
                         PushPull();
                     }
                 }
 
                 else
                 {
+                    playerController.playerMovement.NewJump();
 
-                    if (playerController.playerInput.isInteractTapped)
+                    if (playerController.playerInput.isInteractTapped && !isDisengaging)
                     {
                         isDisengaging = true;
                         continueHolding = 0;
@@ -146,12 +103,11 @@ public class PlayerInteraction : MonoBehaviour
                         isDisengaging = true;
                         continueHolding = 1;
                         StartCoroutine("PutDownLetGo");
-                        //PutDown();
                     }
 
                     else
                     {
-                        StopCoroutine("RaiseUp");
+                        //StopCoroutine("RaiseUp");
 
                         playerController.playerMove.MoveDetection(); // moves too fast
 
@@ -164,7 +120,7 @@ public class PlayerInteraction : MonoBehaviour
 
                 if (playerController.playerInput.isLeftTapped)
                 {
-                    
+
                     //trigger effect left
                 }
 
@@ -173,54 +129,14 @@ public class PlayerInteraction : MonoBehaviour
                     //trigger effect right
                 }
 
-                else if(playerController.playerInput.isInteractTapped)
+                else if (playerController.playerInput.isInteractTapped)
                 {
                     playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
                 }
 
                 break;
         }
-
-        // if (playerController.playerDetectObject.objectType == "Carriable")
-        // {
-        //     //interactableObject = playerController.playerDetectObject.touchingObject;
-        //     PushPull();
-        //
-        //     if (playerController.playerInput.isUpTapped && !isCarrying)
-        //     {
-        //         LiftUp();
-        //     }
-        //
-        //     else if (playerController.playerInput.isDownTapped && isCarrying)
-        //     {
-        //         isDisengaging = true;
-        //         continueHolding = 1;
-        //     }
-        // }
-
-        // if ((playerController.playerState.isInteracting && playerController.playerInput.isInteractTapped) /*|| !playerController.playerSurroundings.isGrounded*/)
-        // {
-        //     if (isCarrying)
-        //     {
-        //         isDisengaging = true;
-        //         continueHolding = 0;
-        //     }
-        //     else
-        //     {
-        //         isHolding = false;
-        //     }
-        //
-        //
-        // }
     }
-
-    //IEnumerator LetGoRaisedObject()
-    //{
-    //
-    //    yield null;
-    //}
-
-
 
     internal void PushPull()
     {
@@ -239,7 +155,6 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
 
-
         else if (playerController.playerInput.isRightPressed)
         {
             if (playerController.speedList.walkSpeed < 0)
@@ -257,45 +172,40 @@ public class PlayerInteraction : MonoBehaviour
             playerController.playerMovement.IdleStop();
             playerController.playerState.isMoving = false;
         }
-
     }
 
     IEnumerator PutDownLetGo()
     {
-
         while (isDisengaging)
         {
             Disengage();
             yield return new WaitForFixedUpdate();
-
         }
 
         if (!isHolding)
         {
+            playerController.playerColliders.BoxColliderFull();
             LetGo();
             yield break;
         }
-        //yield return null;
 
-
-        //yield return null;
-
-        // yield return new WaitForSeconds(0.35f);
-        //PutDown();
-        //yield return null;
-        //isHolding = false;
-        //playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
+        yield break;
     }
 
     IEnumerator RaiseUp()
     {
+        Debug.Log("bogos)");
+
         while (isEngaging)
         {
             Engage();
-            Debug.Log("bogos)");
+
             // yield return new WaitForFixedUpdate();
             yield return new WaitForSeconds(0.1f);
         }
+
+        playerController.playerColliders.AdjustColliderBoxCarriable();
+        yield break;
     }
 
     internal void PutDown() // tidy up
@@ -363,12 +273,16 @@ public class PlayerInteraction : MonoBehaviour
 
     internal void LetGo() // detaches and returns object properties
     {
+
+
         if (!isHolding && playerController.playerState.isInteracting) // check if isInteracting condition needed
         {
+            playerController.playerColliders.BoxColliderFull();
+            playerController.playerState.isInteracting = false;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().simulated = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.SetParent(null);
-            playerController.playerState.isInteracting = false;
+
             playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
         }
     }
@@ -380,6 +294,8 @@ public class PlayerInteraction : MonoBehaviour
 
     internal void Engage()
     {
+        playerController.playerMovement.DisableMovement();
+
         if (playerController.playerState.isFacingRight)
         {
             //angleDegrees += Time.deltaTime * 800;
@@ -399,16 +315,17 @@ public class PlayerInteraction : MonoBehaviour
 
         if (/*engageTimer < 0.1f*/ angleDegrees < 90)
         {
+
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
                  new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
         }
 
         else
         {
+            playerController.playerMovement.EnableMovement();
             playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(0, 0.8f, 0); ;
             isEngaging = false;
             angleDegrees = 90;
-            // isDisengaging = false;
             isCarrying = true;
             engageTimer = 0;
 
@@ -419,6 +336,7 @@ public class PlayerInteraction : MonoBehaviour
 
     internal void Disengage()
     {
+        playerController.playerMovement.DisableMovement();
 
         // if (isDisengaging)
         // {
@@ -438,7 +356,8 @@ public class PlayerInteraction : MonoBehaviour
             radiusLength -= Time.deltaTime * 3;
         }
 
-        if (disengageTimer < 0.1f)
+        //  if (disengageTimer < 0.1f) 
+        if ((playerController.playerState.isFacingRight && angleDegrees > 0) || (!playerController.playerState.isFacingRight && angleDegrees < 180))
         {
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
                  new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
@@ -446,34 +365,37 @@ public class PlayerInteraction : MonoBehaviour
 
         else
         {
-
+            playerController.playerMovement.EnableMovement();
             //playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
 
             isDisengaging = false;
             isCarrying = false;
             disengageTimer = 0;
+            playerController.playerColliders.AdjustColliderBoxMovable();
 
-            if (
-                playerController.playerState.isFacingRight)
+            if (playerController.playerState.isFacingRight)
             {
                 playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(startRadius, -0.109f, 0);
                 angleDegrees = 0;
+                ContinueHolding();
+
             }
             else
             {
                 playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(-startRadius, -0.109f, 0);
                 angleDegrees = 180;
+                ContinueHolding();
             }
 
-            if (continueHolding == 0)
-            {
-                isHolding = false;
-            }
-
-            else if (continueHolding == 1)
-            {
-                isHolding = true;
-            }
+            // if (continueHolding == 0)
+            // {
+            //     isHolding = false;
+            // }
+            //
+            // else if (continueHolding == 1)
+            // {
+            //     isHolding = true;
+            // }
         }
 
         if (angleDegrees > -1f && angleDegrees < 1f)
@@ -489,6 +411,19 @@ public class PlayerInteraction : MonoBehaviour
 
 
         //basically LetGo() with a timegate for animations (4frames?)
+    }
+
+    internal void ContinueHolding()
+    {
+        if (continueHolding == 0)
+        {
+            isHolding = false;
+        }
+
+        else if (continueHolding == 1)
+        {
+            isHolding = true;
+        }
     }
 
     internal float ConvertToRadian(float degrees)

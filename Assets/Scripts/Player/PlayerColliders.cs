@@ -17,7 +17,7 @@ public class PlayerColliders : MonoBehaviour
         CrawlingBox = new Vector2(0.34f, 0.415f);
     }
 
-    private void BoxColliderFull()
+    internal void BoxColliderFull()
     {
         GetComponent<BoxCollider2D>().size = StandingBox;
         GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.069f);
@@ -29,14 +29,34 @@ public class PlayerColliders : MonoBehaviour
         GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.2765f); // 0 - (prone y size /2)  + (full y offset /2) 
     }
 
-    internal void AdjustColliderBoxMovable(int direction)
+    internal void AdjustColliderBoxMovable()
     {
+        int direction;
+        if (playerController.playerState.isFacingRight)
+        {
+            direction = 1;
+        }
+        else
+        {
+            direction = -1;
+        }
+
         playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * ((StandingBox.x + playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.x) / 2 - (StandingBox.x / 2)), -0.069f);
         playerController.GetComponent<BoxCollider2D>().size = new Vector2(playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.x + StandingBox.x, StandingBox.y);
     }
 
-    internal void AdjustColliderBoxCarriable(int direction)
+    internal void AdjustColliderBoxCarriable()
     {
+        int direction;
+        if (playerController.playerState.isFacingRight)
+        {
+            direction = 1;
+        }
+        else
+        {
+            direction = -1;
+        }
+
         // needs another raycast to see if the carriable hits any obstacles, if it does - adjust collider to it's size
         playerController.GetComponent<BoxCollider2D>().offset = new Vector2(direction * 0.015f, (playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y) / 2 - 0.069f);
         playerController.GetComponent<BoxCollider2D>().size = new Vector2(StandingBox.x, playerController.playerDetectObject.touchingObject.GetComponent<SpriteRenderer>().bounds.size.y + StandingBox.y);
@@ -50,15 +70,10 @@ public class PlayerColliders : MonoBehaviour
         {
             if (playerController.playerDetectObject.objectType == "Movable")
             {
-                if (playerController.playerState.isFacingRight)
-                {
-                    AdjustColliderBoxMovable(1);
-                }
-                else
-                {
-                    AdjustColliderBoxMovable(-1);
-                }
+
+              // AdjustColliderBoxMovable();
             }
+
 
             else if (playerController.playerDetectObject.objectType == "Carriable")
             {
@@ -67,26 +82,21 @@ public class PlayerColliders : MonoBehaviour
                     if (playerController.playerState.isFacingRight)
                     {
                         //playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
-                        AdjustColliderBoxCarriable(1);
+                       // AdjustColliderBoxCarriable();
                     }
 
                     else
                     {
                         //playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector2(0, 0.8f);
-                        AdjustColliderBoxCarriable(-1);
+                       // AdjustColliderBoxCarriable();
                     }
                 }
 
                 else
                 {
-                    if (playerController.playerState.isFacingRight)
-                    {
-                        AdjustColliderBoxMovable(1);
-                    }
-                    else
-                    {
-                        AdjustColliderBoxMovable(-1);
-                    }
+
+                    //AdjustColliderBoxMovable();
+
                 }
 
             }
