@@ -69,9 +69,6 @@ public class PlayerJump : MonoBehaviour
     internal void WallJump() /////////CHECK THIS
     {
         playerController.rb.velocity = new Vector2(playerController.speedList.walkSpeed, jumpForce);
-
-        //playerController.playerMovement.isWallSliding = false;
-        // playerController.playerMovement.isHangingLedge = false;
         playerController.playerTimers.hangTimeTimer = 0;
         jumpBufferCount = 0;
     }

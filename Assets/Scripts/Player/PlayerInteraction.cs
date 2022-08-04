@@ -71,14 +71,12 @@ public class PlayerInteraction : MonoBehaviour
                         StartCoroutine("RaiseUp");
                         // LiftUp();
                     }
-
                     else if (playerController.playerInput.isInteractTapped && !isEngaging)
                     {
                         //playerController.playerColliders.BoxColliderFull();
                         isHolding = false;
                         LetGo();
                     }
-
                     else
                     {
                         playerController.playerColliders.AdjustColliderBoxMovable();
@@ -86,7 +84,6 @@ public class PlayerInteraction : MonoBehaviour
                         PushPull();
                     }
                 }
-
                 else
                 {
                     playerController.playerMovement.NewJump();
@@ -97,20 +94,17 @@ public class PlayerInteraction : MonoBehaviour
                         continueHolding = 0;
                         StartCoroutine("PutDownLetGo");
                     }
-
                     else if (playerController.playerInput.isDownTapped)
                     {
                         isDisengaging = true;
                         continueHolding = 1;
                         StartCoroutine("PutDownLetGo");
                     }
-
                     else
                     {
                         //StopCoroutine("RaiseUp");
 
                         playerController.playerMove.MoveDetection(); // moves too fast
-
                     }
                 }
 
@@ -123,12 +117,10 @@ public class PlayerInteraction : MonoBehaviour
 
                     //trigger effect left
                 }
-
                 else if (playerController.playerInput.isRightTapped)
                 {
                     //trigger effect right
                 }
-
                 else if (playerController.playerInput.isInteractTapped)
                 {
                     playerController.playerState.controlMode = PlayerState.ControlMode.FreeMovement;
@@ -154,7 +146,6 @@ public class PlayerInteraction : MonoBehaviour
                 playerController.playerState.isMoving = true;
             }
         }
-
         else if (playerController.playerInput.isRightPressed)
         {
             if (playerController.speedList.walkSpeed < 0)
@@ -166,7 +157,6 @@ public class PlayerInteraction : MonoBehaviour
                 playerController.playerState.isMoving = true;
             }
         }
-
         else
         {
             playerController.playerMovement.IdleStop();
@@ -261,8 +251,12 @@ public class PlayerInteraction : MonoBehaviour
 
     internal void PickUp() //allows the object to be manipulated
     {
+
+
         if (!playerController.playerState.isInteracting)
         {
+            FindRadius();
+
             isHolding = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
             playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().simulated = false;
@@ -375,10 +369,9 @@ public class PlayerInteraction : MonoBehaviour
 
             if (playerController.playerState.isFacingRight)
             {
-                playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(startRadius, -0.109f, 0);
+                playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(+startRadius, -0.109f, 0);
                 angleDegrees = 0;
                 ContinueHolding();
-
             }
             else
             {
@@ -406,9 +399,6 @@ public class PlayerInteraction : MonoBehaviour
 
         disengageTimer += Time.deltaTime;
         // }
-
-
-
 
         //basically LetGo() with a timegate for animations (4frames?)
     }

@@ -68,9 +68,7 @@ public class PlayerAnimationManager : MonoBehaviour
                     if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_STANDUP_R);
-
                     }
-
                     else if (!playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_STANDUP_L);
@@ -99,9 +97,7 @@ public class PlayerAnimationManager : MonoBehaviour
                     if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_STANDUP_R);
-
                     }
-
                     else if (!playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_STANDUP_L);
@@ -147,9 +143,7 @@ public class PlayerAnimationManager : MonoBehaviour
                     if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_GOPRONE_R);
-
                     }
-
                     else if (!playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_GOPRONE_L);
@@ -161,7 +155,6 @@ public class PlayerAnimationManager : MonoBehaviour
                     if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_CRAWLING_R);
-
                     }
                     else
                     {
@@ -176,12 +169,10 @@ public class PlayerAnimationManager : MonoBehaviour
 
                 if (playerController.playerTimers.crawlTimer > 0)
                 {
-
                     if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_GOPRONE_R);
                     }
-
                     else if (!playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_GOPRONE_L);
@@ -193,7 +184,6 @@ public class PlayerAnimationManager : MonoBehaviour
                     if (playerController.playerState.isFacingRight)
                     {
                         playerController.ChangeAnimationState(PLAYER_CRAWLING_R);
-
                     }
                     else
                     {
@@ -266,7 +256,6 @@ public class PlayerAnimationManager : MonoBehaviour
                 {
                     if (playerController.playerState.isFacingRight)
                     {
-
                         playerController.ChangeAnimationState(PLAYER_HANGINGLEDGE_R);
                     }
                     else
@@ -279,7 +268,6 @@ public class PlayerAnimationManager : MonoBehaviour
                 {
                     if (playerController.playerState.isFacingRight)
                     {
-
                         playerController.ChangeAnimationState(PLAYER_WALLSLIDE_R);
                     }
                     else
@@ -295,7 +283,6 @@ public class PlayerAnimationManager : MonoBehaviour
 
                 if (playerController.playerState.isFacingRight)
                 {
-
                     playerController.ChangeAnimationState(PLAYER_HANGINGLEDGE_R);
                 }
                 else
