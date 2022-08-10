@@ -74869,6 +74869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 1759083730}
   jumpForce: 6.6
+  coyoteTimerWindow: 0.2
 --- !u!114 &1759083741
 MonoBehaviour:
   m_ObjectHideFlags: 0

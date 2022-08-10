@@ -24,7 +24,7 @@ public class PlayerTimers : MonoBehaviour
     internal float slideTransitionTimerSet = 0.5f;
 
     internal float climbLedgeTimer = 0;
-    internal float climbLedgeTimerSet = 0.3f;
+    public float climbLedgeTimerSet = 0.3f;
 
     internal float hangTime = 0.1f;
     internal float hangTimeTimer;

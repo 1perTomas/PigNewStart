@@ -86,7 +86,7 @@ public class PlayerInteraction : MonoBehaviour
                 }
                 else
                 {
-                    playerController.playerMovement.NewJump();
+                    playerController.playerJump.NewJump();
 
                     if (playerController.playerInput.isInteractTapped && !isDisengaging)
                     {
@@ -419,6 +419,24 @@ public class PlayerInteraction : MonoBehaviour
     internal float ConvertToRadian(float degrees)
     {
         return degrees * Mathf.PI / 180;
+    }
+
+    internal void InitiateInteraction()
+    {
+        PickUp();
+        playerController.playerState.isInteracting = true;
+
+        if (playerController.playerState.isFacingRight)
+        {
+            angleDegrees = 0;
+        }
+
+        else
+        {
+            angleDegrees = 180;
+        }
+        playerController.playerState.controlMode = PlayerState.ControlMode.Interaction;
+        playerController.playerState.currentState = PlayerState.CharacterMovement.Interacting;
     }
 }
 

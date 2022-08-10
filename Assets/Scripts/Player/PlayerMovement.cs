@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     internal Vector2 hangingPosition;
 
-    internal float velX = 0;
+    // internal float velX = 0;
     internal float velY = 0;
 
     internal bool wallJumpReady = false;
@@ -32,33 +32,33 @@ public class PlayerMovement : MonoBehaviour
     public float wallSlideSense;
 
 
-    internal void NewJump()
-    {
-        if (playerController.playerInput.isJumpTapped)
-        {
-            playerController.playerJump.jumpBufferCount = playerController.playerJump.jumpBufferLength;
-
-            playerController.playerJump.Jump();
-        }
-
-        else if (playerController.playerJump.jumpBufferCount > 0)
-        {
-            if (playerController.playerInput.isJumpPressed && playerController.playerSurroundings.isGrounded)
-            {
-                playerController.playerJump.Jump();
-            }
-            else if (playerController.playerJump.jumpBufferCount >= 0)
-            {
-                playerController.playerJump.jumpBufferCount -= Time.deltaTime;
-            }
-        }
-
-        if (playerController.rb.velocity.y > 0
-        && playerController.playerInput.isJumpReleased) // if space is tapped, jump is smaller
-        {
-            playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, playerController.rb.velocity.y * 0.65f);
-        }
-    }
+    // internal void NewJump() // transfer to jump
+    // {
+    //     if (playerController.playerInput.isJumpTapped)
+    //     {
+    //         playerController.playerJump.jumpBufferCount = playerController.playerJump.jumpBufferLength;
+    //
+    //         playerController.playerJump.Jump();
+    //     }
+    //
+    //     else if (playerController.playerJump.jumpBufferCount > 0)
+    //     {
+    //         if (playerController.playerInput.isJumpPressed && playerController.playerSurroundings.isGrounded)
+    //         {
+    //             playerController.playerJump.Jump();
+    //         }
+    //         else if (playerController.playerJump.jumpBufferCount >= 0)
+    //         {
+    //             playerController.playerJump.jumpBufferCount -= Time.deltaTime;
+    //         }
+    //     }
+    //
+    //     if (playerController.rb.velocity.y > 0
+    //     && playerController.playerInput.isJumpReleased) // if space is tapped, jump is smaller
+    //     {
+    //         playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, playerController.rb.velocity.y * 0.65f);
+    //     }
+    // }
 
     internal void Movement()
     {
@@ -68,7 +68,10 @@ public class PlayerMovement : MonoBehaviour
             IdleStop();
         }
 
-        NewJump();
+        playerController.playerJump.CoyoteTime();
+
+        playerController.playerJump.NewJump();
+
 
         //if (isGrounded) and else for wall and air movement
 
@@ -96,20 +99,7 @@ public class PlayerMovement : MonoBehaviour
                         if (playerController.playerSurroundings.isTouchingInteractableObject)
                         {
 
-                            playerController.playerInteraction.PickUp();
-                            playerController.playerState.isInteracting = true;
-
-                            if (playerController.playerState.isFacingRight)
-                            {
-                                playerController.playerInteraction.angleDegrees = 0;
-                            }
-
-                            else
-                            {
-                                playerController.playerInteraction.angleDegrees = 180;
-                            }
-                            playerController.playerState.controlMode = PlayerState.ControlMode.Interaction;
-                            playerController.playerState.currentState = PlayerState.CharacterMovement.Interacting;
+                            playerController.playerInteraction.InitiateInteraction();
 
                         }
 
@@ -245,20 +235,18 @@ public class PlayerMovement : MonoBehaviour
                     playerController.playerState.isStanding = false;
                     playerController.playerState.canJump = false;
 
-
                     break;
 
                 //-----------------------------------------------------------------C L I M B I N G-------------------------------------------
                 case PlayerState.CharacterMovement.Climbing:
 
-                    FreezePlayerLocation(velX, velY);
+                    //FreezePlayerLocation(0, 0); // disables jump when climbing for some reason
                     playerController.playerTimers.climbLedgeTimer += Time.deltaTime;
 
                     if (playerController.playerTimers.climbLedgeTimer < playerController.playerTimers.climbLedgeTimerSet)
                     {
 
                     }
-
                     else
                     {
                         EnableMovement();
@@ -267,9 +255,8 @@ public class PlayerMovement : MonoBehaviour
                         playerController.playerState.currentState = PlayerState.CharacterMovement.Idle;
                     }
 
-                    playerController.playerState.canJump = false;
+                   // playerController.playerState.canJump = false;
                     break;
-
 
                 //-----------------------------------------------------------------D E F A U L T  O N  G R O U N D-------------------------------------------
                 default:
@@ -357,6 +344,7 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
 
+
                     EnableMovement();
 
                     //fall timer for stuck
@@ -364,7 +352,7 @@ public class PlayerMovement : MonoBehaviour
                     //increase fall velocity
 
                     playerController.playerState.isStanding = true;
-                    playerController.playerState.canJump = false;
+                    // playerController.playerState.canJump = false;
                     break;
                 //-----------------------------------------------------------------W A L L S L I D I N G-------------------------------------------
                 case PlayerState.CharacterMovement.Wallsliding:
@@ -504,13 +492,15 @@ public class PlayerMovement : MonoBehaviour
                         playerController.playerState.currentState = PlayerState.CharacterMovement.WallJump;
                     }
 
-                    if (playerController.playerInput.isUpTapped
+                    if ((playerController.playerInput.isUpTapped
                     || playerController.playerInput.isJumpTapped)
+                    && hangingPosition == playerController.rb.position)
 
                     {
+                        Debug.Log(hangingPosition);
+                        ClimbLedgeTest();
                         // if (canClimb)
                         //  {
-                        ClimbLedgeTest();
                         playerController.playerState.currentState = PlayerState.CharacterMovement.Climbing;
                         // }
                     }
@@ -790,23 +780,16 @@ public class PlayerMovement : MonoBehaviour
     internal void Slide()
     {
         StartCoroutine("SlideTimer");
-
         playerController.playerTimers.slideTransitionTimer = playerController.playerTimers.slideTransitionTimerSet;
     }
 
     IEnumerator SlideTimer()
     {
-
         yield return new WaitForSeconds(0.75f);
-
         while (playerController.playerState.currentState == PlayerState.CharacterMovement.Sliding)
         {
-
             playerController.playerState.currentState = PlayerState.CharacterMovement.Crawling;
         }
-
-
-
     }
 
     internal void WallInteraction()
@@ -843,18 +826,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void HangingLedge() // put into wall interaction function
     {
-
+        FreezePlayerLocation(0, 0);
         hangingPosition = new Vector2(playerController.rb.position.x, playerController.rb.position.y);
-        FreezePlayerLocation(velX, velY);
-
-
     }
 
     internal void ClimbLedgeTest()
     {
+        DisableMovement();
         isClimbingLedge = true;
         playerController.speedList.currentSpeed = 0; //won't climb further tha
-        FreezePlayerLocation(velX, velY);
+        FreezePlayerLocation(0, 0);
 
         if (playerController.playerState.isFacingRight)
         {
@@ -864,50 +845,6 @@ public class PlayerMovement : MonoBehaviour
         {
             playerController.rb.position = new Vector2(hangingPosition.x - 0.35f, hangingPosition.y + 0.28f);
         }
-    }
-
-
-    internal void ClimbLedge()
-    {
-        playerController.playerTimers.climbLedgeTimer += Time.deltaTime;
-
-        // DisableMovement();
-        //
-        // if (playerController.playerState.isFacingRight && !playerController.playerInput.isLeftPressed && canClimb)
-        // {
-        //     isHangingLedge = false;
-        //     isClimbingLedge = true;
-        playerController.rb.position = new Vector2(hangingPosition.x + 0.35f, hangingPosition.y + 0.28f); //standin +0.28f
-        // }
-        // else if (!playerController.playerState.isFacingRight && !playerController.playerInput.isRightPressed && canClimb)
-        // {
-        //     isHangingLedge = false;
-        //     isClimbingLedge = true;
-        //     playerController.rb.position = new Vector2(hangingPosition.x - 0.35f, hangingPosition.y + 0.43f);
-        // }
-        // else
-        // {
-        //     isHangingLedge = true;
-        //     isClimbingLedge = false;
-        // }
-
-    } // climbing logic
-
-    internal void SpecialMovement()
-    {
-        // if (isClimbingLedge)
-        // {
-        //     //DisableMovement();
-        //     FreezePlayerLocation(velX, velY);
-        //     playerController.playerTimers.climbLedgeTimer += Time.deltaTime;
-        //
-        //     if (playerController.playerTimers.climbLedgeTimer > playerController.playerTimers.climbLedgeTimerSet || !isClimbingLedge)
-        //     {
-        //         //EnableMovement();
-        //         isClimbingLedge = false;
-        //         playerController.playerTimers.climbLedgeTimer = 0;
-        //     }
-        // }
     }
 
     internal void IdleStop()
