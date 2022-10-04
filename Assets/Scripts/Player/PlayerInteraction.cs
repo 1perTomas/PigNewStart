@@ -37,7 +37,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Start()
     {
-        radiusLength = 0.8f;
+       //radiusLength = 0.8f;
     }
 
 
@@ -62,10 +62,13 @@ public class PlayerInteraction : MonoBehaviour
 
             case PlayerDetectObject.ObjectTypes.Carriable:
 
+
                 if (!isCarrying)
                 {
+
                     if (playerController.playerInput.isUpTapped)
                     {
+
                         disengageTimer = 0;
                         isEngaging = true;
                         StartCoroutine("RaiseUp");
@@ -77,11 +80,17 @@ public class PlayerInteraction : MonoBehaviour
                         isHolding = false;
                         LetGo();
                     }
-                    else
+                    else if (!isEngaging)
                     {
                         playerController.playerColliders.AdjustColliderBoxMovable();
                         //StopCoroutine("PutDownLetGo");
                         PushPull();
+                    }
+                    else
+                    {
+                        playerController.playerMovement.DisableMovement();
+                        playerController.playerState.isMoving = false;
+                        Debug.Log("AssBandit");
                     }
                 }
                 else
@@ -103,7 +112,6 @@ public class PlayerInteraction : MonoBehaviour
                     else
                     {
                         //StopCoroutine("RaiseUp");
-
                         playerController.playerMove.MoveDetection(); // moves too fast
                     }
                 }
@@ -133,39 +141,58 @@ public class PlayerInteraction : MonoBehaviour
     internal void PushPull()
     {
         Debug.Log("Pickup");
-        if (playerController.playerInput.isLeftPressed
-            && ((playerController.playerState.isFacingRight && !playerController.playerSurroundings.isTouchingWallBehind)
-            || (!playerController.playerState.isFacingRight && !playerController.playerSurroundings.isTouchingWall)))
+
+        if (isEngaging)
         {
-            if (playerController.speedList.walkSpeed > 0)
-            {
-                playerController.speedList.FlipSpeedValues();
-            }
-            else
-            {
-                playerController.playerState.isMoving = true;
-            }
+            // Debug.Log("AssBandit");
+            playerController.playerMovement.DisableMovement();
         }
-        else if (playerController.playerInput.isRightPressed)
+        else if (!isEngaging && !isDisengaging)
         {
-            if (playerController.speedList.walkSpeed < 0)
+            if (playerController.playerInput.isLeftPressed
+                && ((playerController.playerState.isFacingRight && !playerController.playerSurroundings.isTouchingWallBehind)
+                || (!playerController.playerState.isFacingRight && !playerController.playerSurroundings.isTouchingWall))
+                )
             {
-                playerController.speedList.FlipSpeedValues();
+                if (playerController.speedList.walkSpeed > 0)
+                {
+                    playerController.speedList.FlipSpeedValues();
+                }
+                else
+                {
+                    playerController.playerState.isMoving = true;
+                }
+            }
+            else if (playerController.playerInput.isRightPressed
+                && ((!playerController.playerState.isFacingRight && !playerController.playerSurroundings.isTouchingWallBehind)
+                || (playerController.playerState.isFacingRight && !playerController.playerSurroundings.isTouchingWall)))
+            {
+                if (playerController.speedList.walkSpeed < 0)
+                {
+                    playerController.speedList.FlipSpeedValues();
+                }
+                else
+                {
+                    playerController.playerState.isMoving = true;
+                }
             }
             else
             {
-                playerController.playerState.isMoving = true;
+                playerController.playerMovement.IdleStop();
             }
         }
         else
         {
             playerController.playerMovement.IdleStop();
-            playerController.playerState.isMoving = false;
         }
     }
 
     IEnumerator PutDownLetGo()
     {
+        yield return null;
+
+        playerController.playerMovement.IdleStop();
+
         while (isDisengaging)
         {
             Disengage();
@@ -185,13 +212,19 @@ public class PlayerInteraction : MonoBehaviour
     IEnumerator RaiseUp()
     {
         Debug.Log("bogos)");
+        yield return null;
+
+        playerController.playerMovement.IdleStop();
+       // playerController.playerMovement.DisableMovement();
+        // playerController.rb.velocity = new Vector2(0, 0);
 
         while (isEngaging)
         {
+          
             Engage();
 
             // yield return new WaitForFixedUpdate();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.4f);
         }
 
         playerController.playerColliders.AdjustColliderBoxCarriable();
@@ -229,6 +262,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             startRadius = playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition.x - playerController.rb.transform.position.x;
             Debug.Log(startRadius);
+            radiusLength = startRadius;
         }
         else
         {
@@ -288,38 +322,46 @@ public class PlayerInteraction : MonoBehaviour
 
     internal void Engage()
     {
-        playerController.playerMovement.DisableMovement();
+        Debug.Log("radius = " + Mathf.Sqrt(0.1875f*0.1875f+0.1f*0.1f));
 
         if (playerController.playerState.isFacingRight)
         {
             //angleDegrees += Time.deltaTime * 800;
-            angleDegrees += 90 / 4;
+            //  angleDegrees += 90 / 4;
+            angleDegrees += 28 / 4;
 
         }
 
         else if (!playerController.playerState.isFacingRight)
         {
-            angleDegrees -= Time.deltaTime * 800;
+            angleDegrees += Time.deltaTime;
         }
 
-        if (radiusLength < 0.8f)
+        if (radiusLength > 0.2125f)
         {
-            radiusLength += Time.deltaTime * 3;
-        }
-
-        if (/*engageTimer < 0.1f*/ angleDegrees < 90)
-        {
-
-            playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
-                 new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
+            radiusLength -= 0.0875f;
         }
 
         else
         {
+            radiusLength = 0.2125f;
+        }
+
+        if (/*engageTimer < 0.1f*/ angleDegrees < 28 /*90*/)
+        {
+
+            playerController.playerDetectObject.objectItself.collider.gameObject.GetComponent<Rigidbody2D>().transform.localPosition =
+                 new Vector2(radiusLength * Mathf.Cos(ConvertToRadian(angleDegrees)), radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
+            Debug.Log(radiusLength * Mathf.Sin(ConvertToRadian(angleDegrees)));
+        }
+
+        else
+        {
+            radiusLength = 0.2125f;
             playerController.playerMovement.EnableMovement();
-            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(0, 0.8f, 0); ;
+            playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = new Vector3(0.2f, 0.1f, 0); ;
             isEngaging = false;
-            angleDegrees = 90;
+            angleDegrees = 28;
             isCarrying = true;
             engageTimer = 0;
 
@@ -361,7 +403,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             playerController.playerMovement.EnableMovement();
             //playerController.playerDetectObject.touchingObject.GetComponent<Rigidbody2D>().transform.localPosition = originalObjectPosition;
-
+            radiusLength = startRadius;
             isDisengaging = false;
             isCarrying = false;
             disengageTimer = 0;
@@ -430,7 +472,6 @@ public class PlayerInteraction : MonoBehaviour
         {
             angleDegrees = 0;
         }
-
         else
         {
             angleDegrees = 180;

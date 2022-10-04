@@ -74883,6 +74883,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 1759083730}
+  climbLedgeTimerSet: 0.3
 --- !u!114 &1759083742
 MonoBehaviour:
   m_ObjectHideFlags: 0

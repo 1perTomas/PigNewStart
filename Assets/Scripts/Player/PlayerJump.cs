@@ -41,7 +41,7 @@ public class PlayerJump : MonoBehaviour
     internal void NewJump() // transfer to jump
     {
 
-        if (playerController.playerInput.isJumpTapped && playerController.playerState.canJump)
+        if (playerController.playerInput.isJumpTapped && playerController.playerState.currentState != PlayerState.CharacterMovement.HangingLedge) // prevents from immediatelly jumping after climbing ledge
         {
             jumpBufferCount = jumpBufferLength;
             if (playerController.playerState.canJump)

@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     internal Vector2 hangingPosition;
 
     // internal float velX = 0;
-    internal float velY = 0;
+   // internal float velY = 0;
 
     internal bool wallJumpReady = false;
 
@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
     internal void Movement()
     {
         if (playerController.playerSurroundings.isTouchingWall
-        || (playerController.playerSurroundings.isTouchingLedge && playerController.playerState.isStanding))
+        || (playerController.playerSurroundings.isTouchingLedge && playerController.playerState.isStanding)) // stops movement if hits a wall
         {
             IdleStop();
         }

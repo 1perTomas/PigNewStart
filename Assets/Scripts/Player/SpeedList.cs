@@ -18,7 +18,7 @@ public class SpeedList : MonoBehaviour
 
     internal float heavyObjectSpeed = 1.25f;
     internal float lightObjectSpeed = 1.75f;
-    internal float carryingLightObjectSpeed = 2.75f;
+    internal float carryingLightObjectSpeed = 2.25f;
 
     public float turningRateAir = 0.08f;
     public float acceleration = 0.18f;

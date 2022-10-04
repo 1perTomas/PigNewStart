@@ -89,7 +89,6 @@ public class PlayerController : MonoBehaviour
         speedList.SpeedAdjust();
         playerColliders.ColliderAdjust();
 
-
         switch (playerState.controlMode)
         {
             case PlayerState.ControlMode.FreeMovement:
@@ -149,7 +148,18 @@ public class PlayerController : MonoBehaviour
         //
         //  // playerState.ColliderAdjust();
         playerInput.CheckButtonInput();
+        
+        if (!playerState.isMoving)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        }
 
+
+        //Debug.Log("Current velocity is " + rb.velocity.x);
+        if (rb.velocity.x == 0)
+        {
+            Debug.Log("BullsHit");
+        }
     }
 
 
@@ -169,11 +179,11 @@ public class PlayerController : MonoBehaviour
 
         // playerMovement.SpecialMovement();
         // playerMovement.WallInteraction();
-       
+
 
 
         PlayerAnimationManager.AnimationManagerStateTest();
-
+    
 
         //playerState.GetHit();
         switch (playerState.controlMode)
